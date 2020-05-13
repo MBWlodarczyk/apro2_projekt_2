@@ -1,7 +1,6 @@
 package Client.GUI;
 
 import Client.Controller.Client;
-import Client.GUI.Entities;
 import Client.Model.Heroes.Paladin;
 import Client.Model.Heroes.Warrior;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -21,14 +20,14 @@ public class MyGdxGame extends ApplicationAdapter {
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
                     paladinTexture, warriorTexture,
                     edgeTexture;
-    private GameObjcet[][] gameObjcets;
+    private GameObject[][] gameObjects;
     private Client client;
 
 
     public MyGdxGame(int size) throws Exception {
         this.client = new Client();
         this.size = size;
-        gameObjcets = new GameObjcet[size][size];
+        gameObjects = new GameObject[size][size];
         System.out.println(client.getReceived().getMap().toString());
 	}
 
@@ -56,9 +55,9 @@ public class MyGdxGame extends ApplicationAdapter {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
 
-                gameObjcets[i][j] = new GameObjcet(checkTexture(i,j),checkHero(i,j),null);
-                gameObjcets[i][j].x = i * gameObjcets[i][j].height;
-                gameObjcets[i][j].y = 512 - (j+1) * gameObjcets[i][j].width;
+                gameObjects[i][j] = new GameObject(checkTexture(i,j),checkHero(i,j),null);
+                gameObjects[i][j].x = i * gameObjects[i][j].height;
+                gameObjects[i][j].y = 512 - (j+1) * gameObjects[i][j].width;
             }
         }
     }
@@ -130,7 +129,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                gameObjcets[i][j].draw(batch);
+                gameObjects[i][j].draw(batch);
             }
         }
         sprite.draw(batch);
@@ -150,8 +149,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	private void mousePosition() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if(gameObjcets[i][j].contains(Gdx.input.getX(),512 - Gdx.input.getY())){
-                    sprite.setPosition(gameObjcets[i][j].x,gameObjcets[i][j].y);
+                if(gameObjects[i][j].contains(Gdx.input.getX(),512 - Gdx.input.getY())){
+                    sprite.setPosition(gameObjects[i][j].x, gameObjects[i][j].y);
                 }
             }
         }

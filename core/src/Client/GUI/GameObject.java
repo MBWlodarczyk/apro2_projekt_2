@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.awt.*;
 
-public class GameObjcet extends Rectangle {
+public class GameObject extends Rectangle {
 
     private Texture fieldTexture;
     private Texture heroTexture;
     private Texture obstacleTexture;
 
-    public GameObjcet(Texture fieldTexture, Texture heroTexture, Texture obstacleTexture) {
+    public GameObject(Texture fieldTexture, Texture heroTexture, Texture obstacleTexture) {
         this.fieldTexture = fieldTexture;
         this.heroTexture = heroTexture;
         this.obstacleTexture = obstacleTexture;

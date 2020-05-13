@@ -15,7 +15,7 @@ public abstract class Hero extends Entity {
     /**
      * ArrayList of skills
      */
-    private ArrayList<Skill> skills;
+    protected ArrayList<Skill> skills;
     /**
      * Weight of hero (use in order to solve collisions)
      */
@@ -24,16 +24,13 @@ public abstract class Hero extends Entity {
      * Health of hero
      */
     private int health;
-    /**
-     * Distance a hero can travel in a single turn.
-     */
-    private int moveDistance;
 
-    public Hero(Player owner, int weight, int health, int moveDistance) {
+
+    public Hero(Player owner, int weight, int health) {
         this.owner = owner;
         this.weight = weight;
         this.health = health;
-        this.moveDistance = moveDistance;
+        this.skills = new ArrayList<>();
     }
 
     @Override
@@ -43,7 +40,6 @@ public abstract class Hero extends Entity {
                 ", skills=" + skills +
                 ", weight=" + weight +
                 ", health=" + health +
-                ", moveDistance=" + moveDistance +
                 '}';
     }
 }
