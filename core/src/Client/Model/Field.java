@@ -1,11 +1,12 @@
 package Client.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Class to represent single field
  */
-public class Field {
+public class Field implements Serializable {
     /**
      *  X coordinate of the field
      */

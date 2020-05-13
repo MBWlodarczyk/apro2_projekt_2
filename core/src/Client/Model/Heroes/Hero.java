@@ -2,7 +2,7 @@ package Client.Model.Heroes;
 
 import Client.Model.Entity;
 import Client.Model.Player;
-import Client.Skills.Skill;
+import Client.Model.Skills.Skill;
 
 import java.util.ArrayList;
 

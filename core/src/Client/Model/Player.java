@@ -2,9 +2,10 @@ package Client.Model;
 
 import Client.Model.Heroes.Hero;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Serializable {
     final private int id;
     private ArrayList<Hero> heroes;
     private String nick;

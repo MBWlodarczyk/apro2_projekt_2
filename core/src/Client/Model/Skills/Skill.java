@@ -1,4 +1,4 @@
-package Client.Skills;
+package Client.Model.Skills;
 
 public abstract class Skill {
     private int damage;

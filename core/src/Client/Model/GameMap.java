@@ -3,10 +3,12 @@ package Client.Model;
 
 import Client.Model.Heroes.Warrior;
 
+import java.io.Serializable;
+
 /**
  * Class to represent map
  */
-public class GameMap {
+public class GameMap implements Serializable {
 
     /**
      * Two dimensions field array representation of map
