@@ -20,16 +20,21 @@ public class Field implements Serializable {
      */
     final private Type type;
     /**
-     * List of entities on field
+     * Hero on field
      */
-    private ArrayList<Entity> entities;
+    private Entity hero;
+        /**
+     * Obstacle on field
+     */
+    private Entity obstacle;
 
 
     public Field(int y, int x, Type type) {
         this.x = x;
         this.y = y;
         this.type = type;
-        entities = new ArrayList<>(2);
+        this.hero = null;
+        this.obstacle = null;
     }
 
     public int getX() {
@@ -44,14 +49,19 @@ public class Field implements Serializable {
         return type;
     }
 
-    public ArrayList<Entity> getEntities() {
-        return entities;
+    public Entity getHero() {
+        return hero;
     }
 
-    /**
-     * Method that add entity to filed. There could be only two entities.
-     */
-    public void addEntity(Entity e) {
-        entities.add(e);
+    public void setHero(Entity hero) {
+        this.hero = hero;
+    }
+
+    public Entity getObstacle() {
+        return obstacle;
+    }
+
+    public void setObstacle(Entity obstacle) {
+        this.obstacle = obstacle;
     }
 }

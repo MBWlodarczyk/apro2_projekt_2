@@ -7,23 +7,25 @@ import java.awt.*;
 
 public class GameObjcet extends Rectangle {
 
-    private Texture texture;
+    private Texture fieldTexture;
+    private Texture heroTexture;
+    private Texture obstacleTexture;
 
-    public GameObjcet(Texture texture) {
-        this.texture = texture;
-        this.height = texture.getHeight();
-        this.width = texture.getWidth();
+    public GameObjcet(Texture fieldTexture) {
+        this.fieldTexture = fieldTexture;
+        this.height = fieldTexture.getHeight();
+        this.width = fieldTexture.getWidth();
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(texture, x, y);
+        batch.draw(fieldTexture, x, y);
     }
 
-    public Texture getTexture() {
-        return texture;
+    public Texture getFieldTexture() {
+        return fieldTexture;
     }
 
-    public void setTexture(Texture texture){
-        this.texture = texture;
+    public void setFieldTexture(Texture fieldTexture){
+        this.fieldTexture = fieldTexture;
     }
 }

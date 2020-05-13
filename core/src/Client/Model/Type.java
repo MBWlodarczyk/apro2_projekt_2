@@ -7,7 +7,7 @@ public enum Type {
     Wall(4),
     Rock(5),
     Bush(6),
-    CoveredGrass(7)
+
 
     ;
 

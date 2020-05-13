@@ -1,7 +1,7 @@
 package Client.Model;
 
 
-import Client.Model.Heroes.Warrior;
+import Client.Model.Heroes.Paladin;
 
 import java.io.Serializable;
 
@@ -29,7 +29,7 @@ public class GameMap implements Serializable {
             }
         }
         map[3][2] = new Field(3, 2, Type.Wall);
-//        map[3][2].addEntity(new Warrior(new Player("jakiś typ")));
+        map[5][5].setHero(new Paladin(new Player("Jakiś typ")));
     }
 
     public Field[][] getMap() {
