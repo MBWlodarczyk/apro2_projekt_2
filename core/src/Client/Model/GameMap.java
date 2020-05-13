@@ -28,8 +28,8 @@ public class GameMap implements Serializable {
                 map[i][j] = new Field(i, j, Type.Grass);
             }
         }
-        map[3][2] = new Field(3, 2, Type.Wall);
-        map[5][5].setHero(new Paladin(new Player("Jakiś typ")));
+//        map[3][2] = new Field(3, 2, Type.Wall);
+        map[0][0].setHero(new Paladin(new Player("Jakiś typ")));
     }
 
     public Field[][] getMap() {
