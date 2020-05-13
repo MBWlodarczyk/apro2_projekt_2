@@ -8,15 +8,15 @@ import java.util.ArrayList;
  */
 public class Field implements Serializable {
     /**
-     *  X coordinate of the field
+     * X coordinate of the field
      */
     final private int x;
     /**
-     *  Y coordinate of the field
+     * Y coordinate of the field
      */
     final private int y;
     /**
-     *  Type of field
+     * Type of field
      */
     final private Type type;
     /**

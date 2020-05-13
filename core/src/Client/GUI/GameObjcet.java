@@ -15,11 +15,15 @@ public class GameObjcet extends Rectangle {
         this.width = texture.getWidth();
     }
 
-    public void draw(SpriteBatch batch){
-        batch.draw(texture,x,y);
+    public void draw(SpriteBatch batch) {
+        batch.draw(texture, x, y);
     }
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public void setTexture(Texture texture){
+        this.texture = texture;
     }
 }

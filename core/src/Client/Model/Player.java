@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player implements Serializable {
+    private static int idGen;
     final private int id;
     private ArrayList<Hero> heroes;
     private String nick;
-    private static int idGen;
 
     public Player(String nick) {
         this.id = idGen++;

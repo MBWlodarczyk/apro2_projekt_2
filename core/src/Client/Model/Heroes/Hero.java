@@ -7,6 +7,7 @@ import Client.Model.Skills.Skill;
 import java.util.ArrayList;
 
 public abstract class Hero extends Entity {
+    static int idGen;
     /**
      * Owner of that hero
      */
@@ -27,7 +28,6 @@ public abstract class Hero extends Entity {
      * Distance a hero can travel in a single turn.
      */
     private int moveDistance;
-    static int idGen;
 
     public Hero(Player owner, int weight, int health, int moveDistance) {
         this.owner = owner;
