@@ -13,4 +13,10 @@ public class Move implements Serializable {
     private Field where;
     private Skill what;
 
+    public Move(Player whose, Hero who, Field where, Skill what) {
+        this.whose = whose;
+        this.who = who;
+        this.where = where;
+        this.what = what;
+    }
 }

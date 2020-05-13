@@ -32,7 +32,7 @@ public class ServerThread extends Thread{
         while(true) {
             reciever = false;
             try {
-                this.recieved = (Turn) is.readObject();
+                this.recieved = (Turn)is.readObject();
                 System.out.println("recieved object from " + name);
                 reciever = true;
             } catch (IOException | ClassNotFoundException e) {

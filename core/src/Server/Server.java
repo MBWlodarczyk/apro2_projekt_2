@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class Server {
     private static ArrayList<ServerThread> clients= new ArrayList<>();
-    private static GameMap map = new GameMap(10);
+    private static GameMap map = new GameMap(16);
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 
@@ -60,7 +60,7 @@ public class Server {
         for(ServerThread client : clients){
             System.out.println(client.recieved.y);
             System.out.println(client.recieved.x);// map modification should be added here
-            map.map[client.recieved.y][client.recieved.x]= new Field(client.recieved.y,client.recieved.x,Type.Rock); }
+            map.getMap()[client.recieved.y][client.recieved.x]= new Field(client.recieved.y,client.recieved.x,Type.Wall); }
         for(ServerThread client : clients){
             client.os.reset();
             client.os.writeObject(map);// sending object

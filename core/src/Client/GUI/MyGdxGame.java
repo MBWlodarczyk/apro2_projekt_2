@@ -1,5 +1,6 @@
 package Client.GUI;
 
+import Client.Controller.Client;
 import Client.Model.GameMap;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -15,14 +16,14 @@ public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private Texture grassTexture,wallTexture,waterTexture,forestTexture;
 	private GameObjcet[][] gameObjcets;
-	private GameMap gameMap;
+	private Client client;
 
 
-	public MyGdxGame(int size) {
+	public MyGdxGame(int size) throws Exception {
+		this.client= new Client();
 		this.size = size;
 		gameObjcets = new GameObjcet[size][size];
-		gameMap = new GameMap(size);
-		System.out.println(gameMap);
+		System.out.println(client.getReceived().getMap().toString());;
 	}
 
 	@Override  //tu inicjuemy wsyztsko
@@ -59,7 +60,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	 * @return return texture
 	 */
 	private Texture checktextute(int i, int j) {
-		switch(gameMap.getMap()[i][j].getType()){
+		switch(client.getReceived().getMap()[i][j].getType()){
 			case Grass: return grassTexture;
 			case Water: return waterTexture;
 			case Forest: return forestTexture;
@@ -94,9 +95,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	}
 
 	private void update() {
-		if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			System.out.println("A");
-		}
+		init();
 	}
 
 	@Override
