@@ -2,6 +2,7 @@ package Client.GUI;
 
 import Client.Controller.Client;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +16,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,coveredGrassTexture;
     private GameObjcet[][] gameObjcets;
     private Client client;
+    private GameObjcet obiekcik;
 
 
     public MyGdxGame(int size) throws Exception {
@@ -44,15 +46,16 @@ public class MyGdxGame extends ApplicationAdapter {
     private void rewriteMap() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-//                Texture texture = checktextute(i, j);
-//                gameObjcets[i][j] = new GameObjcet(texture);
-                gameObjcets[i][j] = new GameObjcet(grassTexture);
-
+                Texture texture = checktextute(i, j);
+                gameObjcets[i][j] = new GameObjcet(texture);
                 gameObjcets[i][j].x = i * gameObjcets[i][j].height;
                 gameObjcets[i][j].y = 512 - (j+1) * gameObjcets[i][j].width;
             }
         }
-        gameObjcets[2][3].setTexture(wallTexture);
+//        obiekcik = new GameObjcet(coveredGrassTexture);
+//        obiekcik.x = 10;
+//        obiekcik.y = 10;
+//        gameObjcets[2][3].setTexture(wallTexture);
 //        System.out.println(client.getReceived());
 
     }
@@ -79,7 +82,6 @@ public class MyGdxGame extends ApplicationAdapter {
                 return rockTexture;
             case Bush:
                 return bushTexture;
-			case CoveredGrass: return coveredGrassTexture;
             default:
                 return grassTexture; //tutaj jak na razie defultowo jest dawaniae testruy trwawy, bo nie ma wsyztskich testur xd
         }
@@ -104,6 +106,8 @@ public class MyGdxGame extends ApplicationAdapter {
             }
         }
 
+//        obiekcik.draw(batch);
+
         batch.end();;
     }
 
@@ -112,12 +116,18 @@ public class MyGdxGame extends ApplicationAdapter {
 	 */
 	private void update() {
         rewriteMap();
-        //mousePosition();
+        mousePosition();
     }
 
 	private void mousePosition() {
 		System.out.println("x: "+Gdx.input.getX()+"   y: "+Gdx.input.getY());
-
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if(gameObjcets[i][j].contains(Gdx.input.getX(),512 - Gdx.input.getY())){
+                    gameObjcets[i][j].setTexture(coveredGrassTexture);
+                }
+            }
+        }
 
 
 	}
@@ -132,7 +142,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		wallTexture = assets.manager.get("wall.png", Texture.class);
 		bushTexture = assets.manager.get("bush.png", Texture.class);
 		rockTexture = assets.manager.get("rock.png", Texture.class);
-
+        coveredGrassTexture = assets.manager.get("covered/grass_covered.png",Texture.class);
 	}
 
     @Override
