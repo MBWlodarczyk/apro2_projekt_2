@@ -21,7 +21,7 @@ public class GameMap implements Serializable {
         loadMap();
     }
 
-
+// tester method
     private void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
