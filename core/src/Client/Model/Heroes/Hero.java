@@ -6,8 +6,12 @@ import Client.Model.Skills.Skill;
 
 import java.util.ArrayList;
 
+/**
+ * Class to represent abstract hero
+ */
 public abstract class Hero extends Entity {
     static int idGen;
+
     /**
      * Owner of that hero
      */
@@ -48,4 +52,9 @@ public abstract class Hero extends Entity {
                 ", health=" + health +
                 '}';
     }
+
+    public Player getOwner() {
+        return owner;
+    }
+
 }

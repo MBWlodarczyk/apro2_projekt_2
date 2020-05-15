@@ -7,6 +7,9 @@ import Client.Model.Skills.Skill;
 
 import java.io.Serializable;
 
+/**
+ * Class representing single move
+ */
 public class Move implements Serializable {
     private Player whose;
     private Hero who;
@@ -25,15 +28,17 @@ public class Move implements Serializable {
     public Field getWhere() {
         return where;
     }
+
     public Field getFrom() {
         return from;
     }
+
     public Skill getWhat() {
         return what;
     }
 
-    public Move(Player whose, Hero who, Field where,Field from, Skill what) {
-        this.whose = whose;
+    public Move(Hero who, Field where, Field from, Skill what) {
+        this.whose = who.getOwner();
         this.who = who;
         this.from = from;
         this.where = where;

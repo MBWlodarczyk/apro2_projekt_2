@@ -6,13 +6,13 @@ import java.io.Serializable;
 import java.util.PriorityQueue;
 
 /**
- * test
+ * Class representing single turn consisting of 4 moves.
  */
 public class Turn implements Serializable {
     public int x;
     public int y;
     private Player owner;
-    private PriorityQueue<Move> moves;
+    private PriorityQueue<Move> moves = new PriorityQueue<>();
 
     public Turn(int x, int y) {
         this.x = x;
