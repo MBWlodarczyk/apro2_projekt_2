@@ -35,6 +35,7 @@ public class Assets implements Disposable {
     private void loadHeroes(){
         manager.load("heroes/paladin.png",Texture.class);
         manager.load("heroes/warrior.png",Texture.class);
+        manager.load("heroes/archer.png",Texture.class);
     }
 
     /**

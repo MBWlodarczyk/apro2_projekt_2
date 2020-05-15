@@ -24,12 +24,18 @@ public abstract class Hero extends Entity {
      * Health of hero
      */
     private int health;
+    /**
+     * Start health
+     */
+    private final int startHealth;
 
 
-    public Hero(Player owner, int weight, int health) {
+
+    public Hero(Player owner, int weight, int startHealth,int health) {
         this.owner = owner;
         this.weight = weight;
         this.health = health;
+        this.startHealth = startHealth;
         this.skills = new ArrayList<>();
     }
 
