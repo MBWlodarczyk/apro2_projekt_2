@@ -57,4 +57,7 @@ public abstract class Hero extends Entity {
         return owner;
     }
 
+    public ArrayList<Skill> getSkills() {
+        return skills;
+    }
 }

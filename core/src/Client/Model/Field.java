@@ -1,5 +1,7 @@
 package Client.Model;
 
+import Client.Model.Heroes.Hero;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -22,11 +24,11 @@ public class Field implements Serializable {
     /**
      * Hero on field
      */
-    private Entity hero;
+    private Hero hero;
         /**
      * Obstacle on field
      */
-    private Entity obstacle;
+    private Obstacle obstacle;
 
 
     public Field(int y, int x, Type type) {
@@ -49,19 +51,19 @@ public class Field implements Serializable {
         return type;
     }
 
-    public Entity getHero() {
+    public Hero getHero() {
         return hero;
     }
 
-    public void setHero(Entity hero) {
+    public void setHero(Hero hero) {
         this.hero = hero;
     }
 
-    public Entity getObstacle() {
+    public Obstacle getObstacle() {
         return obstacle;
     }
 
-    public void setObstacle(Entity obstacle) {
+    public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
     }
 }

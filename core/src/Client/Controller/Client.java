@@ -14,7 +14,9 @@ import java.util.Scanner;
 public class Client {
     ObjectInputStream is;
     ObjectOutputStream os;
-    private GameMap received = new GameMap(16);
+    private Move send;
+    private GameMap received = new GameMap(22);
+    private boolean isSend;
     public Client() throws Exception {
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
@@ -24,27 +26,36 @@ public class Client {
             @Override
             public void run() {
                 while (true) {
-                    Scanner sc = new Scanner(System.in);
-                    int y = sc.nextInt();
-                    int x = sc.nextInt();
-                    Turn move = new Turn(y, x);
-                    try {
-                        os.writeObject(move);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (send != null && !isSend) {
+                        try {
+                            os.writeObject(send);
+                            isSend = true;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    System.out.println("Reading...");
-                    try {
-                        received = (GameMap) is.readObject();
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
+
+                    if (isSend) {
+                        try {
+                            received = (GameMap) is.readObject();
+                            System.out.println("Reading...");
+                            isSend=false;
+                            send=null;
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println(received);
                     }
-                    System.out.println(received);
                 }
+
             }
         }
         );
         t.start();
+    }
+
+    public void setSend(Move send) {
+        this.send = send;
     }
 
     public GameMap getReceived() {

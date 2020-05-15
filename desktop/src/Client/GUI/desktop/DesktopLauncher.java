@@ -1,6 +1,6 @@
 package Client.GUI.desktop;
 
-import Client.GUI.MyGdxGame;
+
 import Client.Gui_v2.SwordGame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -17,7 +17,7 @@ public static void main (String[] arg) throws Exception {
 	LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 	config.width = 704;
 	config.height = 704;
-	config.resizable = true;
+	config.resizable = false;
 	new LwjglApplication(new SwordGame(), config);
 }
 }

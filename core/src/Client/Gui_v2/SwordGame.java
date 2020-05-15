@@ -15,7 +15,11 @@ public class SwordGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        setScreen(new PlayScreen(this));
+        try {
+            setScreen(new PlayScreen(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

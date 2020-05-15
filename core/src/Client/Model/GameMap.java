@@ -1,6 +1,8 @@
 package Client.Model;
 
 
+import Client.Controller.DistanceValidator;
+import Client.Controller.Move;
 import Client.Model.Heroes.*;
 
 import java.io.Serializable;
@@ -38,6 +40,27 @@ public class GameMap implements Serializable {
     public Field[][] getMap() {
         return map;
     }
+
+
+
+    public void move(GameMap map, Move move){
+        if(DistanceValidator.isValid(map,move)){
+            Hero temp = move.getWho();
+            int x = move.getFrom().getX();
+            int y = move.getFrom().getY();
+            map.getMap()[y][x].setHero(null);
+            x = move.getWhere().getX();
+            y = move.getWhere().getY();
+            map.getMap()[y][x].setHero(temp);
+
+        }
+    }
+
+
+
+
+
+
 
     @Override
     public String toString() {

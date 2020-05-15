@@ -1,9 +1,11 @@
 package Client.Model.Skills;
 
+import java.io.Serializable;
+
 /**
  * Abstract class to represent single skill.
  */
-public abstract class Skill {
+public abstract class Skill implements Serializable {
     public int damage;
     public int distance;
     public boolean aggressive;  //if(aggressive == false) to nie jest sprawdzay damage

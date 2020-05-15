@@ -8,23 +8,23 @@ import java.awt.*;
 
 public class GameObject extends Rectangle {
 
-    private Texture fieldTexture;
+
     private Texture heroTexture;
     private Texture obstacleTexture;
 
 
 
-    public GameObject(Texture fieldTexture, Texture heroTexture, Texture obstacleTexture) {
-        this.fieldTexture = fieldTexture;
+    public GameObject(Texture heroTexture, Texture obstacleTexture) {
+//        this.fieldTexture = fieldTexture;
         this.heroTexture = heroTexture;
         this.obstacleTexture = obstacleTexture;
-        this.height = fieldTexture.getHeight();
-        this.width = fieldTexture.getWidth();
+        this.height = 32;
+        this.width = 32;
     }
 
 
     public void draw(SpriteBatch batch) {
-        batch.draw(fieldTexture, x, y);
+//        batch.draw(fieldTexture, x, y);
 
         if(heroTexture != null) {
             Sprite s = new Sprite(heroTexture, 0, 0, heroTexture.getWidth(), heroTexture.getHeight());
@@ -36,13 +36,5 @@ public class GameObject extends Rectangle {
             s2.setPosition(x,y);
             s2.draw(batch);
         }
-    }
-
-    public Texture getFieldTexture() {
-        return fieldTexture;
-    }
-
-    public void setFieldTexture(Texture fieldTexture){
-        this.fieldTexture = fieldTexture;
     }
 }

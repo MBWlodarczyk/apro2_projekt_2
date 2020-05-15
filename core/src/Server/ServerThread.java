@@ -1,5 +1,6 @@
 package Server;
 
+import Client.Controller.Move;
 import Client.Controller.Turn;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class ServerThread extends Thread{
     public ObjectOutputStream os;
     public String name;
     public boolean reciever;
-    public Turn recieved;
+    public Move recieved;
     public ServerThread(Socket sock,ObjectInputStream is,ObjectOutputStream os,String name) throws IOException {
         System.out.println("Creating thread");
     socket = sock;
@@ -32,7 +33,7 @@ public class ServerThread extends Thread{
         while(true) {
             reciever = false;
             try {
-                this.recieved = (Turn)is.readObject();
+                this.recieved = (Move)is.readObject();
                 System.out.println("recieved object from " + name);
                 reciever = true;
             } catch (IOException | ClassNotFoundException e) {
