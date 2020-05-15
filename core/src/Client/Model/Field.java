@@ -3,7 +3,6 @@ package Client.Model;
 import Client.Model.Heroes.Hero;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Class to represent single field
@@ -25,7 +24,7 @@ public class Field implements Serializable {
      * Hero on field
      */
     private Hero hero;
-        /**
+    /**
      * Obstacle on field
      */
     private Obstacle obstacle;

@@ -1,7 +1,7 @@
 package Client.GUI.desktop;
 
 
-import Client.Gui_v2.SwordGame;
+import Client.GUI.SwordGame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 

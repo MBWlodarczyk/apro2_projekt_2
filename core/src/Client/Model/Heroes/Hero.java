@@ -11,15 +11,18 @@ import java.util.ArrayList;
  */
 public abstract class Hero extends Entity {
     static int idGen;
-
     /**
-     * Owner of that hero
+     * Start health
      */
-    private Player owner;
+    private final int startHealth;
     /**
      * ArrayList of skills
      */
     protected ArrayList<Skill> skills;
+    /**
+     * Owner of that hero
+     */
+    private Player owner;
     /**
      * Weight of hero (use in order to solve collisions)
      */
@@ -28,28 +31,31 @@ public abstract class Hero extends Entity {
      * Health of hero
      */
     private int health;
-    /**
-     * Start health
-     */
-    private final int startHealth;
+    private float heathStatus;
 
 
-
-    public Hero(Player owner, int weight, int startHealth,int health) {
+    public Hero(Player owner, int weight, int startHealth, int health) {
         this.owner = owner;
         this.weight = weight;
         this.health = health;
         this.startHealth = startHealth;
+        this.heathStatus = (float) health / startHealth;
         this.skills = new ArrayList<>();
+    }
+
+    public static int getIdGen() {
+        return idGen;
     }
 
     @Override
     public String toString() {
-        return "{" +
+        return "Hero{" +
                 "owner=" + owner +
                 ", skills=" + skills +
                 ", weight=" + weight +
                 ", health=" + health +
+                ", startHealth=" + startHealth +
+                ", heathStatus=" + heathStatus +
                 '}';
     }
 
@@ -57,7 +63,36 @@ public abstract class Hero extends Entity {
         return owner;
     }
 
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
     public ArrayList<Skill> getSkills() {
         return skills;
+    }
+
+    public void setSkills(ArrayList<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+
+    public float getHeathStatus() {
+        return heathStatus;
     }
 }

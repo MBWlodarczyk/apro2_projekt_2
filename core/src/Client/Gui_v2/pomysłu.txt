@@ -1,1 +1,0 @@
-- do hero dodać aktualny stan zycia, aby pokazywac paskiem ile ma zycia

@@ -17,6 +17,7 @@ public class Client {
     private Move send;
     private GameMap received = new GameMap(22);
     private boolean isSend;
+
     public Client() throws Exception {
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
@@ -39,8 +40,8 @@ public class Client {
                         try {
                             received = (GameMap) is.readObject();
                             System.out.println("Reading...");
-                            isSend=false;
-                            send=null;
+                            isSend = false;
+                            send = null;
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }

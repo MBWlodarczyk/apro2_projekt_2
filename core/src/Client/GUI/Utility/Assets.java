@@ -1,4 +1,4 @@
-package Client.Gui_v2.Utility;
+package Client.GUI.Utility;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +20,7 @@ public class Assets implements Disposable {
     /**
      * Load fields
      */
-    private void loadField(){
+    private void loadField() {
         manager.load("field/grass.png", Texture.class);
         manager.load("field/water.png", Texture.class);
         manager.load("field/wall.png", Texture.class);
@@ -32,17 +32,18 @@ public class Assets implements Disposable {
     /**
      * Load heroes
      */
-    private void loadHeroes(){
-        manager.load("heroes/paladin.png",Texture.class);
-        manager.load("heroes/warrior.png",Texture.class);
-        manager.load("heroes/archer.png",Texture.class);
+    private void loadHeroes() {
+        manager.load("heroes/paladin.png", Texture.class);
+        manager.load("heroes/warrior.png", Texture.class);
+        manager.load("heroes/archer.png", Texture.class);
     }
 
     /**
      * load Special effects
      */
-    private void loadSpecial(){
-        manager.load("special/edge.png",Texture.class);
+    private void loadSpecial() {
+        manager.load("special/edge.png", Texture.class);
+        manager.load("special/health.png", Texture.class);
     }
 
 

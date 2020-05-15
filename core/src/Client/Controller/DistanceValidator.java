@@ -70,15 +70,15 @@ public class DistanceValidator {
         boolean[][] marked = getValid(map, move);
         print(marked);
         System.out.println(map);
-        System.out.println(isValid(map,move));
+        System.out.println(isValid(map, move));
     }
 
     //class to print array of booleans
-    public static void print(boolean[][] arr){
-        for(int i = 0; i<arr.length; i++){
+    public static void print(boolean[][] arr) {
+        for (int i = 0; i < arr.length; i++) {
             System.out.println();
-            for(int j = 0; j<arr[0].length; j++){
-                System.out.print(arr[i][j]+" ");
+            for (int j = 0; j < arr[0].length; j++) {
+                System.out.print(arr[i][j] + " ");
             }
         }
         System.out.println();

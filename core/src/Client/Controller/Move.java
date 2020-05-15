@@ -17,6 +17,14 @@ public class Move implements Serializable {
     private Field where;
     private Skill what;
 
+    public Move(Hero who, Field where, Field from, Skill what) {
+        this.whose = who.getOwner();
+        this.who = who;
+        this.from = from;
+        this.where = where;
+        this.what = what;
+    }
+
     public Player getWhose() {
         return whose;
     }
@@ -35,13 +43,5 @@ public class Move implements Serializable {
 
     public Skill getWhat() {
         return what;
-    }
-
-    public Move(Hero who, Field where, Field from, Skill what) {
-        this.whose = who.getOwner();
-        this.who = who;
-        this.from = from;
-        this.where = where;
-        this.what = what;
     }
 }

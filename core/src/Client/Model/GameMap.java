@@ -3,7 +3,10 @@ package Client.Model;
 
 import Client.Controller.DistanceValidator;
 import Client.Controller.Move;
-import Client.Model.Heroes.*;
+import Client.Model.Heroes.Archer;
+import Client.Model.Heroes.Hero;
+import Client.Model.Heroes.Paladin;
+import Client.Model.Heroes.Warrior;
 
 import java.io.Serializable;
 
@@ -23,7 +26,7 @@ public class GameMap implements Serializable {
         loadMap();
     }
 
-// tester method
+    // tester method
     private void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -42,9 +45,8 @@ public class GameMap implements Serializable {
     }
 
 
-
-    public void move(GameMap map, Move move){
-        if(DistanceValidator.isValid(map,move)){
+    public void move(GameMap map, Move move) {
+        if (DistanceValidator.isValid(map, move)) {
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
@@ -55,11 +57,6 @@ public class GameMap implements Serializable {
 
         }
     }
-
-
-
-
-
 
 
     @Override
