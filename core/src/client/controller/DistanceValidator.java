@@ -1,11 +1,11 @@
-package client.controller;
+package Client.Controller;
 
-import client.model.Field;
-import client.model.GameMap;
-import client.model.heroes.Paladin;
-import client.model.Player;
-import client.model.skills.Walk;
-import client.model.Type;
+import Client.Model.Field;
+import Client.Model.GameMap;
+import Client.Model.Heroes.Paladin;
+import Client.Model.Player;
+import Client.Model.Skills.Walk;
+import Client.Model.Type;
 
 /**
  * Class to validate if skill target is in range.

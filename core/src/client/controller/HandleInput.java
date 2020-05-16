@@ -1,6 +1,8 @@
-package client.controller;
+package Client.Controller;
 
-import client.gui.screens.PlayScreen;
+import Client.Controller.DistanceValidator;
+import Client.Controller.Move;
+import Client.GUI.Screens.PlayScreen;
 import com.badlogic.gdx.InputProcessor;
 
 

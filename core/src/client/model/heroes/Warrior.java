@@ -1,7 +1,7 @@
-package client.model.heroes;
+package Client.Model.Heroes;
 
-import client.model.Player;
-import client.model.skills.Walk;
+import Client.Model.Player;
+import Client.Model.Skills.Walk;
 
 public class Warrior extends Hero {
 

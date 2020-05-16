@@ -1,6 +1,6 @@
-package client.gui.scenes;
+package Client.GUI.Scenes;
 
-import client.gui.SwordGame;
+import Client.GUI.SwordGame;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

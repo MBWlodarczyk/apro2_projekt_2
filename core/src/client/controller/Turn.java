@@ -1,6 +1,6 @@
-package client.controller;
+package Client.Controller;
 
-import client.model.Player;
+import Client.Model.Player;
 
 import java.io.Serializable;
 import java.util.PriorityQueue;

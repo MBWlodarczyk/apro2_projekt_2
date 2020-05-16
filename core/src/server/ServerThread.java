@@ -1,6 +1,6 @@
-package server;
+package Server;
 
-import client.controller.Move;
+import Client.Controller.Move;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

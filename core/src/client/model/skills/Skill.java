@@ -1,4 +1,4 @@
-package client.model.skills;
+package Client.Model.Skills;
 
 import java.io.Serializable;
 

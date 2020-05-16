@@ -1,8 +1,8 @@
-package client.model.heroes;
+package Client.Model.Heroes;
 
-import client.model.Entity;
-import client.model.Player;
-import client.model.skills.Skill;
+import Client.Model.Entity;
+import Client.Model.Player;
+import Client.Model.Skills.Skill;
 
 import java.util.ArrayList;
 

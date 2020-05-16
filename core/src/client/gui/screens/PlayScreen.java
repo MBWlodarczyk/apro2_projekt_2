@@ -1,15 +1,15 @@
-package client.gui.screens;
+package Client.GUI.Screens;
 
-import client.controller.Client;
-import client.controller.DistanceValidator;
-import client.controller.Move;
-import client.gui.SwordGame;
-import client.gui.utility.Assets;
-import client.gui.utility.GameObject;
-import client.controller.HandleInput;
-import client.model.heroes.Archer;
-import client.model.heroes.Paladin;
-import client.model.heroes.Warrior;
+import Client.Controller.Client;
+import Client.Controller.DistanceValidator;
+import Client.Controller.Move;
+import Client.GUI.SwordGame;
+import Client.GUI.Utility.Assets;
+import Client.GUI.Utility.GameObject;
+import Client.Controller.HandleInput;
+import Client.Model.Heroes.Archer;
+import Client.Model.Heroes.Paladin;
+import Client.Model.Heroes.Warrior;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;

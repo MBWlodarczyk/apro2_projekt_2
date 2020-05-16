@@ -1,9 +1,9 @@
-package client.controller;
+package Client.Controller;
 
-import client.model.Field;
-import client.model.heroes.Hero;
-import client.model.Player;
-import client.model.skills.Skill;
+import Client.Model.Field;
+import Client.Model.Heroes.Hero;
+import Client.Model.Player;
+import Client.Model.Skills.Skill;
 
 import java.io.Serializable;
 

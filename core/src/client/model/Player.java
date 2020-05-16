@@ -1,6 +1,6 @@
-package client.model;
+package Client.Model;
 
-import client.model.heroes.Hero;
+import Client.Model.Heroes.Hero;
 
 import java.io.Serializable;
 import java.util.ArrayList;

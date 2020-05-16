@@ -1,4 +1,4 @@
-package client.gui.utility;
+package Client.GUI.Utility;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;

@@ -1,4 +1,4 @@
-package client.model;
+package Client.Model;
 
 public enum Type {
     Grass(0),

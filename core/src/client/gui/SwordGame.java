@@ -1,6 +1,6 @@
-package client.gui;
+package Client.GUI;
 
-import client.gui.screens.PlayScreen;
+import Client.GUI.Screens.PlayScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

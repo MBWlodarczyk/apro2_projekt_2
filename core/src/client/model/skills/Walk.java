@@ -1,4 +1,4 @@
-package client.model.skills;
+package Client.Model.Skills;
 
 public class Walk extends Skill {
     public Walk(int distance) {

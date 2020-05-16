@@ -1,12 +1,12 @@
-package client.model;
+package Client.Model;
 
 
-import client.controller.DistanceValidator;
-import client.controller.Move;
-import client.model.heroes.Archer;
-import client.model.heroes.Hero;
-import client.model.heroes.Paladin;
-import client.model.heroes.Warrior;
+import Client.Controller.DistanceValidator;
+import Client.Controller.Move;
+import Client.Model.Heroes.Archer;
+import Client.Model.Heroes.Hero;
+import Client.Model.Heroes.Paladin;
+import Client.Model.Heroes.Warrior;
 
 import java.io.Serializable;
 

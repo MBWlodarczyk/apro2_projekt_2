@@ -1,6 +1,6 @@
-package client.controller;
+package Client.Controller;
 
-import client.model.GameMap;
+import Client.Model.GameMap;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
