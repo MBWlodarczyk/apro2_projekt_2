@@ -1,6 +1,7 @@
-package Client.Model;
+package Client.Model.map;
 
 import Client.Model.Heroes.Hero;
+import Client.Model.Type;
 
 import java.io.Serializable;
 
@@ -17,10 +18,6 @@ public class Field implements Serializable {
      */
     final private int y;
     /**
-     * Type of field
-     */
-    final private Type type;
-    /**
      * Hero on field
      */
     private Hero hero;
@@ -30,10 +27,9 @@ public class Field implements Serializable {
     private Obstacle obstacle;
 
 
-    public Field(int y, int x, Type type) {
+    public Field(int y, int x) {
         this.x = x;
         this.y = y;
-        this.type = type;
         this.hero = null;
         this.obstacle = null;
     }
@@ -46,9 +42,6 @@ public class Field implements Serializable {
         return y;
     }
 
-    public Type getType() {
-        return type;
-    }
 
     public Hero getHero() {
         return hero;

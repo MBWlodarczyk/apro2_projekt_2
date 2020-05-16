@@ -1,7 +1,7 @@
 package Client.Controller;
 
-import Client.Model.Field;
-import Client.Model.GameMap;
+import Client.Model.map.Field;
+import Client.Model.map.GameMap;
 import Client.Model.Heroes.Paladin;
 import Client.Model.Player;
 import Client.Model.Skills.Walk;
@@ -19,6 +19,7 @@ public class DistanceValidator {
      * @return boolean array of field where can be applied and where cannot.
      */
     public static boolean[][] getValid(GameMap map, Move move) {
+
         boolean[][] marked = new boolean[map.getMap().length][map.getMap()[0].length];
         dfs(map, marked, move.getFrom().getY(), move.getFrom().getX(), move.getWhat().getDistance());
         return marked;
@@ -47,7 +48,7 @@ public class DistanceValidator {
      * Method to help dfs validate if the field is not null or wall.
      */
     private static boolean fieldValid(GameMap map, int y, int x) {
-        return y < map.getMap().length && y >= 0 && x >= 0 && x < map.getMap()[0].length && map.getMap()[y][x].getType() == Type.Grass;//Typy ktore nie moga byc przekroczone tutaj dodawac
+        return y < map.getMap().length && y >= 0 && x >= 0 && x < map.getMap()[0].length && map.getMap()[y][x].getObstacle()==null;//Typy ktore nie moga byc przekroczone tutaj dodawac
     }
 
     /**
@@ -66,7 +67,7 @@ public class DistanceValidator {
     public static void main(String[] args) {
         GameMap map = new GameMap(16);
         Player owner = new Player("xd");
-        Move move = new Move(new Paladin(owner), new Field(4, 4, Type.Grass), new Field(15, 0, Type.Grass), new Walk(3));
+        Move move = new Move(new Paladin(owner), new Field(4, 4), new Field(15, 0), new Walk(3));
         boolean[][] marked = getValid(map, move);
         print(marked);
         System.out.println(map);

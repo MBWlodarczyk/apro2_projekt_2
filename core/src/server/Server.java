@@ -1,6 +1,7 @@
 package Server;
 
-import Client.Model.GameMap;
+import Client.Model.map.GameMap;
+import Client.Model.Player;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class Server {
     private static ArrayList<ServerThread> clients = new ArrayList<>();
     private static GameMap map = new GameMap(22);
+    private static ArrayList<Player> players;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
@@ -59,7 +61,11 @@ public class Server {
 
     public static synchronized void send() throws IOException {
         for (ServerThread client : clients) {
-            map.move(map, client.recieved);
+
+            map.move(map, client.recieved.getMoves().poll());
+            map.move(map, client.recieved.getMoves().poll());
+            map.move(map, client.recieved.getMoves().poll());
+            map.move(map, client.recieved.getMoves().poll());
         }
         for (ServerThread client : clients) {
             client.os.reset();
@@ -67,6 +73,9 @@ public class Server {
             System.out.println(map);
             client.os.flush();
         }
+    }
+    public static synchronized void removeClient(ServerThread client){
+        clients.remove(client);
     }
 }
 

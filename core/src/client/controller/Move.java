@@ -1,6 +1,6 @@
 package Client.Controller;
 
-import Client.Model.Field;
+import Client.Model.map.Field;
 import Client.Model.Heroes.Hero;
 import Client.Model.Player;
 import Client.Model.Skills.Skill;

@@ -158,7 +158,6 @@ public class PlayScreen implements Screen {
             }
         }
         else{
-            System.out.println("ciage else");
             sprites = new ArrayList<>(); //clean up
         }
     }

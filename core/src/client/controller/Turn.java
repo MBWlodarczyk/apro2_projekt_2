@@ -3,27 +3,38 @@ package Client.Controller;
 import Client.Model.Player;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Class representing single turn consisting of 4 moves.
  */
 public class Turn implements Serializable {
-    public int x;
-    public int y;
     private Player owner;
-    private PriorityQueue<Move> moves = new PriorityQueue<>();
+    private Queue<Move> moves = new PriorityQueue<>();
 
-    public Turn(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Queue<Move> getMoves() {
+        return moves;
     }
 
-    //    public Turn(Player owner) {
-//        this.owner = owner;
-//        this.moves = new PriorityQueue<Move>();
-//    }
+    public Turn(Player owner) {
+        this.owner = owner;
+        this.moves = new LinkedList<Move>();
+    }
     public void addMove(Move move) {
         moves.add(move);
+    }
+
+    @Override
+    public String toString() {
+        return "Turn{" +
+                "owner=" + owner +
+                ", moves=" + moves +
+                '}';
+    }
+
+    public void clearMoves() {
+        this.moves = new LinkedList<Move>();
     }
 }

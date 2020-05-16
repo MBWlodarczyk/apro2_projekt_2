@@ -1,6 +1,7 @@
 package Client.Controller;
 
-import Client.Model.GameMap;
+import Client.Model.Player;
+import Client.Model.map.GameMap;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,9 +13,9 @@ import java.util.Scanner;
  * test
  */
 public class Client {
-    ObjectInputStream is;
-    ObjectOutputStream os;
-    private Move send;
+    public ObjectInputStream is;
+    public ObjectOutputStream os;
+    private Turn send = new Turn(new Player("xd"));
     private GameMap received = new GameMap(22);
     private boolean isSend;
 
@@ -27,10 +28,14 @@ public class Client {
             @Override
             public void run() {
                 while (true) {
-                    if (send != null && !isSend) {
+                    System.out.println(send);
+                    if (send != null && !isSend && send.getMoves().size()==4) {
                         try {
+                            System.out.println("Sending...");
+                            os.reset();
                             os.writeObject(send);
                             isSend = true;
+                            os.flush();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -41,7 +46,7 @@ public class Client {
                             received = (GameMap) is.readObject();
                             System.out.println("Reading...");
                             isSend = false;
-                            send = null;
+                            send.clearMoves();
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -55,8 +60,12 @@ public class Client {
         t.start();
     }
 
-    public void setSend(Move send) {
+    public void setSend(Turn send) {
         this.send = send;
+    }
+
+    public Turn getSend() {
+        return send;
     }
 
     public GameMap getReceived() {
