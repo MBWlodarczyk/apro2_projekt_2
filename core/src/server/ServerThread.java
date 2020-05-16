@@ -38,7 +38,7 @@ public class ServerThread extends Thread {
             reciever = false;
             try {
                     this.recieved = (Turn) is.readObject();
-                    System.out.println("recieved object from " + name);
+                    System.out.println("received object from " + name);
                     reciever = true;
                     synchronized (lock) {
                     {
@@ -61,6 +61,3 @@ public class ServerThread extends Thread {
         exit = true;
     }
 }
-// Server.removeClient(this);
-//         System.out.println("disconnect " + name);
-//         this.dispose();

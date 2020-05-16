@@ -61,16 +61,20 @@ public class Server {
 
     public static synchronized void send() throws IOException {
         for (ServerThread client : clients) {
-
             map.move(map, client.recieved.getMoves().poll());
+        }
+        for (ServerThread client : clients) {
             map.move(map, client.recieved.getMoves().poll());
+        }
+        for (ServerThread client : clients) {
             map.move(map, client.recieved.getMoves().poll());
+        }
+        for (ServerThread client : clients) {
             map.move(map, client.recieved.getMoves().poll());
         }
         for (ServerThread client : clients) {
             client.os.reset();
             client.os.writeObject(map);// sending object
-            System.out.println(map);
             client.os.flush();
         }
     }
