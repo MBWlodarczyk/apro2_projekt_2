@@ -51,7 +51,7 @@ public class PlayScreen implements Screen {
         this.swordGame = swordGame;
         gameCam = new OrthographicCamera();
 
-        gamePort = new FitViewport(704, 704, gameCam);
+        gamePort = new FitViewport(1000, 704, gameCam);
         //hud = new Hud(swordGame.batch);
 
         size = 22;
@@ -77,8 +77,9 @@ public class PlayScreen implements Screen {
         sprite = new Sprite(edgeTexture, 0, 0, edgeTexture.getWidth(), edgeTexture.getHeight());
         sprites = new ArrayList<>();
 
-        Gdx.input.setInputProcessor(new HandleInput(this));
         handleInput = new HandleInput(this);
+        Gdx.input.setInputProcessor(handleInput);
+
     }
 
     public GameObject[][] getGameObjects() {
@@ -96,7 +97,6 @@ public class PlayScreen implements Screen {
                 else {
                     gameObjects[i][j] = new GameObject(checkHero(i, j), null, healthTexture, client.getReceived().getMap()[i][j].getHero().getHeathStatus());
                 }
-
                 gameObjects[i][j].x = i * gameObjects[i][j].height;
                 gameObjects[i][j].y = 704 - (j + 1) * gameObjects[i][j].width;
             }
@@ -132,11 +132,14 @@ public class PlayScreen implements Screen {
     }
 
     private void distanceMove() {
-        int[]  tab = handleInput.getCord(Gdx.input.getX(),Gdx.input.getY());
-        if(Gdx.input.isTouched() && client.getReceived().getMap()[tab[0]][tab[1]].getHero() != null){
-            Move move = new Move(client.getReceived().getMap()[tab[0]][tab[1]].getHero(), client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[tab[0]][tab[1]].getHero().getSkills().get(0));
-            boolean[][] marked = DistanceValidator.getValid(client.getReceived(),move);
 
+        if(handleInput.heroChosen){
+            int[] tab = handleInput.getCord(Gdx.input.getX(),Gdx.input.getY());
+            int x = handleInput.getX();
+            int y = handleInput.getY();
+            Move move = new Move(client.getReceived().getMap()[y][x].getHero(), client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[y][x], client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
+
+            boolean[][] marked = DistanceValidator.getValid(client.getReceived(),move);
             for(int i = 0; i < size; i ++){
                 for(int j = 0; j < size; j++){
                     if(marked[i][j]){
@@ -145,39 +148,20 @@ public class PlayScreen implements Screen {
                 }
             }
             int count = 0;
-            for(int i = 0; i < size; i ++){
-                for(int j = 0; j < size; j++){
-                    if(marked[i][j]){
-                        sprites.get(count).setPosition(32*i,704-32*(j+1));
+            for(int i = 0; i < size; i ++) {
+                for (int j = 0; j < size; j++) {
+                    if(marked[i][j]) {
+                        sprites.get(count).setPosition(i * 32, 704 - (j + 1) * 32);
                         count++;
                     }
+
                 }
             }
-            System.out.println(sprites.size());
         }
-
-
-
-//        if(handleInput.isHeroChosen()){
-//            System.out.println("jest na ture");
-//            int[] tab = handleInput.getTab();
-//            int x = handleInput.getX();
-//            int y = handleInput.getY();
-//            Move move = new Move(client.getReceived().getMap()[y][x].getHero(), client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[y][x], client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
-//
-////            boolean[][] marked = DistanceValidator.getValid(client.getReceived(),move);
-////            for(int i = 0; i < size; i ++){
-////                for(int j = 0; j < size; j++){
-////                    if(marked[i][j]){
-////                        sprites.add(new Sprite(edgeTexture, 0, 0, edgeTexture.getWidth(), edgeTexture.getHeight()));
-////                    }
-////                }
-////            }
-//        }
-//        else{
-//            System.out.println("ciage else");
-//            sprites = new ArrayList<>(); //clean up
-//        }
+        else{
+            System.out.println("ciage else");
+            sprites = new ArrayList<>(); //clean up
+        }
     }
 
     private void mouseUpdate() {
@@ -200,6 +184,8 @@ public class PlayScreen implements Screen {
 
         swordGame.batch.begin();
 
+
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 gameObjects[i][j].draw(swordGame.batch);
@@ -208,10 +194,11 @@ public class PlayScreen implements Screen {
 
         for (Sprite value : sprites) value.draw(swordGame.batch);
 
-
-
+//        handleInput.draw(swordGame.batch);
 
         sprite.draw(swordGame.batch);
+
+
 
         swordGame.batch.end();
 

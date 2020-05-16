@@ -5,20 +5,14 @@ import Client.Controller.Move;
 import Client.GUI.Screens.PlayScreen;
 import com.badlogic.gdx.InputProcessor;
 
+
 public class HandleInput implements InputProcessor {
-    private boolean pressed;
-    private boolean heroChosen;
+
+    public boolean heroChosen;
     private boolean skillChosen;
     private PlayScreen game;
     private int x, y;
 
-    public boolean isPressed() {
-        return pressed;
-    }
-
-    public void setPressed(boolean pressed) {
-        this.pressed = pressed;
-    }
 
     public int getX() {
         return x;
@@ -31,7 +25,6 @@ public class HandleInput implements InputProcessor {
     public HandleInput(PlayScreen game) {
         this.heroChosen = false;
         this.skillChosen = false;
-        this.pressed = false;
         this.game = game;
     }
 
@@ -53,23 +46,23 @@ public class HandleInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        int[] tab = getCord(screenX, screenY);
-        getCord(screenX,screenY); //zwraca cordy gdzie przycisnelismy
-        if (!heroChosen && game.client.getReceived().getMap()[tab[0]][tab[1]].getHero() != null) {
-            System.out.println("!herose");
-            pressed = true;
-            heroChosen = true;
-            this.y = tab[0];
-            this.x = tab[1];
-            return true;
-        }
-        if (heroChosen) {
-            Move move = new Move(game.client.getReceived().getMap()[y][x].getHero(), game.client.getReceived().getMap()[tab[0]][tab[1]], game.client.getReceived().getMap()[y][x], game.client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
-            if (DistanceValidator.isValid(game.client.getReceived(), move)) {
-                System.out.println("trying to send");
-                game.client.setSend(move);
-                heroChosen = false;
+        if(screenX<=704) {
+            int[] tab = getCord(screenX, screenY);
+            getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
+            if (!heroChosen && game.client.getReceived().getMap()[tab[0]][tab[1]].getHero() != null) {
+                heroChosen = true;
+                this.y = tab[0];
+                this.x = tab[1];
                 return true;
+            }
+            if (heroChosen) {
+                Move move = new Move(game.client.getReceived().getMap()[y][x].getHero(), game.client.getReceived().getMap()[tab[0]][tab[1]], game.client.getReceived().getMap()[y][x], game.client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
+                if (DistanceValidator.isValid(game.client.getReceived(), move)) {
+//                System.out.println("trying to send");
+                    game.client.setSend(move);
+                    heroChosen = false;
+                    return true;
+                }
             }
         }
         return false;
