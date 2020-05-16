@@ -32,10 +32,11 @@ public abstract class Hero extends Entity {
      */
     private int health;
     private float heathStatus;
+    protected int speed;
 
-
-    public Hero(Player owner, int weight, int startHealth, int health) {
+    public Hero(Player owner, int weight, int startHealth, int health, int speed) {
         this.owner = owner;
+        this.speed = speed;
         this.weight = weight;
         this.health = health;
         this.startHealth = startHealth;
