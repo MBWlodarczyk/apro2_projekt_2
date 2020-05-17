@@ -1,17 +1,15 @@
 package Client.GUI.desktop;
 
-
-import Client.GUI.SwordGame;
+import Server.SerwerScreen;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-public class DesktopLauncher {
-
+public class Serwerek {
     public static void main(String[] arg) throws Exception {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = 1000;
-        config.height = 704;
+        config.width = 50;
+        config.height = 50;
         config.resizable = false;
-        new LwjglApplication(new SwordGame(), config);
+        new LwjglApplication(new SerwerScreen(), config);
     }
 }

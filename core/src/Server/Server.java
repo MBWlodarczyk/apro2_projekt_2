@@ -19,9 +19,7 @@ public class Server {
     private static ArrayList<Player> players;
     private int playerNumber;
 
-    public static void main(String[] args) throws IOException {
-
-
+    public Server() throws IOException {
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
 
@@ -36,6 +34,7 @@ public class Server {
             clients.add(t);
         }
     }
+
 
     public static synchronized boolean check() throws IOException {
         boolean marker = true;

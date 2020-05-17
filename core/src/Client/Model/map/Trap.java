@@ -6,6 +6,7 @@ public class Trap extends Obstacle {
     private boolean immobilize; // czy zatrzymuje gracza
 
     public Trap(int y, int x, int damage) {
+        super("obstacles/trap.png",x,y);
         this.x = x;
         this.y = y;
         this.isFixed = true;

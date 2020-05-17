@@ -66,7 +66,7 @@ public class DistanceValidator {
     public static void main(String[] args) {
         GameMap map = new GameMap(16);
         Player owner = new Player("xd");
-        Move move = new Move(new Paladin(owner), new Field(4, 4), new Field(15, 0), new Walk(3));
+        Move move = new Move(new Paladin(owner,4,4), new Field(4, 4), new Field(15, 0), new Walk(3));
         boolean[][] marked = getValid(map, move);
         print(marked);
         System.out.println(map);
