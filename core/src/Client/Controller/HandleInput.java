@@ -61,6 +61,7 @@ public class HandleInput implements InputProcessor {
 //                System.out.println("trying to send");
                     game.client.getSend().addMove(move);
                     System.out.println("Adding move...");
+                    System.out.println(game.client.getSend().getMoves().size());
                     heroChosen = false;
                     return true;
                 }

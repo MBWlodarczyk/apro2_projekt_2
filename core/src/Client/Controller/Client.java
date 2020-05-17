@@ -15,46 +15,47 @@ import java.util.Scanner;
 public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
-    private Turn send;
-    private GameMap received = new GameMap(22);
-    private boolean isSend;
-    private Player player;
+    private Turn send = new Turn(new Player("wtf"));
+    private GameMap received;
+    private boolean isSend=false;
 
     public Client() throws Exception {
+        received = new GameMap(22);
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
-        Scanner sc = new Scanner(System.in);
-        String nick = sc.nextLine();
-        this.player = new Player(nick);
-        send = new Turn(player);
+        Object lock = new Object();
+
+        final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    System.out.println(send);
-                    if (send != null && !isSend && send.getMoves().size() == 4) {
-                        try {
-                            System.out.println("Sending...");
-                            os.reset();
-                            os.writeObject(send);
-                            isSend = true;
-                            os.flush();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    synchronized (finalLock){
+                        if (send != null && !isSend && send.getMoves().size() == 4) {
+                            try {
+                                System.out.println("Sending...");
+                                os.reset();
+                                os.writeObject(send);
+                                isSend = true;
+                                os.flush();
+                                send.clearMoves();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
 
-                    if (isSend) {
-                        try {
-                            received = (GameMap) is.readObject();
-                            System.out.println("Reading...");
-                            isSend = false;
-                            send.clearMoves();
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
+                        if (isSend) {
+                            try {
+                                received = (GameMap) is.readObject();
+                                System.out.println("Reading...");
+                                isSend = false;
+                                send.clearMoves();
+                            } catch (IOException | ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println(received);
                         }
-                        System.out.println(received);
                     }
                 }
 
@@ -62,10 +63,6 @@ public class Client {
         }
         );
         t.start();
-    }
-
-    public void setSend(Turn send) {
-        this.send = send;
     }
 
     public Turn getSend() {

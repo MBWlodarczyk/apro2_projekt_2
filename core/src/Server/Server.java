@@ -17,12 +17,14 @@ public class Server {
     private static ArrayList<ServerThread> clients = new ArrayList<>();
     private static GameMap map = new GameMap(22);
     private static ArrayList<Player> players;
+    private int playerNumber;
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException {
 
 
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
+
         while (true) {
             Socket s = server.accept();
 
