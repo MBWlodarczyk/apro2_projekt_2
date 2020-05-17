@@ -60,27 +60,5 @@ public class DistanceValidator {
     public static boolean isValid(GameMap map, Move move) {
         boolean[][] marked = getValid(map, move);
         return marked[move.getWhere().getY()][move.getWhere().getX()];
-    }
+    }}
 
-    //testing for class
-    public static void main(String[] args) {
-        GameMap map = new GameMap(16);
-        Player owner = new Player("xd");
-        Move move = new Move(new Paladin(owner,4,4), new Field(4, 4), new Field(15, 0), new Walk(3));
-        boolean[][] marked = getValid(map, move);
-        print(marked);
-        System.out.println(map);
-        System.out.println(isValid(map, move));
-    }
-
-    //class to print array of booleans
-    public static void print(boolean[][] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.println();
-            for (int j = 0; j < arr[0].length; j++) {
-                System.out.print(arr[i][j] + " ");
-            }
-        }
-        System.out.println();
-    }
-}

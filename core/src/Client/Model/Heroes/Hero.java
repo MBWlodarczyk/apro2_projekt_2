@@ -34,7 +34,7 @@ public abstract class Hero extends Entity {
     private float heathStatus;
     protected int speed;
 
-    public Hero(String imagePath,int x, int y, Player owner, int weight, int startHealth, int health, int speed) {
+    public Hero(Player owner, int weight, int startHealth, int health, int speed,String imagePath,int x,int y) {
         super(imagePath,x,y);
         this.owner = owner;
         this.speed = speed;

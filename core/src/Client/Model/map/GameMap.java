@@ -32,11 +32,11 @@ public class GameMap implements Serializable {
                 map[i][j] = new Field(i, j);
             }
         }
-
+//        map[3][2] = new Field(3, 2, Type.Wall);
         map[3][3].setHero(new Warrior(new Player("Jakiś typ"),3,3));
-//        map[3][4].setHero(new Paladin(new Player("Jakiś typ"),4,3));
-//        map[3][5].setHero(new Archer(new Player("Jakiś typ"),5,3));
-//        map[3][6].setHero(new Wizard(new Player("Jakiś typ"),6,3));
+        map[3][4].setHero(new Paladin(new Player("Jakiś typ"),3,4));
+        map[3][5].setHero(new Archer(new Player("Jakiś typ"),3,5));
+        map[3][6].setHero(new Wizard(new Player("Jakiś typ"),3,6));
 
     }
 

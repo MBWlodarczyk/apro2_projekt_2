@@ -10,29 +10,14 @@ import java.io.Serializable;
  * Abstract class to represent single entity
  */
 public abstract class Entity extends Image implements Serializable {
-    protected boolean isFixed=false; // can it be moved by a hero
-    protected boolean isVisible=true; // is it visible
-    protected boolean isCrossable=true; // can you pass through it and see over/through it
-    protected boolean isAttackable=true;
-    protected int x,y;
-
-    public final static int WIDTH = 32;
-    public final static int HEIGHT = 32;
-    public final static int STARTING_X = 200;
-    public final static int STARTING_Y = 300;
-
-    public Entity(String imagePath,int x,int y){
-//        super(new Texture("heroes/archer.png"));
-        this.x = x;
-        this.y = y;
-        this.setOrigin(WIDTH/2,HEIGHT/2);
-        this.setSize(WIDTH,HEIGHT);
-        this.setPosition(x*WIDTH+10, Constans.HEIGHT-(y+1)*HEIGHT-10);
-    }
-
+    protected boolean isFixed = false; // can it be moved by a hero
+    protected boolean isVisible = true; // is it visible
+    protected boolean isCrossable = true; // can you pass through it and see over/through it
+    protected boolean isAttackable = true;
+    protected int x, y;
 
     @Override
-    public String toString(){ // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
+    public String toString() { // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
         return this.getClass().toString();
     }
 
@@ -70,5 +55,15 @@ public abstract class Entity extends Image implements Serializable {
 
     public boolean isAttackable() {
         return isAttackable;
+    }
+
+    public Entity(String imagePath, int x, int y) {
+        super(new Texture(imagePath));
+        this.x = x;
+        this.y = y;
+
+        this.setOrigin(16, 16);
+        this.setSize(32, 32);
+        this.setPosition(x * Constans.WIDTH + 10, Constans.HEIGHT - (y + 1) * 32 - 10);
     }
 }
