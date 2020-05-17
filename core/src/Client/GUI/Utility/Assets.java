@@ -36,6 +36,9 @@ public class Assets implements Disposable {
         manager.load("heroes/paladin.png", Texture.class);
         manager.load("heroes/warrior.png", Texture.class);
         manager.load("heroes/archer.png", Texture.class);
+        manager.load("heroes/necromancer.png", Texture.class);
+        manager.load("heroes/priest.png", Texture.class);
+        manager.load("heroes/wizard.png", Texture.class);
     }
 
     /**

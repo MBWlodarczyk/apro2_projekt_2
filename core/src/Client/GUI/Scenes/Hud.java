@@ -1,13 +1,17 @@
 package Client.GUI.Scenes;
 
+import Client.GUI.Constans;
 import Client.GUI.SwordGame;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -26,7 +30,7 @@ public class Hud {
     public Hud(SpriteBatch sb) {
         moves = 4;
         rounds = roundsGen++;
-        viewport = new FillViewport(SwordGame.V_WIDTH, SwordGame.V_HEIGHT, new OrthographicCamera());
+        viewport = new FillViewport(Constans.WIDTH, Constans.HEIGHT, new OrthographicCamera());
 
         stage = new Stage(viewport, sb); //do organizaji widgetów (label)
 
@@ -43,6 +47,14 @@ public class Hud {
         tabel.add(movesCountLabel).expandX().padTop(10);
         tabel.add(roundsLabel).expandX().padTop(10);
         tabel.add(roundsCountLabel).expandX().padTop(10);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/rainbow-ui.json"));
+
+        TextButton button = new TextButton("simeno",skin);
+        button.setSize(300,100);
+        button.setPosition(700,300);
+        stage.addActor(button);
+
 
         stage.addActor(tabel);
     }

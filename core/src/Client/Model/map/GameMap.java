@@ -3,10 +3,7 @@ package Client.Model.map;
 
 import Client.Controller.DistanceValidator;
 import Client.Controller.Move;
-import Client.Model.Heroes.Archer;
-import Client.Model.Heroes.Hero;
-import Client.Model.Heroes.Paladin;
-import Client.Model.Heroes.Warrior;
+import Client.Model.Heroes.*;
 import Client.Model.Player;
 import Client.Model.Type;
 
@@ -29,7 +26,7 @@ public class GameMap implements Serializable {
     }
 
     // tester method
-    private void loadMap() {
+    public void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
@@ -39,6 +36,7 @@ public class GameMap implements Serializable {
         map[3][3].setHero(new Warrior(new Player("Jakiś typ")));
         map[3][4].setHero(new Paladin(new Player("Jakiś typ")));
         map[3][5].setHero(new Archer(new Player("Jakiś typ")));
+        map[3][6].setHero(new Wizard(new Player("Jakiś typ")));
 
     }
 

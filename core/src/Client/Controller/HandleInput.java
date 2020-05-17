@@ -2,6 +2,7 @@ package Client.Controller;
 
 import Client.Controller.DistanceValidator;
 import Client.Controller.Move;
+import Client.GUI.Constans;
 import Client.GUI.Screens.PlayScreen;
 import com.badlogic.gdx.InputProcessor;
 
@@ -12,7 +13,11 @@ public class HandleInput implements InputProcessor {
     private boolean skillChosen;
     private PlayScreen game;
     private int x, y;
+    private int[] tab = new int[2];
 
+    public int[] getTab() {
+        return tab;
+    }
 
     public int getX() {
         return x;
@@ -47,7 +52,7 @@ public class HandleInput implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(screenX<=704) {
-            int[] tab = getCord(screenX, screenY);
+            getCord(screenX, screenY);
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
             if (!heroChosen && game.client.getReceived().getMap()[tab[0]][tab[1]].getHero() != null) {
                 heroChosen = true;
@@ -58,7 +63,6 @@ public class HandleInput implements InputProcessor {
             if (heroChosen) {
                 Move move = new Move(game.client.getReceived().getMap()[y][x].getHero(), game.client.getReceived().getMap()[tab[0]][tab[1]], game.client.getReceived().getMap()[y][x], game.client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
                 if (DistanceValidator.isValid(game.client.getReceived(), move)) {
-//                System.out.println("trying to send");
                     game.client.getSend().addMove(move);
                     System.out.println("Adding move...");
                     System.out.println(game.client.getSend().getMoves().size());
@@ -70,18 +74,15 @@ public class HandleInput implements InputProcessor {
         return false;
     }
 
-    public int[] getCord(int x, int y) {
-        int[] tab = new int[2];
+    public void getCord(int x, int y) {
         for (int i = 0; i < game.size; i++) {
             for (int j = 0; j < game.size; j++) {
-                if (game.getGameObjects()[i][j].contains(x, 704 - y)) {
+                if (game.getGameObjects()[i][j].contains(x, Constans.HEIGHT - y)) {
                     tab[0] = i;
                     tab[1] = j;
-                    return tab;
                 }
             }
         }
-        return null;
     }
 
     @Override
