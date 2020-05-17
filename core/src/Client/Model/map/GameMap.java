@@ -56,7 +56,6 @@ public class GameMap implements Serializable {
             x = move.getWhere().getX();
             y = move.getWhere().getY();
             map.getMap()[y][x].setHero(temp);
-
         }
     }
 

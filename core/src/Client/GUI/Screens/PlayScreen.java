@@ -3,6 +3,7 @@ package Client.GUI.Screens;
 import Client.Controller.Client;
 import Client.Controller.DistanceValidator;
 import Client.Controller.Move;
+import Client.GUI.Constans;
 import Client.GUI.SwordGame;
 import Client.GUI.Utility.Assets;
 import Client.GUI.Utility.GameObject;
@@ -16,12 +17,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -44,13 +51,16 @@ public class PlayScreen implements Screen {
     private Assets assets;
     private HandleInput handleInput;
 
+    private World world;
+    private Box2DDebugRenderer b2dr;
+
     public PlayScreen(SwordGame swordGame) throws Exception {
         client = new Client();
 
         this.swordGame = swordGame;
         gameCam = new OrthographicCamera();
 
-        gamePort = new FitViewport(1000, 704, gameCam);
+        gamePort = new FitViewport(Constans.WIDTH / Constans.PPM, Constans.HEIGHT / Constans.PPM, gameCam);
         //hud = new Hud(swordGame.batch);
 
         size = 22;
@@ -70,7 +80,7 @@ public class PlayScreen implements Screen {
 
         mapLoader = new TmxMapLoader();
         map = mapLoader.load("projekt_textury.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(map,1/ Constans.PPM);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         sprite = new Sprite(edgeTexture, 0, 0, edgeTexture.getWidth(), edgeTexture.getHeight());
@@ -79,6 +89,29 @@ public class PlayScreen implements Screen {
         handleInput = new HandleInput(this);
         Gdx.input.setInputProcessor(handleInput);
 
+
+        world = new World(new Vector2(0,0),true);
+        b2dr = new Box2DDebugRenderer();
+
+        BodyDef bdef =new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef  fdef = new FixtureDef();
+        Body body;
+        for(MapObject object: map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){  //wall
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth()/ 2)/Constans.PPM, (rect.getY() + rect.getHeight()/2)/Constans.PPM);
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 /Constans.PPM, rect.getHeight()/2/Constans.PPM);
+
+            fdef.shape = shape;
+
+            body.createFixture(fdef);
+
+        }
     }
 
     public GameObject[][] getGameObjects() {
@@ -179,6 +212,8 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
+
+        b2dr.render(world,gameCam.combined);
 
         swordGame.batch.begin();
 
