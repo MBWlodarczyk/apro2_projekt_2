@@ -34,6 +34,13 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Running");
+        try {
+            os.reset();
+            os.writeObject(Server.getMap());// sending object
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (!exit) {
             reciever = false;
             try {

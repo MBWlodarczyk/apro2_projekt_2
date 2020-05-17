@@ -60,6 +60,12 @@ public class Server {
         }
     }
 
+    public static GameMap getMap() {
+        return map;
+    }
+
+
+
     public static synchronized void send() throws IOException {
         for (ServerThread client : clients) {
             map.move(map, client.recieved.getMoves().poll());

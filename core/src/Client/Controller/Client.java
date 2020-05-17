@@ -20,7 +20,6 @@ public class Client {
     private boolean isSend=false;
 
     public Client() throws Exception {
-        received = new GameMap(22);
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
@@ -30,6 +29,14 @@ public class Client {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    received = (GameMap) is.readObject();
+                    System.out.println("Reading...");
+                    isSend = false;
+                    send.clearMoves();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 while (true) {
                     synchronized (finalLock){
                         if (send != null && !isSend && send.getMoves().size() == 4) {

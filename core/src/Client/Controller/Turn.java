@@ -13,14 +13,15 @@ import java.util.Queue;
 public class Turn implements Serializable {
     private Player owner;
     private Queue<Move> moves;
-
     public Queue<Move> getMoves() {
         return moves;
     }
+    boolean init;
 
     public Turn(Player owner) {
         this.owner = owner;
         this.moves = new LinkedList<Move>();
+        init=true;
     }
     public void addMove(Move move) {
         moves.add(move);
