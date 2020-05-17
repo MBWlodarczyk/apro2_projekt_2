@@ -9,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 /**
  * test
@@ -20,7 +22,7 @@ public class Server {
     private int playerNumber;
 
     public static void main(String[] args) throws IOException {
-
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         ServerSocket server = new ServerSocket(1701);
         int i = 1;

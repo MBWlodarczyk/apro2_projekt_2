@@ -12,7 +12,7 @@ import java.util.Queue;
  */
 public class Turn implements Serializable {
     private Player owner;
-    private Queue<Move> moves = new PriorityQueue<>();
+    private Queue<Move> moves;
 
     public Queue<Move> getMoves() {
         return moves;

@@ -6,8 +6,8 @@ import Client.Model.Skills.Walk;
 public class Archer extends Hero {
     final int id;
 
-    public Archer(Player owner) {
-        super(owner, 110, 100, 50, 5);
+    public Archer(Player owner,int y,int x) {
+        super(owner, 110, 100, 50, 5,"heroes/archer.png",x,y);
         id = idGen++;
         this.skills.add(new Walk(3));
     }

@@ -53,7 +53,6 @@ public class ServerThread extends Thread {
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
-
         }
     }
     public void dispose()

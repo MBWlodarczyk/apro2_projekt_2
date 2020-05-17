@@ -1,26 +1,31 @@
 package Client.Model;
 
+import Client.GUI.Constans;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 import java.io.Serializable;
 
 /**
  * Abstract class to represent single entity
  */
-public abstract class Entity implements Serializable {
-    protected boolean isFixed=false; // can it be moved by a hero
-    protected boolean isVisible=true; // is it visible
-    protected boolean isCrossable=true; // can you pass through it and see over/through it
-    protected boolean isAttackable=true;
-    protected int x,y;
+public abstract class Entity extends Image implements Serializable {
+    protected boolean isFixed = false; // can it be moved by a hero
+    protected boolean isVisible = true; // is it visible
+    protected boolean isCrossable = true; // can you pass through it and see over/through it
+    protected boolean isAttackable = true;
+    protected int x, y;
+
     @Override
-    public String toString(){ // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
+    public String toString() { // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
         return this.getClass().toString();
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -50,5 +55,15 @@ public abstract class Entity implements Serializable {
 
     public boolean isAttackable() {
         return isAttackable;
+    }
+
+    public Entity(String imagePath, int x, int y) {
+        super(new Texture(imagePath));
+        this.x = x;
+        this.y = y;
+
+        this.setOrigin(16, 16);
+        this.setSize(32, 32);
+        this.setPosition(x * Constans.WIDTH + 10, Constans.HEIGHT - (y + 1) * 32 - 10);
     }
 }
