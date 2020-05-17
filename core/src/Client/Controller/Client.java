@@ -24,35 +24,38 @@ public class Client {
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
+        Object lock = new Object();
 
+        final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    System.out.println(isSend);
-                    if (send != null && !isSend && send.getMoves().size() == 4) {
-                        try {
-                            System.out.println("Sending...");
-                            os.reset();
-                            os.writeObject(send);
-                            isSend = true;
-                            os.flush();
-                            send.clearMoves();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    synchronized (finalLock){
+                        if (send != null && !isSend && send.getMoves().size() == 4) {
+                            try {
+                                System.out.println("Sending...");
+                                os.reset();
+                                os.writeObject(send);
+                                isSend = true;
+                                os.flush();
+                                send.clearMoves();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
 
-                    if (isSend) {
-                        try {
-                            received = (GameMap) is.readObject();
-                            System.out.println("Reading...");
-                            isSend = false;
-                            send.clearMoves();
-                        } catch (IOException | ClassNotFoundException e) {
-                            e.printStackTrace();
+                        if (isSend) {
+                            try {
+                                received = (GameMap) is.readObject();
+                                System.out.println("Reading...");
+                                isSend = false;
+                                send.clearMoves();
+                            } catch (IOException | ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println(received);
                         }
-                        System.out.println(received);
                     }
                 }
 
