@@ -30,6 +30,10 @@ public class LoadScreen implements Screen {
             paladinTexture_dark, warriorTexture_dark, archerTexture_dark,necromancerTexture_dark,priestTexture_dark,wizardTexture_dark;
     private ArrayList<Texture> textures_white;
     private ArrayList<Texture> textures_dark;
+    private TextField ipField;
+    private TextField portField;
+    private TextField nickField;
+
 
 
 
@@ -77,31 +81,31 @@ public class LoadScreen implements Screen {
     }
 
     private void portInput() {
-        TextField textField = new TextField("",swordGame.skin);
-        textField.setMessageText("Podaj port");
-        textField.setPosition(280,100);
-        textField.setSize(200,40);
-        stage.addActor(textField);
-        swordGame.port = textField.getText();
+        portField = new TextField("",swordGame.skin);
+        portField.setMessageText("Podaj port");
+        portField.setPosition(280,100);
+        portField.setSize(200,40);
+        stage.addActor(portField);
+        swordGame.port = portField.getText();
     }
 
     private void ipInput() {
-        TextField textField = new TextField("",swordGame.skin);
-        textField.setMessageText("Podaj ip");
-        textField.setPosition(50,100);
-        textField.setSize(200,40);
-        stage.addActor(textField);
-        swordGame.ip = textField.getText();
+        ipField = new TextField("",swordGame.skin);
+        ipField.setMessageText("Podaj ip");
+        ipField.setPosition(50,100);
+        ipField.setSize(200,40);
+        stage.addActor(ipField);
+        swordGame.ip = ipField.getText();
     }
 
 
     private void nickInput(){
-        TextField textField = new TextField("",swordGame.skin);
-        textField.setMessageText("Podaj nick");
-        textField.setPosition(510,100);
-        textField.setSize(200,40);
-        stage.addActor(textField);
-        swordGame.nick = textField.getText();
+        nickField = new TextField("",swordGame.skin);
+        nickField.setMessageText("Podaj nick");
+        nickField.setPosition(510,100);
+        nickField.setSize(200,40);
+        stage.addActor(nickField);
+        swordGame.nick = nickField.getText();
     }
 
     private void heroes(){
@@ -177,8 +181,6 @@ public class LoadScreen implements Screen {
         swordGame.batch.begin();
         stage.draw();
         swordGame.batch.end();
-
-        System.out.println(Arrays.toString(SwordGame.chosen));
     }
 
     @Override
