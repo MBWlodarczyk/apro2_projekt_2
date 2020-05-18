@@ -1,5 +1,7 @@
 package Client.Controller;
 
+import Client.GUI.SwordGame;
+import Client.Model.Heroes.Warrior;
 import Client.Model.Player;
 import Client.Model.map.GameMap;
 
@@ -15,7 +17,7 @@ import java.util.Scanner;
 public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
-    private Turn send = new Turn(new Player("wtf"));
+    private Turn send;
     private GameMap received;
     private boolean isSend=false;
 
@@ -24,7 +26,12 @@ public class Client {
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
         Object lock = new Object();
-
+        Player player = new Player(SwordGame.nick);
+        send = new Turn(player);
+        send.addMove(new Move(new Warrior(player,2,2),null,null,null));
+        send.addMove(new Move(new Warrior(player,2,2),null,null,null));
+        send.addMove(new Move(new Warrior(player,2,2),null,null,null));
+        send.addMove(new Move(new Warrior(player,2,2),null,null,null));
         final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
             @Override

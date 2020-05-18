@@ -32,8 +32,6 @@ public class LoadScreen implements Screen {
     private ArrayList<Texture> textures_dark;
 
 
-    private boolean[] chosen = new boolean[6];
-
 
     public LoadScreen(SwordGame swordGame) {
         this.swordGame = swordGame;
@@ -128,12 +126,12 @@ public class LoadScreen implements Screen {
                     if(texture == textures_dark.get(i))
                         break petelka;
                 }
-                if(!chosen[i]){
-                    chosen[i] = true;
+                if(!SwordGame.chosen[i]){
+                    SwordGame.chosen[i] = true;
                     background.setDrawable(new SpriteDrawable(new Sprite(textures_white.get(i))));
                 }
                 else {
-                    chosen[i] = false;
+                    SwordGame.chosen[i] = false;
                     background.setDrawable(new SpriteDrawable(new Sprite(textures_dark.get(i))));
                 }
                 return  true;
@@ -146,8 +144,8 @@ public class LoadScreen implements Screen {
 
     private boolean amountTrue(){
         int count = 0;
-        for(int i =0; i < chosen.length;i ++){
-            if(chosen[i])
+        for(int i =0; i < SwordGame.chosen.length;i ++){
+            if(SwordGame.chosen[i])
                 count++;
         }
         return count == 4;
@@ -162,7 +160,10 @@ public class LoadScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    swordGame.setScreen(new PlayScreen(swordGame));
+
+                    if(amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("")) {
+                        swordGame.setScreen(new PlayScreen(swordGame));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -177,7 +178,7 @@ public class LoadScreen implements Screen {
         stage.draw();
         swordGame.batch.end();
 
-        System.out.println(Arrays.toString(chosen));
+        System.out.println(Arrays.toString(SwordGame.chosen));
     }
 
     @Override

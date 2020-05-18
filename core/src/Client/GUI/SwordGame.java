@@ -15,9 +15,10 @@ public class SwordGame extends Game {
     public int textureSize = 32;
     public SpriteBatch batch;
     public Skin skin;
-    public String nick;
-    public String ip;
-    public String port;
+    public static String nick;
+    public static String ip;
+    public static String port;
+    public static boolean[] chosen = new boolean[6];
 
     @Override
     public void create() {

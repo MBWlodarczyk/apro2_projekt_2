@@ -13,7 +13,7 @@ public class SerwerScreen extends ApplicationAdapter {
     public void create() {
 
         try {
-            new Server();
+            new Server(1);
         } catch (IOException e) {
             e.printStackTrace();
         }

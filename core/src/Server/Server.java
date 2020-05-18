@@ -17,9 +17,9 @@ public class Server {
     private static ArrayList<ServerThread> clients = new ArrayList<>();
     private static GameMap map = new GameMap(22);
     private static ArrayList<Player> players;
-    private int playerNumber;
-
-    public Server() throws IOException {
+    private static int playerNumber;
+    public Server(int playerNumber) throws IOException {
+        this.playerNumber=playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
 
@@ -37,17 +37,20 @@ public class Server {
 
 
     public static synchronized boolean check() throws IOException {
-        boolean marker = true;
-        for (ServerThread client : clients) {
-            if (!client.reciever) {
-                marker = false;
+        if(clients.size() == Server.playerNumber){
+            boolean marker = true;
+            for (ServerThread client : clients) {
+                if (!client.reciever) {
+                    marker = false;
+                }
             }
+            if (marker) {
+                unlock();
+                send();
+            }
+            return marker;
         }
-        if (marker) {
-            unlock();
-            send();
-        }
-        return marker;
+        return false;
     }
 
     public static synchronized void unlock() {
