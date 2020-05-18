@@ -1,6 +1,6 @@
 package Client.GUI.Screens;
 
-import Client.GUI.Constans;
+import Client.GUI.Utility.Constants;
 import Client.GUI.SwordGame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -79,7 +79,7 @@ public class LoadScreen implements Screen {
     private void addBackground() {
         TextureRegion textureRegion = new TextureRegion(background);
         final Image background = new Image(textureRegion);
-        background.setSize(Constans.WIDTH, Constans.HEIGHT);
+        background.setSize(Constants.WIDTH, Constants.HEIGHT);
         background.setPosition(0, 0);
         stage.addActor(background);
     }

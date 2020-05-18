@@ -1,8 +1,6 @@
 package Client.Controller;
 
-import Client.Controller.DistanceValidator;
-import Client.Controller.Move;
-import Client.GUI.Constans;
+import Client.GUI.Utility.Constants;
 import Client.GUI.Screens.PlayScreen;
 import com.badlogic.gdx.InputProcessor;
 
@@ -79,7 +77,7 @@ public class HandleInput implements InputProcessor {
     public void getCord(int x, int y) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (game.getGameObjects()[i][j].contains(x, Constans.HEIGHT - y)) {
+                if (game.getGameObjects()[i][j].contains(x, Constants.HEIGHT - y)) {
                     tab[0] = i;
                     tab[1] = j;
                 }

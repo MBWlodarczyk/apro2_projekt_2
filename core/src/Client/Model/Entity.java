@@ -1,6 +1,6 @@
 package Client.Model;
 
-import Client.GUI.Constans;
+import Client.GUI.Utility.Constants;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -64,6 +64,6 @@ public abstract class Entity extends Image implements Serializable {
 
         this.setOrigin(16, 16);
         this.setSize(32, 32);
-        this.setPosition(x * Constans.WIDTH + 10, Constans.HEIGHT - (y + 1) * 32 - 10);
+        this.setPosition(x * Constants.WIDTH + 10, Constants.HEIGHT - (y + 1) * 32 - 10);
     }
 }

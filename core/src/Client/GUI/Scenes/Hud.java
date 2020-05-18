@@ -1,7 +1,6 @@
 package Client.GUI.Scenes;
 
-import Client.GUI.Constans;
-import Client.GUI.SwordGame;
+import Client.GUI.Utility.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -30,7 +29,7 @@ public class Hud {
     public Hud(SpriteBatch sb) {
         moves = 4;
         rounds = roundsGen++;
-        viewport = new FillViewport(Constans.WIDTH, Constans.HEIGHT, new OrthographicCamera());
+        viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
 
         stage = new Stage(viewport, sb); //do organizaji widgetów (label)
 
