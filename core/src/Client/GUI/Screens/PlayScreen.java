@@ -41,7 +41,7 @@ public class PlayScreen implements Screen {
 
     public int size;
     public Client client;
-    private SwordGame swordGame;
+    public SwordGame swordGame;
     private Hud hud;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
@@ -60,7 +60,7 @@ public class PlayScreen implements Screen {
     private ArrayList<Button> skills;
 
     public PlayScreen(SwordGame swordGame) throws Exception {
-        client = new Client();
+        client = new Client(swordGame);
         skin = new Skin(Gdx.files.internal("skin/rainbow-ui.json"));
 
         this.swordGame = swordGame;

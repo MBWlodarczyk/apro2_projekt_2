@@ -21,6 +21,7 @@ public class ServerThread extends Thread {
     private Socket socket;
     public ObjectInputStream is;
     boolean exit;
+    public boolean init;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) throws IOException {
         System.out.println("Creating thread");
@@ -38,21 +39,33 @@ public class ServerThread extends Thread {
             os.reset();
             os.writeObject(Server.getMap());// sending object
             os.flush();
-        } catch (IOException e) {
+            this.recieved = (Turn) is.readObject();
+            System.out.println("received object from " + name);
+            Server.initPlayer++;
+            reciever=true;
+            if(Server.playerNumber==Server.initPlayer) {
+                Server.init();
+                Server.send(false);
+                Server.unlock();
+            }
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         while (!exit) {
-            reciever = false;
+            reciever=false;
             try {
-                    this.recieved = (Turn) is.readObject();
-                    System.out.println("received object from " + name);
-                    reciever = true;
+
+
+                        this.recieved = (Turn) is.readObject();
+                        System.out.println("received object from " + name);
+                        reciever = true;
+
                     synchronized (lock) {
-                    {
-                        System.out.println("lock " + name);
-                        if (!Server.check())
-                            lock.wait();
-                    }
+                        {
+                            System.out.println("lock " + name);
+                            if (!Server.check())
+                                lock.wait();
+                        }
                 }
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {

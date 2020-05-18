@@ -130,12 +130,12 @@ public class LoadScreen implements Screen {
                     if(texture == textures_dark.get(i))
                         break petelka;
                 }
-                if(!SwordGame.chosen[i]){
-                    SwordGame.chosen[i] = true;
+                if(!swordGame.chosen[i]){
+                    swordGame.chosen[i] = true;
                     background.setDrawable(new SpriteDrawable(new Sprite(textures_white.get(i))));
                 }
                 else {
-                    SwordGame.chosen[i] = false;
+                    swordGame.chosen[i] = false;
                     background.setDrawable(new SpriteDrawable(new Sprite(textures_dark.get(i))));
                 }
                 return  true;
@@ -148,8 +148,8 @@ public class LoadScreen implements Screen {
 
     private boolean amountTrue(){
         int count = 0;
-        for(int i =0; i < SwordGame.chosen.length;i ++){
-            if(SwordGame.chosen[i])
+        for(int i =0; i < swordGame.chosen.length;i ++){
+            if(swordGame.chosen[i])
                 count++;
         }
         return count == 4;
@@ -164,7 +164,9 @@ public class LoadScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-
+                    swordGame.ip = ipField.getText();
+                    swordGame.nick = nickField.getText();
+                    swordGame.port = portField.getText();
                     if(amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("")) {
                         swordGame.setScreen(new PlayScreen(swordGame));
                     }

@@ -2,6 +2,7 @@ package Client.GUI;
 
 import Client.GUI.Screens.LoadScreen;
 //import Client.GUI.Screens.PlayScreen;
+import Client.Model.Player;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,10 +14,11 @@ public class SwordGame extends Game {
     public int textureSize = 32;
     public SpriteBatch batch;
     public Skin skin;
-    public static String nick;
-    public static String ip;
-    public static String port;
-    public static boolean[] chosen = new boolean[6];
+    public String nick;
+    public String ip;
+    public String port;
+    public boolean[] chosen = new boolean[6];
+    public Player player;
 
     @Override
     public void create() {

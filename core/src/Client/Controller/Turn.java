@@ -18,6 +18,10 @@ public class Turn implements Serializable {
     }
     boolean init;
 
+    public Player getOwner() {
+        return owner;
+    }
+
     public Turn(Player owner) {
         this.owner = owner;
         this.moves = new LinkedList<Move>();

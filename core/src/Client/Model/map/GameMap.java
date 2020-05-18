@@ -33,10 +33,10 @@ public class GameMap implements Serializable {
             }
         }
 //        map[3][2] = new Field(3, 2, Type.Wall);
-        map[3][3].setHero(new Warrior(new Player("Jakiś typ"),3,3));
-        map[3][4].setHero(new Paladin(new Player("Jakiś typ"),3,4));
-        map[3][5].setHero(new Archer(new Player("Jakiś typ"),3,5));
-        map[3][6].setHero(new Wizard(new Player("Jakiś typ"),3,6));
+//        map[3][3].setHero(new Warrior(new Player("Jakiś typ"),3,3));
+//        map[3][4].setHero(new Paladin(new Player("Jakiś typ"),3,4));
+//        map[3][5].setHero(new Archer(new Player("Jakiś typ"),3,5));
+//        map[3][6].setHero(new Wizard(new Player("Jakiś typ"),3,6));
 
     }
 
@@ -46,7 +46,7 @@ public class GameMap implements Serializable {
 
 
     public void move(GameMap map, Move move) {
-        if (DistanceValidator.isValid(map, move)) {
+
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
@@ -54,7 +54,7 @@ public class GameMap implements Serializable {
             x = move.getWhere().getX();
             y = move.getWhere().getY();
             map.getMap()[y][x].setHero(temp);
-        }
+
     }
 
 

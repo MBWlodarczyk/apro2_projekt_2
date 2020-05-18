@@ -54,7 +54,7 @@ public class HandleInput implements InputProcessor {
         if(screenX<=704) {
             getCord(screenX, screenY);
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
-            if (!heroChosen && game.client.getReceived().getMap()[tab[0]][tab[1]].getHero() != null) {
+            if (!heroChosen&&game.client.getReceived().getMap()[tab[0]][tab[1]].getHero()!=null && game.client.getReceived().getMap()[tab[0]][tab[1]].getHero().getOwner().getNick().equals(game.swordGame.player.getNick())) {
                 heroChosen = true;
                 this.y = tab[0];
                 this.x = tab[1];
