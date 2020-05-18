@@ -54,6 +54,8 @@ public class Assets implements Disposable {
     private void loadSpecial() {
         manager.load("special/edge.png", Texture.class);
         manager.load("special/health.png", Texture.class);
+        manager.load("special/background.png", Texture.class);
+
     }
 
 

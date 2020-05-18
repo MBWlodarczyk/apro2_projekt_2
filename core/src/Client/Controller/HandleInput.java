@@ -12,6 +12,7 @@ public class HandleInput implements InputProcessor {
     public boolean heroChosen;
     private boolean skillChosen;
     private PlayScreen game;
+    private int size;
     private int x, y;
     private int[] tab = new int[2];
 
@@ -27,10 +28,11 @@ public class HandleInput implements InputProcessor {
         return y;
     }
 
-    public HandleInput(PlayScreen game) {
+    public HandleInput(PlayScreen game,int size) {
         this.heroChosen = false;
         this.skillChosen = false;
         this.game = game;
+        this.size = size;
     }
 
 
@@ -75,8 +77,8 @@ public class HandleInput implements InputProcessor {
     }
 
     public void getCord(int x, int y) {
-        for (int i = 0; i < game.size; i++) {
-            for (int j = 0; j < game.size; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (game.getGameObjects()[i][j].contains(x, Constans.HEIGHT - y)) {
                     tab[0] = i;
                     tab[1] = j;

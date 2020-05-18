@@ -44,4 +44,11 @@ public class Move implements Serializable {
     public Skill getWhat() {
         return what;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        //TODO preety String to show move
+        return sb.toString();
+    }
 }
