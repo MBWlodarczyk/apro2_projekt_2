@@ -7,16 +7,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoadScreen implements Screen {
 
@@ -24,16 +26,19 @@ public class LoadScreen implements Screen {
     private Stage stage;
     private ArrayList<ImageButton> buttons;
     private Assets assets;
-    private Texture paladinTexture, warriorTexture, archerTexture,necromancerTexture,priestTexture,wizardTexture;
-    private ArrayList<Hero> heroes;
+    private Texture paladinTexture, warriorTexture, archerTexture,necromancerTexture,priestTexture,wizardTexture,
+            paladinTexture_dark, warriorTexture_dark, archerTexture_dark,necromancerTexture_dark,priestTexture_dark,wizardTexture_dark;
+    private ArrayList<Texture> textures_white;
+    private ArrayList<Texture> textures_dark;
+
+
+    private boolean[] chosen = new boolean[6];
 
 
     public LoadScreen(SwordGame swordGame) {
         this.swordGame = swordGame;
         stage = new Stage();
-        heroes = new ArrayList<>();
         buttons = new ArrayList<>();
-        heroes = new ArrayList<>(4);
 
         assets = new Assets();
         assets.load();
@@ -41,6 +46,24 @@ public class LoadScreen implements Screen {
         if (assets.manager.update()) {
             loadData();
         }
+
+        textures_white = new ArrayList<>();
+        textures_white.add(archerTexture);
+        textures_white.add(necromancerTexture);
+        textures_white.add(paladinTexture);
+        textures_white.add(priestTexture);
+        textures_white.add(warriorTexture);
+        textures_white.add(wizardTexture);
+
+        textures_dark = new ArrayList<>();
+        textures_dark.add(archerTexture_dark);
+        textures_dark.add(necromancerTexture_dark);
+        textures_dark.add(paladinTexture_dark);
+        textures_dark.add(priestTexture_dark);
+        textures_dark.add(warriorTexture_dark);
+        textures_dark.add(wizardTexture_dark);
+
+
         Gdx.input.setInputProcessor(stage);
         init();
     }
@@ -84,30 +107,50 @@ public class LoadScreen implements Screen {
     }
 
     private void heroes(){
-        addHeroe(archerTexture,10,400);
-        addHeroe(necromancerTexture,180,400);
-        addHeroe(paladinTexture,330,400);
-        addHeroe(priestTexture,480,400);
-        addHeroe(warriorTexture,640,400);
-        addHeroe(wizardTexture,800,400);
+        addHeroe(archerTexture_dark,10,400);
+        addHeroe(necromancerTexture_dark,180,400);
+        addHeroe(paladinTexture_dark,330,400);
+        addHeroe(priestTexture_dark,480,400);
+        addHeroe(warriorTexture_dark,640,400);
+        addHeroe(wizardTexture_dark,800,400);
     }
 
-    private void addHeroe(Texture texture,int x, int y){
+    private void addHeroe(final Texture texture, int x, int y){
         TextureRegion textureRegion = new TextureRegion(texture);
-        Image background = new Image(textureRegion);
+        final Image background = new Image(textureRegion);
         background.setSize(150,150);
         background.setPosition(x,y);
         background.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                System.out.println(x + " " + y + " "+ pointer);
+                int i;
+                petelka:for(i = 0; i < textures_dark.size(); i++){
+                    if(texture == textures_dark.get(i))
+                        break petelka;
+                }
+                if(!chosen[i]){
+                    chosen[i] = true;
+                    background.setDrawable(new SpriteDrawable(new Sprite(textures_white.get(i))));
+                }
+                else {
+                    chosen[i] = false;
+                    background.setDrawable(new SpriteDrawable(new Sprite(textures_dark.get(i))));
+                }
                 return  true;
         }
         });
         stage.addActor(background);
 
-        //image, boolean isT=Selected,   if seclted sprite
+    }
+
+
+    private boolean amountTrue(){
+        int count = 0;
+        for(int i =0; i < chosen.length;i ++){
+            if(chosen[i])
+                count++;
+        }
+        return count == 4;
     }
 
 
@@ -133,6 +176,8 @@ public class LoadScreen implements Screen {
         swordGame.batch.begin();
         stage.draw();
         swordGame.batch.end();
+
+        System.out.println(Arrays.toString(chosen));
     }
 
     @Override
@@ -172,5 +217,12 @@ public class LoadScreen implements Screen {
         necromancerTexture = assets.manager.get("heroes/necromancer.png", Texture.class);
         wizardTexture = assets.manager.get("heroes/wizard.png", Texture.class);
         priestTexture = assets.manager.get("heroes/priest.png", Texture.class);
+
+        paladinTexture_dark = assets.manager.get("heroes/paladin_nygga.png", Texture.class);
+        warriorTexture_dark = assets.manager.get("heroes/warrior_nygga.png", Texture.class);
+        archerTexture_dark = assets.manager.get("heroes/archer_nygga.png", Texture.class);
+        necromancerTexture_dark = assets.manager.get("heroes/necromancer_nygga.png", Texture.class);
+        priestTexture_dark = assets.manager.get("heroes/priest_nygga.png", Texture.class);
+        wizardTexture_dark = assets.manager.get("heroes/wizard_nygga.png",Texture.class);
     }
 }
