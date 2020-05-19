@@ -2,6 +2,7 @@ package Server;
 
 import Client.Controller.Move;
 import Client.Controller.Turn;
+import Client.Model.Player;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,6 +23,7 @@ public class ServerThread extends Thread {
     public ObjectInputStream is;
     boolean exit;
     public boolean init;
+    public Player player;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) throws IOException {
         System.out.println("Creating thread");
@@ -35,22 +37,28 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Running");
-        try {
-            os.reset();
-            os.writeObject(Server.getMap());// sending object
-            os.flush();
-            this.recieved = (Turn) is.readObject();
-            System.out.println("received object from " + name);
-            Server.initPlayer++;
-            reciever=true;
-            if(Server.playerNumber==Server.initPlayer) {
-                Server.init();
-                Server.send(false);
-                Server.unlock();
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+while((Server.playerNumber != Server.initPlayer)) {
+    try {
+        os.reset();
+        os.writeObject(Server.getMap());// sending object
+        os.flush();
+        this.recieved = (Turn) is.readObject();
+        System.out.println("received object from " + name);
+        Server.initPlayer++;
+        reciever = true;
+        if (recieved.getOwner() != null) {
+            Server.playersClients.put(this, recieved.getOwner());
+            Server.players.add(recieved.getOwner());
         }
+        if (Server.playerNumber == Server.initPlayer) {
+            Server.init();
+            Server.send(false);
+            Server.unlock();
+        }
+    } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+}
         while (!exit) {
             reciever=false;
             try {
@@ -70,6 +78,7 @@ public class ServerThread extends Thread {
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 Server.removeClient(this);
+                Server.players.remove(this);
                 System.out.println("disconnect " + name);
                 this.dispose();
             }

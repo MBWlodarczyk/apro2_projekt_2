@@ -16,7 +16,6 @@ public class Turn implements Serializable {
     public Queue<Move> getMoves() {
         return moves;
     }
-    boolean init;
 
     public Player getOwner() {
         return owner;
@@ -24,8 +23,7 @@ public class Turn implements Serializable {
 
     public Turn(Player owner) {
         this.owner = owner;
-        this.moves = new LinkedList<Move>();
-        init=true;
+        this.moves = new LinkedList<>();
     }
     public void addMove(Move move) {
         moves.add(move);
@@ -40,6 +38,6 @@ public class Turn implements Serializable {
     }
 
     public void clearMoves() {
-        this.moves = new LinkedList<Move>();
+        this.moves = new LinkedList<>();
     }
 }

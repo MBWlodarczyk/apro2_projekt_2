@@ -46,9 +46,9 @@ public class PlayScreen implements Screen {
     private HandleInput handleInput;
     private ArrayList<Button> skills;
 
-    public PlayScreen(SwordGame swordGame) throws Exception {
+    public PlayScreen(SwordGame swordGame,boolean init) throws Exception {
         this.swordGame = swordGame;
-        client = new Client(swordGame);
+        client = new Client(swordGame,init);
         gameCam = new OrthographicCamera();
         gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
         gameObjects = new GameObject[22][22];

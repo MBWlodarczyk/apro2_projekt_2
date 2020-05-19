@@ -11,19 +11,21 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * test
  */
 public class Server {
     public static ArrayList<ServerThread> clients = new ArrayList<>();
+    public static HashMap<ServerThread,Player> playersClients = new HashMap<>();
+    public static ArrayList<Player> players = new ArrayList<>();
     private static GameMap map = new GameMap(22);
-    private static ArrayList<Player> players = new ArrayList<>();
     public static int playerNumber;
     public static int initPlayer;
     static boolean gameinit;
     public Server(int playerNumber) throws IOException {
-        this.playerNumber=playerNumber;
+        Server.playerNumber =playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
 
@@ -109,7 +111,7 @@ public class Server {
         switch(initPlayer){
             case 4:
                 Turn turn = clients.get(3).recieved;
-                players.add(turn.getOwner());
+                clients.get(3).player=clients.get(3).recieved.getOwner();
                 Hero hero1 = turn.getMoves().poll().getWho();
                 Hero hero2 = turn.getMoves().poll().getWho();
                 Hero hero3 = turn.getMoves().poll().getWho();
@@ -120,7 +122,7 @@ public class Server {
                 map.getMap()[2][19].setHero(hero4);
             case 3:
                 turn = clients.get(2).recieved;
-                players.add(turn.getOwner());
+                clients.get(2).player=clients.get(2).recieved.getOwner();
                 hero1 = turn.getMoves().poll().getWho();
                 hero2 = turn.getMoves().poll().getWho();
                 hero3 = turn.getMoves().poll().getWho();
@@ -131,7 +133,7 @@ public class Server {
                 map.getMap()[19][2].setHero(hero4);
             case 2:
                 turn = clients.get(1).recieved;
-                players.add(turn.getOwner());
+                clients.get(1).player=clients.get(1).recieved.getOwner();
                 hero1 = turn.getMoves().poll().getWho();
                 hero2 = turn.getMoves().poll().getWho();
                 hero3 = turn.getMoves().poll().getWho();
@@ -142,7 +144,7 @@ public class Server {
                 map.getMap()[19][19].setHero(hero4);
             case 1:
                 turn = clients.get(0).recieved;
-                players.add(turn.getOwner());
+                clients.get(0).player=clients.get(0).recieved.getOwner();
                 hero1 = turn.getMoves().poll().getWho();
                 hero2 = turn.getMoves().poll().getWho();
                 hero3 = turn.getMoves().poll().getWho();

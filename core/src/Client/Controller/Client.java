@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Scanner;
 
 /**
@@ -23,15 +25,17 @@ public class Client {
     private GameMap received;
     private boolean isSend=false;
 
-    public Client(SwordGame game) throws Exception {
+    public Client(SwordGame game,boolean init) throws Exception {
+        //Todo reconnecting marked as not init;
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
         Object lock = new Object();
-        Player player = new Player(game.nick);
+        Player player = new Player(game.nick,game.password);
         game.player = player;
         send = new Turn(player);
-        createTurn(send,game);
+        if(init){
+        createTurn(send, game);
         received = (GameMap) is.readObject();
         System.out.println("Reading...");
         System.out.println("Sending...");
@@ -40,6 +44,7 @@ public class Client {
         send.clearMoves();
         isSend = true;
         os.flush();
+    }
         final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
             @Override
@@ -96,22 +101,34 @@ public class Client {
 
     private void createTurn(Turn turn,SwordGame game){
         if(game.chosen[0]){
-           turn.addMove((new Move(new Archer(turn.getOwner(),3,4),new Field(1,1),new Field(1,1),new Walk(5))));
+            Archer hero = new Archer(turn.getOwner(),3,4);
+           turn.addMove((new Move(hero,new Field(1,1),new Field(1,1),new Walk(5))));
+           turn.getOwner().addHero(hero);
         }
         if(game.chosen[1]){
-            turn.addMove((new Move(new Necromancer(turn.getOwner(),3,4),new Field(2,2),new Field(2,2),new Walk(5))));
+            Necromancer hero = new Necromancer(turn.getOwner(),3,4);
+            turn.addMove((new Move(hero,new Field(2,2),new Field(2,2),new Walk(5))));
+            turn.getOwner().addHero(hero);
         }
         if(game.chosen[2]){
-            turn.addMove((new Move(new Paladin(turn.getOwner(),3,4),new Field(3,3),new Field(3,3),new Walk(5))));
+            Paladin hero = new Paladin(turn.getOwner(),3,4);
+            turn.addMove((new Move(hero,new Field(3,3),new Field(3,3),new Walk(5))));
+            turn.getOwner().addHero(hero);
         }
         if(game.chosen[3]){
-            turn.addMove((new Move(new Priest(turn.getOwner(),3,4),new Field(4,4),new Field(4,4),new Walk(5))));
+            Priest hero = new Priest(turn.getOwner(),3,4);
+            turn.addMove((new Move(hero,new Field(4,4),new Field(4,4),new Walk(5))));
+            turn.getOwner().addHero(hero);
         }
         if(game.chosen[4]){
-            turn.addMove((new Move(new Wizard(turn.getOwner(),3,4),new Field(5,5),new Field(5,5),new Walk(5))));
+            Warrior hero =new Warrior(turn.getOwner(),3,4);
+            turn.addMove((new Move(hero,new Field(5,5),new Field(5,5),new Walk(5))));
+            turn.getOwner().addHero(hero);
         }
         if(game.chosen[5]){
-            turn.addMove((new Move(new Archer(turn.getOwner(),3,4),new Field(6,6),new Field(6,6),new Walk(5))));
+            Wizard hero = new Wizard(turn.getOwner(),3,4);
+            turn.addMove((new Move(hero,new Field(6,6),new Field(6,6),new Walk(5))));
+            turn.getOwner().addHero(hero);
         }
 
     }

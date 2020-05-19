@@ -16,7 +16,7 @@ public class SwordGame extends Game {
     public String nick;
     public String ip;
     public String port;
-    public String password;
+    public byte[] password;
     public boolean[] chosen = new boolean[6];
     public Player player;
     public Assets assets; //load textures manager
