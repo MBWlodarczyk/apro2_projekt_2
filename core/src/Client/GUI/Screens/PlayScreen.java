@@ -4,9 +4,10 @@ import Client.Controller.Client;
 import Client.Controller.DistanceValidator;
 import Client.Controller.HandleInput;
 import Client.Controller.Move;
-import Client.GUI.Utility.Constants;
 import Client.GUI.Scenes.Hud;
+import Client.GUI.Sprites.MouseSprite;
 import Client.GUI.SwordGame;
+import Client.GUI.Utility.Constants;
 import Client.GUI.Utility.GameObject;
 import Client.Model.Heroes.*;
 import com.badlogic.gdx.Gdx;
@@ -35,14 +36,14 @@ public class PlayScreen implements Screen {
     private Viewport gamePort;
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            edgeTexture, healthTexture, bordTexture;
-    private GameObject[][] gameObjects;
-    private Sprite mouse;
+            crossTexture, edgeTexture, healthTexture, bordTexture;
+    public static  GameObject[][] gameObjects;
+//    private Sprite mouse;
+    private MouseSprite mouseSprite;
     private Sprite bord;
     private ArrayList<Sprite> moveDistance;
+//    private MoveDistanceSprite moveDistance;
     private HandleInput handleInput;
-
-
     private ArrayList<Button> skills;
 
     public PlayScreen(SwordGame swordGame) throws Exception {
@@ -56,16 +57,16 @@ public class PlayScreen implements Screen {
 
         hud = new Hud(swordGame.batch);
 
-//        mapLoader = new TmxMapLoader();
-//        map = mapLoader.load("projekt_textury.tmx");
-//        renderer = new OrthogonalTiledMapRenderer(map);
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         bord = new Sprite(bordTexture,0,0,bordTexture.getWidth(),bordTexture.getHeight());
         bord.setPosition(0,0);
 
-        mouse = new Sprite(edgeTexture, 0, 0, edgeTexture.getWidth(), edgeTexture.getHeight());
-        moveDistance = new ArrayList<>();
+        mouseSprite = new MouseSprite(edgeTexture);
+
+
+
+//        moveDistance = new ArrayList<>();
         skills = new ArrayList<>();
 
         handleInput = new HandleInput(this, swordGame.size);
@@ -149,7 +150,6 @@ public class PlayScreen implements Screen {
                     button.addListener(new ClickListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                            System.out.println("elo");
                             return super.touchDown(event, x, y, pointer, button);
                         }
                     });
@@ -161,22 +161,11 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private void mouseUpdate() {
-        for (int i = 1; i < swordGame.size-1; i++) {
-            for (int j = 1; j < swordGame.size-1; j++) {
-                if (gameObjects[i][j].contains(Gdx.input.getX(), Constants.HEIGHT - Gdx.input.getY())) {
-                    mouse.setPosition(gameObjects[i][j].x, gameObjects[i][j].y);
-                }
-            }
-        }
-    }
 
 
     private void update(float delta) {
         rewriteMap();
         gameCam.update();
-//        renderer.setView(gameCam);
-        mouseUpdate();
         distanceMove();
         skillOptions();
     }
@@ -187,12 +176,11 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        renderer.render();
 
         swordGame.batch.begin();
 
-        bord.draw(swordGame.batch);
-
+        bord.draw(swordGame.batch);  //draw bord
+        mouseSprite.draw(swordGame.batch); //draw mousePosition
 
         //render textures
         for (int i = 0; i < swordGame.size; i++) {
@@ -203,12 +191,10 @@ public class PlayScreen implements Screen {
 
         //render sprites
         for (Sprite value : moveDistance) value.draw(swordGame.batch);
+
         //render list skill
-
         for (Button b : skills) b.draw(swordGame.batch, 1);
-        //draw mouse position
 
-        mouse.draw(swordGame.batch);
 
         swordGame.batch.end();
 
@@ -244,7 +230,6 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
 
-
     }
 
     private void loadData() {
@@ -262,6 +247,7 @@ public class PlayScreen implements Screen {
         wizardTexture = swordGame.assets.manager.get("heroes/wizard.png", Texture.class);
         priestTexture = swordGame.assets.manager.get("heroes/priest.png", Texture.class);
 
+        crossTexture = swordGame.assets.manager.get("special/cross.png",Texture.class);
         edgeTexture = swordGame.assets.manager.get("special/edge.png", Texture.class);
         healthTexture = swordGame.assets.manager.get("special/health.png", Texture.class);
         bordTexture = swordGame.assets.manager.get("special/bord.png",Texture.class);

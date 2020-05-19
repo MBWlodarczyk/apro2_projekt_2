@@ -1,7 +1,6 @@
 package Client.GUI;
 
 import Client.GUI.Screens.LoadScreen;
-//import Client.GUI.Screens.PlayScreen;
 import Client.GUI.Utility.Assets;
 import Client.Model.Player;
 import com.badlogic.gdx.Game;
@@ -17,6 +16,7 @@ public class SwordGame extends Game {
     public String nick;
     public String ip;
     public String port;
+    public String password;
     public boolean[] chosen = new boolean[6];
     public Player player;
     public Assets assets; //load textures manager

@@ -30,6 +30,7 @@ public class LoadScreen implements Screen {
     private TextField ipField;
     private TextField portField;
     private TextField nickField;
+    private TextField passwordField;
 
 
     /**
@@ -52,10 +53,14 @@ public class LoadScreen implements Screen {
         texturesToArrays();
         addBackground();
         heroes();
-        nextScreenButton();
+        //text inputs
         nickInput();
         ipInput();
         portInput();
+        passwordInput();
+        //buttons
+        nextScreenButton();
+        reconnectButton();
     }
 
     private void texturesToArrays() {
@@ -84,32 +89,36 @@ public class LoadScreen implements Screen {
         stage.addActor(background);
     }
 
-    private void portInput() {
-        portField = new TextField("", swordGame.skin);
-        portField.setMessageText("Port");
-        portField.setPosition(280, 100);
-        portField.setSize(200, 40);
-        stage.addActor(portField);
-        swordGame.port = portField.getText();
-    }
-
     private void ipInput() {
         ipField = new TextField("", swordGame.skin);
         ipField.setMessageText("IP");
-        ipField.setPosition(50, 100);
+        ipField.setPosition(50, 150);
         ipField.setSize(200, 40);
         stage.addActor(ipField);
-        swordGame.ip = ipField.getText();
     }
 
+    private void portInput() {
+        portField = new TextField("", swordGame.skin);
+        portField.setMessageText("Port");
+        portField.setPosition(280, 150);
+        portField.setSize(200, 40);
+        stage.addActor(portField);
+    }
 
     private void nickInput() {
         nickField = new TextField("", swordGame.skin);
         nickField.setMessageText("Nick");
-        nickField.setPosition(510, 100);
+        nickField.setPosition(510, 150);
         nickField.setSize(200, 40);
         stage.addActor(nickField);
-        swordGame.nick = nickField.getText();
+    }
+
+    private void passwordInput() {
+        passwordField = new TextField("", swordGame.skin);
+        passwordField.setMessageText("Password");
+        passwordField.setPosition(740, 150);
+        passwordField.setSize(200, 40);
+        stage.addActor(passwordField);
     }
 
     private void heroes() {
@@ -160,11 +169,10 @@ public class LoadScreen implements Screen {
         return count == 4;
     }
 
-
     private void nextScreenButton() {
         TextButton button = new TextButton("Next", swordGame.skin);
         button.setSize(100, 100);
-        button.setPosition(750, 50);
+        button.setPosition(750, 20);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -178,6 +186,19 @@ public class LoadScreen implements Screen {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+        stage.addActor(button);
+    }
+
+    private void reconnectButton(){
+        TextButton button = new TextButton("Reconnect", swordGame.skin);
+        button.setSize(100, 100);
+        button.setPosition(100, 20);
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO reconnecting
             }
         });
         stage.addActor(button);

@@ -20,9 +20,8 @@ public class GameObject extends Rectangle {
         this.obstacleTexture = obstacleTexture;
         this.healthTexture = healthTexture;
         this.percent = percent;
-
-        this.height = 32;
-        this.width = 32;
+        this.height = Constants.TEXTURE_SIZE;
+        this.width = Constants.TEXTURE_SIZE;
     }
 
     public GameObject(Texture obstacleTexture) {
@@ -30,8 +29,8 @@ public class GameObject extends Rectangle {
         this.obstacleTexture = obstacleTexture;
         this.healthTexture = null;
         this.percent = 0.0f;
-        this.height = 32;
-        this.width = 32;
+        this.height = Constants.TEXTURE_SIZE;
+        this.width = Constants.TEXTURE_SIZE;
     }
 
 
