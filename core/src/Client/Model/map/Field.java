@@ -1,7 +1,6 @@
 package Client.Model.map;
 
 import Client.Model.Heroes.Hero;
-import Client.Model.Type;
 
 import java.io.Serializable;
 

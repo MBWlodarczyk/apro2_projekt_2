@@ -1,6 +1,5 @@
 package Client.GUI.Sprites;
 
-import Client.Controller.HandleInput;
 import Client.GUI.Utility.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

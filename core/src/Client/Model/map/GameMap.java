@@ -1,11 +1,8 @@
 package Client.Model.map;
 
 
-import Client.Controller.DistanceValidator;
 import Client.Controller.Move;
 import Client.Model.Heroes.*;
-import Client.Model.Player;
-import Client.Model.Type;
 
 import java.io.Serializable;
 

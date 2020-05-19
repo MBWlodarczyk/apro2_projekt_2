@@ -1,9 +1,5 @@
 package Client.Controller;
 
-import Client.Model.Heroes.Paladin;
-import Client.Model.Player;
-import Client.Model.Skills.Walk;
-import Client.Model.map.Field;
 import Client.Model.map.GameMap;
 
 /**

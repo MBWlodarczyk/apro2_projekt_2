@@ -24,10 +24,9 @@ public class Player implements Serializable {
         return passhash;
     }
 
-    public boolean addHero(Hero hero) {
+    public void addHero(Hero hero) {
         if(hero.getOwner()==this){
-        return heroes.add(hero);
+            heroes.add(hero);
+        }
     }
-        return false;
-}
 }

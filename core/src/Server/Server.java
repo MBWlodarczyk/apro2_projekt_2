@@ -23,7 +23,7 @@ public class Server {
     private static GameMap map = new GameMap(22);
     public static int playerNumber;
     public static int initPlayer;
-    static boolean gameinit;
+    static boolean gameInit;
     public Server(int playerNumber) throws IOException {
         Server.playerNumber =playerNumber;
         ServerSocket server = new ServerSocket(1701);
@@ -48,6 +48,7 @@ public class Server {
             for (ServerThread client : clients) {
                 if (!client.reciever) {
                     marker = false;
+                    break;
                 }
             }
             if (marker) {
@@ -104,7 +105,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(3);
+        new Server(2);
     }
 
     public static synchronized void init(){
@@ -154,6 +155,6 @@ public class Server {
                 map.getMap()[2][1].setHero(hero3);
                 map.getMap()[2][2].setHero(hero4);
         }
-        Server.gameinit = true;
+        Server.gameInit = true;
     }
 }

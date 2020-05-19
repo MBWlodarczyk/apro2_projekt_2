@@ -4,8 +4,6 @@ import Client.GUI.Utility.Constants;
 import Client.GUI.Screens.PlayScreen;
 import com.badlogic.gdx.InputProcessor;
 
-import java.util.Arrays;
-
 
 public class HandleInput implements InputProcessor {
 

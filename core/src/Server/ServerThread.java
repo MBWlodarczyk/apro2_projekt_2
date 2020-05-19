@@ -1,6 +1,5 @@
 package Server;
 
-import Client.Controller.Move;
 import Client.Controller.Turn;
 import Client.Model.Player;
 
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * test
@@ -19,15 +17,13 @@ public class ServerThread extends Thread {
     public String name;
     public boolean reciever;
     public Turn recieved;
-    private Socket socket;
     public ObjectInputStream is;
     boolean exit;
     public boolean init;
     public Player player;
 
-    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) throws IOException {
+    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
         System.out.println("Creating thread");
-        socket = sock;
         this.is = is;
         this.os = os;
         this.name = name;
@@ -78,7 +74,7 @@ if((Server.playerNumber != Server.initPlayer)) {
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 Server.removeClient(this);
-                Server.players.remove(this);
+                Server.playersClients.remove(this);
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
