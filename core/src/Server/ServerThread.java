@@ -37,7 +37,7 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         System.out.println("Running");
-while((Server.playerNumber != Server.initPlayer)) {
+if((Server.playerNumber != Server.initPlayer)) {
     try {
         os.reset();
         os.writeObject(Server.getMap());// sending object
