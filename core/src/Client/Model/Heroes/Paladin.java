@@ -7,7 +7,7 @@ public class Paladin extends Hero {
     final int id;
 
     public Paladin(Player owner,int y,int x) {
-        super(owner, 110, 100, 50, 5,"heroes/paladin.png",x,y);
+        super(owner, 110, 100, 50, 5);
         id = idGen++;
         this.skills.add(new Walk(3));
     }

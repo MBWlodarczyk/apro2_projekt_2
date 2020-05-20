@@ -5,10 +5,7 @@ public class Trap extends Obstacle {
     protected int damage;
     private boolean immobilize; // czy zatrzymuje gracza
 
-    public Trap(int y, int x, int damage) {
-        super("obstacles/trap.png",x,y);
-        this.x = x;
-        this.y = y;
+    public Trap(int damage) {
         this.isFixed = true;
         this.isVisible = true;
         this.isCrossable = true;

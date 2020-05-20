@@ -3,6 +3,7 @@ package Client.Model.map;
 
 import Client.Controller.Move;
 import Client.Model.Heroes.*;
+import Client.Model.Player;
 
 import java.io.Serializable;
 
@@ -20,14 +21,28 @@ public class GameMap implements Serializable {
     public GameMap(int size) {
         this.map = new Field[size][size];
         loadMap();
+        addWalls();
     }
 
     // tester method
-    public void loadMap() {
+    private void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
+                map[i][j].setObstacle(new Grass());
             }
+        }
+        byte[] hash = new byte[3];
+        map[1][1].setHero(new Archer(new Player("ktos",hash),1,1));
+    }
+
+    // PRIMITIVE VERY PRIMITIVE XD //TODO find out way to read map
+    private void addWalls(){
+        for(int i = 0; i < map.length;i++){
+            map[i][0].setObstacle(new Wall());
+            map[0][i].setObstacle(new Wall());
+            map[map.length-1][i].setObstacle(new Wall());
+            map[i][map.length-1].setObstacle(new Wall());
         }
     }
 

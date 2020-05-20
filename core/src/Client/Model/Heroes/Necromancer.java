@@ -7,7 +7,7 @@ public class Necromancer extends Hero {
     final int id;
 
     public Necromancer(Player owner,int y,int x) {
-        super(owner, 110, 100, 50, 5,"heroes/necromancer.png",x,y);
+        super(owner, 110, 100, 50, 5);
         id = idGen++;
         this.skills.add(new Walk(3));
     }

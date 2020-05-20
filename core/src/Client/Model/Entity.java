@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Abstract class to represent single entity
  */
-public abstract class Entity extends Image implements Serializable {
+public abstract class Entity implements Serializable {
     protected boolean isFixed = false; // can it be moved by a hero
     protected boolean isVisible = true; // is it visible
     protected boolean isCrossable = true; // can you pass through it and see over/through it
@@ -21,11 +21,11 @@ public abstract class Entity extends Image implements Serializable {
         return this.getClass().toString();
     }
 
-    public float getX() {
+    public int getX() {
         return x;
     }
 
-    public float getY() {
+    public int getY() {
         return y;
     }
 
@@ -57,13 +57,4 @@ public abstract class Entity extends Image implements Serializable {
         return isAttackable;
     }
 
-    public Entity(String imagePath, int x, int y) {
-        super(new Texture(imagePath));
-        this.x = x;
-        this.y = y;
-
-        this.setOrigin(16, 16);
-        this.setSize(32, 32);
-        this.setPosition(x * Constants.WIDTH + 10, Constants.HEIGHT - (y + 1) * 32 - 10);
-    }
 }

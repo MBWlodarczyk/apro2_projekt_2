@@ -8,7 +8,7 @@ public class Warrior extends Hero {
     final int id;
 
     public Warrior(Player owner,int y,int x) {
-        super(owner, 110, 100, 50, 5,"heroes/warrior.png",x,y);
+        super(owner, 110, 100, 50, 5);
         id = idGen++;
         this.skills.add(new Walk(3));
     }
