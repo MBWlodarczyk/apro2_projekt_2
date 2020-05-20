@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class EntitySprite<E extends Entity> implements Updatable, Drawable {
-    protected final E entity;
-    protected final Sprite sprite;
+    private final E entity;
+    private final Sprite sprite;
 
     public EntitySprite(E entity, Texture texture) {
         this.entity = entity;

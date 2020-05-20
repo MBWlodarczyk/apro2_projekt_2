@@ -1,6 +1,6 @@
 package Client.Controller;
 
-import Client.GUI.Screens.ScreenTest;
+import Client.GUI.Screens.PlayScreen;
 import Client.GUI.Utility.Constants;
 import Client.Model.map.Field;
 import com.badlogic.gdx.InputProcessor;
@@ -10,7 +10,7 @@ public class HandleInput implements InputProcessor {
 
     public boolean heroChosen;
     private boolean skillChosen;
-    private ScreenTest game;
+    private PlayScreen game;
     private int size;
     private int x, y;
     private int[] tab = new int[2];
@@ -27,7 +27,7 @@ public class HandleInput implements InputProcessor {
         return y;
     }
 
-    public HandleInput(ScreenTest game, int size) {
+    public HandleInput(PlayScreen game, int size) {
         this.heroChosen = false;
         this.skillChosen = false;
         this.game = game;
