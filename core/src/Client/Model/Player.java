@@ -4,6 +4,8 @@ import Client.Model.Heroes.Hero;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Player implements Serializable {
     private ArrayList<Hero> heroes;
@@ -20,6 +22,16 @@ public class Player implements Serializable {
     public String getNick() {
         return nick;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(nick, player.nick) &&
+                Arrays.equals(passhash, player.passhash);
+    }
+
 
     public byte[] getPasshash() {
         return passhash;

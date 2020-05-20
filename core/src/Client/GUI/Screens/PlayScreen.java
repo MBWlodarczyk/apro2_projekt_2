@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -229,7 +230,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        try {
+            client.sock.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadData() {

@@ -22,10 +22,12 @@ public class Client {
     private GameMap received;
     private boolean isSend=false;
     boolean exit=false;
+    public Socket sock;
 
     public Client(SwordGame game, final boolean init) throws Exception {
         //Todo reconnecting marked as not init;
         Socket s = new Socket("127.0.0.1", 1701);
+        sock = s;
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
         Object lock = new Object();
