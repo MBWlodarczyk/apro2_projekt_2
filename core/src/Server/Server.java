@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,18 +107,21 @@ public class Server {
             }
             turns.clear();
         }
-        for (ServerThread client : clients) {
+        ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
+        while(temp.size()!=0) {
             System.out.println("Sending");
-            if(!client.sock.isClosed()) {
+            if(!temp.get(0).sock.isOutputShutdown()) {
                 try {
-                    client.os.reset();
-                    client.os.writeObject(map);// sending object
-                    client.os.flush();
-                } catch (IOException e) {
-                    client.sock.close();
-                    Server.removeClient(client);
-                    Server.playersClients.remove(client);
-                    System.out.println("disconnect error");
+                    temp.get(0).os.reset();
+                    temp.get(0).os.writeObject(map);// sending object
+                    temp.get(0).os.flush();
+                    temp.remove(temp.get(0));
+                } catch (SocketException e) {
+                    temp.get(0).sock.close();
+                    Server.playersClients.remove(temp.get(0));
+                    System.out.println("disconnect error"+ temp.get(0).name);
+                    Server.removeClient(temp.get(0));
+                    temp.remove(temp.get(0));
                     e.printStackTrace();
                 }
             }
@@ -128,7 +132,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(1);
+        new Server(3);
     }
 
     public static synchronized void init(){
