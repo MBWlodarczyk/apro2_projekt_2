@@ -64,9 +64,10 @@ public class HandleInput implements InputProcessor {
             if (heroChosen) {
                 Move move = new Move(game.client.getReceived().getMap()[y][x].getHero(), game.client.getReceived().getMap()[tab[0]][tab[1]], game.client.getReceived().getMap()[y][x], game.client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
                 if (DistanceValidator.isValid(game.client.getReceived(), move)) {
-                    game.client.getSend().addMove(move);
-                    System.out.println("Adding move...");
-                    GameEngine.checkMove(move,game.client);
+                    if(!GameEngine.checkMove(move,game.client.getSend().getMoves())) {
+                        game.client.getSend().addMove(move);
+                        System.out.println("Adding move...");
+                    }
                     System.out.println(game.client.getSend().getMoves().size());
                     heroChosen = false;
                     return true;
