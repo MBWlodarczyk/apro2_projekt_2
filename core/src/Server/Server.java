@@ -108,7 +108,7 @@ public class Server {
             turns.clear();
         }
         ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
-        while(temp.size()==0) {
+        while(temp.size()!=0) {
             System.out.println("Sending");
             if(!temp.get(0).sock.isOutputShutdown()) {
                 try {
