@@ -19,21 +19,25 @@ import java.util.HashMap;
  * test
  */
 public class Server {
-    public static ArrayList<ServerThread> clients = new ArrayList<>();
-    public static HashMap<ServerThread, Player> playersClients = new HashMap<>();
-    public static ArrayList<Player> players = new ArrayList<>();
+
+    public static final ArrayList<ServerThread> clients = new ArrayList<>();
+    public static final HashMap<ServerThread, Player> playersClients = new HashMap<>();
+    public static final ArrayList<Player> players = new ArrayList<>();
     public static ArrayList<Turn> turns = new ArrayList<>();
     public static int playerNumber;
     public static int initPlayer;
     static boolean gameInit;
-    private static GameMap map = new GameMap(22);
+    private static final GameMap map = new GameMap(22);
+    private boolean exit=false;
 
     public Server(int playerNumber) throws IOException {
+
         Server.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
 
-        while (true) {
+
+        while (!exit) {
             Socket s = server.accept();
 
             String name = "client " + i;
@@ -45,10 +49,14 @@ public class Server {
         }
     }
 
+
     public static void main(String[] args) throws IOException {
         new Server(1);
     }
 
+    public void dispose(){
+        exit = true;
+    }
 
     public static synchronized boolean check() throws IOException {
         boolean marker;
@@ -77,21 +85,9 @@ public class Server {
         return map;
     }
 
-
     public static synchronized void send(boolean moves) throws IOException {
+
         if (moves) {
-//            for (ServerThread client : clients) {
-//                map.move(map, client.recieved.getMoves().poll());
-//            }
-//            for (ServerThread client : clients) {
-//                map.move(map, client.recieved.getMoves().poll());
-//            }
-//            for (ServerThread client : clients) {
-//                map.move(map, client.recieved.getMoves().poll());
-//            }
-//            for (ServerThread client : clients) {
-//                map.move(map, client.recieved.getMoves().poll());
-//            }
             for (Turn turn : Server.turns) {
                 map.move(map, turn.getMoves().poll());
             }
@@ -106,8 +102,11 @@ public class Server {
             }
             turns.clear();
         }
+
         ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
+
         while (temp.size() != 0) {
+
             System.out.println("Sending");
             if (!temp.get(0).sock.isOutputShutdown()) {
                 try {
@@ -124,6 +123,7 @@ public class Server {
                     e.printStackTrace();
                 }
             }
+
         }
     }
 
@@ -134,6 +134,7 @@ public class Server {
     public static synchronized void init() {
         switch (initPlayer) {
             case 4:
+
                 Turn turn = clients.get(3).recieved;
                 clients.get(3).player = clients.get(3).recieved.getOwner();
                 Hero hero1 = turn.getMoves().poll().getWho();
@@ -144,7 +145,9 @@ public class Server {
                 map.getMap()[2][19].setHero(hero2);
                 map.getMap()[1][20].setHero(hero3);
                 map.getMap()[2][19].setHero(hero4);
+
             case 3:
+
                 turn = clients.get(2).recieved;
                 clients.get(2).player = clients.get(2).recieved.getOwner();
                 hero1 = turn.getMoves().poll().getWho();
@@ -155,7 +158,9 @@ public class Server {
                 map.getMap()[20][2].setHero(hero2);
                 map.getMap()[19][1].setHero(hero3);
                 map.getMap()[19][2].setHero(hero4);
+
             case 2:
+
                 turn = clients.get(1).recieved;
                 clients.get(1).player = clients.get(1).recieved.getOwner();
                 hero1 = turn.getMoves().poll().getWho();
@@ -166,7 +171,9 @@ public class Server {
                 map.getMap()[20][19].setHero(hero2);
                 map.getMap()[19][20].setHero(hero3);
                 map.getMap()[19][19].setHero(hero4);
+
             case 1:
+
                 turn = clients.get(0).recieved;
                 clients.get(0).player = clients.get(0).recieved.getOwner();
                 hero1 = turn.getMoves().poll().getWho();
@@ -177,6 +184,7 @@ public class Server {
                 map.getMap()[1][2].setHero(hero2);
                 map.getMap()[2][1].setHero(hero3);
                 map.getMap()[2][2].setHero(hero4);
+
         }
         Server.gameInit = true;
     }

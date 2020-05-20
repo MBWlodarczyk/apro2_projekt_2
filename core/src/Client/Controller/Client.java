@@ -25,7 +25,7 @@ public class Client {
     public Socket sock;
 
     public Client(SwordGame game, final boolean init) throws Exception {
-        //Todo reconnecting marked as not init;
+
         Socket s = new Socket("127.0.0.1", 1701);
         sock = s;
         is = new ObjectInputStream(s.getInputStream());
@@ -33,18 +33,22 @@ public class Client {
         Object lock = new Object();
         Player player = new Player(game.nick,game.password);
         game.player = player;
+
         send = new Turn(player);
         received = (GameMap) is.readObject();
         System.out.println("Reading...");
+
         if(init) {
             createTurn(send, game);
         }
+
         System.out.println("Sending...");
         os.reset();
         os.writeObject(send);
         send.clearMoves();
         isSend = true;
         os.flush();
+
         final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
             @Override

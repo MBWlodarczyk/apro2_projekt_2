@@ -36,48 +36,59 @@ public class ServerThread extends Thread {
     public void run() {
         init=Server.playerNumber != Server.initPlayer;
         System.out.println("Running");
-if((init)) {
-    try {
-        os.reset();
-        os.writeObject(Server.getMap());// sending object
-        os.flush();
-        this.recieved = (Turn) is.readObject();
-        System.out.println("received object from " + name);
-        Server.initPlayer++;
-        reciever = true;
-        if (recieved.getOwner() != null) {
-            this.player=recieved.getOwner();
-            Server.playersClients.put(this, recieved.getOwner());
-            Server.players.add(recieved.getOwner());
-        }
-        if (Server.playerNumber == Server.initPlayer) {
-            Server.init();
-            Server.send(false);
-            Server.unlock();
-        }
-    } catch (IOException | ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-}else { // reconnect
-    try {
-        os.reset();
-        os.writeObject(Server.getMap());
-        os.flush();
-        this.recieved = (Turn) is.readObject();
-        System.out.println("received reconnect from " + name);
-        if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
-            this.player = recieved.getOwner();
-            Server.playersClients.put(this, Server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
+
+        if(init) {
+            try {
+                os.reset();
+                os.writeObject(Server.getMap());// sending object
+                os.flush();
+
+                this.recieved = (Turn) is.readObject();
+                System.out.println("received object from " + name);
+
+                Server.initPlayer++;
+                reciever = true;
+
+            if (recieved.getOwner() != null) {
+                this.player=recieved.getOwner();
+                Server.playersClients.put(this, recieved.getOwner());
+                Server.players.add(recieved.getOwner());
+            }
+
+            if (Server.playerNumber == Server.initPlayer) {
+                Server.init();
+                Server.send(false);
+                Server.unlock();
+            }
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else { // reconnect
+            try {
             os.reset();
-            os.writeObject(Server.getMap());// sending object
+            os.writeObject(Server.getMap());
             os.flush();
-            reciever = true;
-        } else{
-            Server.removeClient(this);
-            Server.playersClients.remove(this);
-            System.out.println("disconnect " + name);
-            this.dispose();
-        }
+
+            this.recieved = (Turn) is.readObject();
+            System.out.println("received reconnect from " + name);
+
+            if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
+
+                this.player = recieved.getOwner();
+                Server.playersClients.put(this, Server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
+
+                os.reset();
+                os.writeObject(Server.getMap());// sending object
+                os.flush();
+
+                reciever = true;
+            } else {
+                Server.removeClient(this);
+                Server.playersClients.remove(this);
+                System.out.println("disconnect " + name);
+                this.dispose();
+            }
     } catch (IOException | ClassNotFoundException e) {
         e.printStackTrace();
     }
