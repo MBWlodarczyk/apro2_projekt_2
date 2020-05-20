@@ -15,6 +15,7 @@ public class ServerThread extends Thread {
     public final Object lock = new Object();
     public ObjectOutputStream os;
     public String name;
+    Socket sock;
     public boolean reciever;
     public Turn recieved;
     public ObjectInputStream is;
@@ -27,6 +28,7 @@ public class ServerThread extends Thread {
         this.is = is;
         this.os = os;
         this.name = name;
+        this.sock = sock;
         this.start();
     }
 
@@ -54,16 +56,38 @@ if((Server.playerNumber != Server.initPlayer)) {
     } catch (IOException | ClassNotFoundException e) {
         e.printStackTrace();
     }
+}else { // reconnect
+    try {
+        os.reset();
+        os.writeObject(Server.getMap());
+        os.flush();
+        this.recieved = (Turn) is.readObject();
+        Server.turns.add(recieved);
+        System.out.println("received reconnect from " + name);
+        if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
+            Server.playersClients.put(this, Server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
+            os.reset();
+            os.writeObject(Server.getMap());// sending object
+            os.flush();
+        } else{
+            Server.removeClient(this);
+            Server.playersClients.remove(this);
+            System.out.println("disconnect " + name);
+            this.dispose();
+        }
+    } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+    }
 }
         while (!exit) {
             reciever=false;
             try {
 
-
+                System.out.println("Waiting for turn from " + name);
                         this.recieved = (Turn) is.readObject();
+                        Server.turns.add(recieved);
                         System.out.println("received object from " + name);
                         reciever = true;
-
                     synchronized (lock) {
                         {
                             System.out.println("lock " + name);

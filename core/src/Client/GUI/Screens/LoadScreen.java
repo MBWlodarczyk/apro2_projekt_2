@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class LoadScreen implements Screen {
@@ -202,6 +203,16 @@ public class LoadScreen implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                swordGame.ip = ipField.getText();
+                swordGame.nick = nickField.getText();
+                swordGame.port = portField.getText();
+                MessageDigest md = null;
+                try {
+                    md = MessageDigest.getInstance("SHA-512");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                 if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                     try {
                         swordGame.setScreen(new PlayScreen(swordGame,false));

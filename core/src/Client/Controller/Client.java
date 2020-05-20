@@ -21,8 +21,9 @@ public class Client {
     private Turn send;
     private GameMap received;
     private boolean isSend=false;
+    boolean exit=false;
 
-    public Client(SwordGame game,boolean init) throws Exception {
+    public Client(SwordGame game, final boolean init) throws Exception {
         //Todo reconnecting marked as not init;
         Socket s = new Socket("127.0.0.1", 1701);
         is = new ObjectInputStream(s.getInputStream());
@@ -31,29 +32,31 @@ public class Client {
         Player player = new Player(game.nick,game.password);
         game.player = player;
         send = new Turn(player);
-        if(init){
-        createTurn(send, game);
         received = (GameMap) is.readObject();
         System.out.println("Reading...");
+        if(init) {
+            createTurn(send, game);
+        }
         System.out.println("Sending...");
         os.reset();
         os.writeObject(send);
         send.clearMoves();
         isSend = true;
         os.flush();
-    }
         final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    received = (GameMap) is.readObject();
-                    System.out.println("Reading...");
-                    isSend = false;
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                if(init) {
+                    try {
+                        received = (GameMap) is.readObject();
+                        System.out.println("Reading...");
+                        isSend = false;
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
-                while (true) {
+                while (!exit) {
                     synchronized (finalLock){
                         if (send != null && !isSend && send.getMoves().size() == 4) {
                             try {
@@ -129,4 +132,9 @@ public class Client {
         }
 
     }
+    public void dispose()
+    {
+        exit = true;
+    }
+
 }

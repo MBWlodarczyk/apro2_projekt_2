@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -20,6 +21,7 @@ public class Server {
     public static ArrayList<ServerThread> clients = new ArrayList<>();
     public static HashMap<ServerThread,Player> playersClients = new HashMap<>();
     public static ArrayList<Player> players = new ArrayList<>();
+    public static ArrayList<Turn> turns = new ArrayList<>();
     private static GameMap map = new GameMap(22);
     public static int playerNumber;
     public static int initPlayer;
@@ -92,6 +94,7 @@ public class Server {
             for (ServerThread client : clients) {
                 map.move(map, client.recieved.getMoves().poll());
             }
+            turns.clear();
         }
         for (ServerThread client : clients) {
             System.out.println("Sending");
@@ -156,5 +159,21 @@ public class Server {
                 map.getMap()[2][2].setHero(hero4);
         }
         Server.gameInit = true;
+    }
+    public static boolean look(String nick, byte[] passhash){
+        for(Player player : players){
+            if (player.getNick().equals(nick) && Arrays.equals(player.getPasshash(),passhash)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static Player get(String nick, byte[] passhash){
+        for(Player player : players){
+            if (player.getNick().equals(nick) && player.getPasshash()==passhash){
+                return player;
+            }
+        }
+        return null;
     }
 }

@@ -9,6 +9,7 @@ public class Player implements Serializable {
     private ArrayList<Hero> heroes;
     final private String nick;
     final private byte[] passhash;
+    private boolean turn = true;
 
     public Player(String nick,byte[] hash) {
         this.heroes = new ArrayList<>(4);
@@ -28,5 +29,11 @@ public class Player implements Serializable {
         if(hero.getOwner()==this){
             heroes.add(hero);
         }
+    }
+    public boolean hasMove(){
+        return turn;
+    }
+    public void setTurn(boolean turn){
+        this.turn = turn;
     }
 }
