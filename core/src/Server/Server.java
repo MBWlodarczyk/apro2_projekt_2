@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,18 +107,18 @@ public class Server {
             }
             turns.clear();
         }
-        for (ServerThread client : clients) {
+        for (int i=0;i<clients.size();i++) {
             System.out.println("Sending");
-            if(!client.sock.isClosed()) {
+            if(!clients.get(i).sock.isOutputShutdown()) {
                 try {
-                    client.os.reset();
-                    client.os.writeObject(map);// sending object
-                    client.os.flush();
-                } catch (IOException e) {
-                    client.sock.close();
-                    Server.removeClient(client);
-                    Server.playersClients.remove(client);
-                    System.out.println("disconnect error");
+                    clients.get(i).os.reset();
+                    clients.get(i).os.writeObject(map);// sending object
+                    clients.get(i).os.flush();
+                } catch (SocketException e) {
+                    clients.get(i).sock.close();
+                    Server.playersClients.remove(clients.get(i));
+                    System.out.println("disconnect error"+ clients.get(i).name);
+                    Server.removeClient(clients.get(i));
                     e.printStackTrace();
                 }
             }
