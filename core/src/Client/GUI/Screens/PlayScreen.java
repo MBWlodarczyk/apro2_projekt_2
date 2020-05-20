@@ -6,6 +6,9 @@ import Client.Controller.HandleInput;
 import Client.Controller.Move;
 import Client.GUI.Scenes.Hud;
 import Client.GUI.Sprites.MouseSprite;
+import Client.GUI.Sprites.MoveDistanceSprite;
+import Client.GUI.Sprites.SkillPanelSprite;
+import Client.GUI.Sprites.WallSprite;
 import Client.GUI.SwordGame;
 import Client.GUI.Utility.Constants;
 import Client.GUI.Utility.GameObject;
@@ -28,45 +31,52 @@ import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
 
-
     public Client client;
     public SwordGame swordGame;
-    private Hud hud;
+//    private Hud hud;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            crossTexture, edgeTexture, healthTexture, bordTexture;
-    public static  GameObject[][] gameObjects;
-//    private Sprite mouse;
+            crossTexture, edgeTexture, healthTexture, bordTexture,skillPanelTexture;
+    public  GameObject[][] gameObjects;
+
     private MouseSprite mouseSprite;
-    private Sprite bord;
-    private ArrayList<Sprite> moveDistance;
-//    private MoveDistanceSprite moveDistance;
+    private SkillPanelSprite skillPanelSprite;
+    private WallSprite wallSprite;
+
+    private MoveDistanceSprite moveDistanceSprite;
+
+//    private Sprite bord;
+
+
+
     private HandleInput handleInput;
     private ArrayList<Button> skills;
+    private int skillNumber;
 
     public PlayScreen(SwordGame swordGame,boolean init) throws Exception {
         this.swordGame = swordGame;
-        client = new Client(swordGame,init);
-        gameCam = new OrthographicCamera();
-        gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
-        gameObjects = new GameObject[22][22];
+        this.client = new Client(swordGame,init);
+        this.gameCam = new OrthographicCamera();
+        this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
+        this.gameObjects = new GameObject[22][22];
         loadData();
-
-
-        hud = new Hud(swordGame.batch);
+        this.mouseSprite = new MouseSprite(edgeTexture);
+        this.skillPanelSprite = new SkillPanelSprite(skillPanelTexture);
+        this.moveDistanceSprite = new MoveDistanceSprite(crossTexture);
+        this.wallSprite = new WallSprite(wallTexture,client.getReceived());
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        bord = new Sprite(bordTexture,0,0,bordTexture.getWidth(),bordTexture.getHeight());
-        bord.setPosition(0,0);
 
-        mouseSprite = new MouseSprite(edgeTexture);
+//        hud = new Hud(swordGame.batch);
 
 
+//        bord = new Sprite(bordTexture,0,0,bordTexture.getWidth(),bordTexture.getHeight());
+//        bord.setPosition(0,0);
 
-//        moveDistance = new ArrayList<>();
+
         skills = new ArrayList<>();
 
         handleInput = new HandleInput(this, swordGame.size);
@@ -118,20 +128,10 @@ public class PlayScreen implements Screen {
             int x = handleInput.getX();
             int y = handleInput.getY();
             Move move = new Move(client.getReceived().getMap()[y][x].getHero(), client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[y][x], client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
-            Sprite s;
-
             boolean[][] marked = DistanceValidator.getValid(client.getReceived(), move);
-            for (int i = 0; i < swordGame.size; i++) {
-                for (int j = 0; j < swordGame.size; j++) {
-                    if (marked[i][j]) {
-                        s = new Sprite(edgeTexture, 0, 0, edgeTexture.getWidth(), edgeTexture.getHeight());
-                        s.setPosition(i * 32, 704 - (j + 1) * 32);
-                        moveDistance.add(s);
-                    }
-                }
-            }
+            moveDistanceSprite.setSprites(marked);
         } else {
-            moveDistance = new ArrayList<>(); //clean up
+             moveDistanceSprite.clear();
         }
     }
 
@@ -147,9 +147,11 @@ public class PlayScreen implements Screen {
                     button = new TextButton(s, swordGame.skin);
                     button.setSize(250, 100);
                     button.setPosition(720, Constants.HEIGHT - 100 * (i + 2));
+                    final int finalI = i;
                     button.addListener(new ClickListener() {
                         @Override
                         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                            skillNumber = finalI; //walk stay
                             return super.touchDown(event, x, y, pointer, button);
                         }
                     });
@@ -157,7 +159,7 @@ public class PlayScreen implements Screen {
                 }
             }
         } else {
-            skills = new ArrayList<>();
+            skills.clear();
         }
     }
 
@@ -173,14 +175,20 @@ public class PlayScreen implements Screen {
     @Override
     public void render(float delta) {
         update(delta);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         swordGame.batch.begin();
+//        bord.draw(swordGame.batch);  //draw bord
 
-        bord.draw(swordGame.batch);  //draw bord
+        wallSprite.draw(swordGame.batch);
+
+        skillPanelSprite.draw(swordGame.batch);  //draw skill panel
+
         mouseSprite.draw(swordGame.batch); //draw mousePosition
+
+        moveDistanceSprite.draw(swordGame.batch);
 
         //render textures
         for (int i = 0; i < swordGame.size; i++) {
@@ -188,9 +196,6 @@ public class PlayScreen implements Screen {
                 gameObjects[i][j].draw(swordGame.batch);
             }
         }
-
-        //render sprites
-        for (Sprite value : moveDistance) value.draw(swordGame.batch);
 
         //render list skill
         for (Button b : skills) b.draw(swordGame.batch, 1);
@@ -251,5 +256,6 @@ public class PlayScreen implements Screen {
         edgeTexture = swordGame.assets.manager.get("special/edge.png", Texture.class);
         healthTexture = swordGame.assets.manager.get("special/health.png", Texture.class);
         bordTexture = swordGame.assets.manager.get("special/bord.png",Texture.class);
+        skillPanelTexture = swordGame.assets.manager.get("special/skillPanel.png",Texture.class);
     }
 }
