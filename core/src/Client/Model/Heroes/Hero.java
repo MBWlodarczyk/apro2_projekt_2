@@ -67,6 +67,15 @@ public abstract class Hero extends Entity {
         return y;
     }
 
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
+    }
 
     public Player getOwner() {
         return owner;

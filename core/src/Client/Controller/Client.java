@@ -102,10 +102,10 @@ public class Client {
     }
 
     private void createTurn(Turn turn,SwordGame game){
-        if(game.chosen[0]){
-            Archer hero = new Archer(turn.getOwner(),3,4);
-           turn.addMove((new Move(hero,new Field(1,1),new Field(1,1),new Walk(5))));
-           turn.getOwner().addHero(hero);
+        if(game.chosen[0]) {
+            Archer hero = new Archer(turn.getOwner(), 5, 5);
+            turn.addMove((new Move(hero, new Field(1, 1), new Field(1, 1), new Walk(5))));
+            turn.getOwner().addHero(hero);
         }
         if(game.chosen[1]){
             Necromancer hero = new Necromancer(turn.getOwner(),3,4);

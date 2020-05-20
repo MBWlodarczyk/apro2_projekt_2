@@ -2,6 +2,7 @@ package Client.Model.map;
 
 import Client.Model.Heroes.Hero;
 import Client.Model.obstacles.Obstacle;
+import Client.Model.terrain.Terrain;
 
 import java.io.Serializable;
 
@@ -25,6 +26,10 @@ public class Field implements Serializable {
      * Obstacle on field
      */
     private Obstacle obstacle;
+    /**
+     * Terrain on a field
+     */
+    private Terrain terrain;
 
 
     public Field(int y, int x) {
@@ -32,6 +37,7 @@ public class Field implements Serializable {
         this.y = y;
         this.hero = null;
         this.obstacle = null;
+        this.terrain = null;
     }
 
     public int getX() {
@@ -42,12 +48,15 @@ public class Field implements Serializable {
         return y;
     }
 
-
     public Hero getHero() {
         return hero;
     }
 
     public void setHero(Hero hero) {
+        if(hero!=null){
+            hero.setX(x); //in order to change the x and y Hero coordinates
+            hero.setY(y);  //FK BLAD
+        }
         this.hero = hero;
     }
 
@@ -57,5 +66,13 @@ public class Field implements Serializable {
 
     public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
     }
 }

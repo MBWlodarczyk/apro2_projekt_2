@@ -3,8 +3,8 @@ package Client.Model.map;
 
 import Client.Controller.Move;
 import Client.Model.Heroes.Hero;
-import Client.Model.obstacles.Grass;
 import Client.Model.obstacles.Wall;
+import Client.Model.terrain.Grass;
 
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ public class GameMap implements Serializable {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
-                map[i][j].setObstacle(new Grass(i, j));
+                map[i][j].setTerrain(new Grass(i,j));
             }
         }
     }
@@ -45,6 +45,11 @@ public class GameMap implements Serializable {
         }
 //        byte[] hash = new byte[2];
 //        map[2][3].setHero(new Archer(new Player("ktos",hash),2,3));
+//        map[10][5].setHero(new Archer(new Player("ktos",hash),10,5));
+//        map[3][7].setHero(new Archer(new Player("ktos",hash),3,7));
+        map[3][3].setObstacle(new Wall(3,3));
+        map[3][2].setObstacle(new Wall(3,2));
+
     }
 
     public Field[][] getMap() {
@@ -52,14 +57,15 @@ public class GameMap implements Serializable {
     }
 
 
-    public void move(GameMap map, Move move) {
+    public void move(GameMap gameMap, Move move) {
         Hero temp = move.getWho();
         int x = move.getFrom().getX();
         int y = move.getFrom().getY();
-        map.getMap()[y][x].setHero(null);
+        gameMap.getMap()[y][x].setHero(null);
+
         x = move.getWhere().getX();
         y = move.getWhere().getY();
-        map.getMap()[y][x].setHero(temp);
+        gameMap.getMap()[y][x].setHero(temp);
     }
 
 
