@@ -29,6 +29,9 @@ public class Turn implements Serializable {
     public void addMove(Move move) {
         moves.add(move);
     }
+    public void rmMove() {
+        moves.remove();
+    }
 
     @Override
     public String toString() {
