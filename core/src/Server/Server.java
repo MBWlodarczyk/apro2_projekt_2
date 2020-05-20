@@ -107,18 +107,21 @@ public class Server {
             }
             turns.clear();
         }
-        for (int i=0;i<clients.size();i++) {
+        ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
+        while(temp.size()==0) {
             System.out.println("Sending");
-            if(!clients.get(i).sock.isOutputShutdown()) {
+            if(!temp.get(0).sock.isOutputShutdown()) {
                 try {
-                    clients.get(i).os.reset();
-                    clients.get(i).os.writeObject(map);// sending object
-                    clients.get(i).os.flush();
+                    temp.get(0).os.reset();
+                    temp.get(0).os.writeObject(map);// sending object
+                    temp.get(0).os.flush();
+                    temp.remove(temp.get(0));
                 } catch (SocketException e) {
-                    clients.get(i).sock.close();
-                    Server.playersClients.remove(clients.get(i));
-                    System.out.println("disconnect error"+ clients.get(i).name);
-                    Server.removeClient(clients.get(i));
+                    temp.get(0).sock.close();
+                    Server.playersClients.remove(temp.get(0));
+                    System.out.println("disconnect error"+ temp.get(0).name);
+                    Server.removeClient(temp.get(0));
+                    temp.remove(temp.get(0));
                     e.printStackTrace();
                 }
             }
@@ -129,7 +132,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(2);
+        new Server(3);
     }
 
     public static synchronized void init(){
