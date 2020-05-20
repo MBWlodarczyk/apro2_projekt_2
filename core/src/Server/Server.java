@@ -132,7 +132,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(3);
+        new Server(1);
     }
 
     public static synchronized void init(){
