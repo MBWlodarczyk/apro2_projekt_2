@@ -15,6 +15,7 @@ public class Assets implements Disposable {
         loadField();
         loadHeroes();
         loadSpecial();
+        loadObstacles();
     }
 
     /**
@@ -58,6 +59,10 @@ public class Assets implements Disposable {
         manager.load("special/bord.png", Texture.class);
         manager.load("special/cross.png", Texture.class);
         manager.load("special/skillPanel.png", Texture.class);
+    }
+
+    private void loadObstacles() {
+        manager.load("obstacles/trap.png", Texture.class);
     }
 
 

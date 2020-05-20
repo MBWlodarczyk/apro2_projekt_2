@@ -1,6 +1,7 @@
 package Client.Model.map;
 
 import Client.Model.Heroes.Hero;
+import Client.Model.obstacles.Obstacle;
 
 import java.io.Serializable;
 

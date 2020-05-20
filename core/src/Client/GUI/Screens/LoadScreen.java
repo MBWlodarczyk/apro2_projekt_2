@@ -1,7 +1,7 @@
 package Client.GUI.Screens;
 
-import Client.GUI.Utility.Constants;
 import Client.GUI.SwordGame;
+import Client.GUI.Utility.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -185,7 +185,7 @@ public class LoadScreen implements Screen {
                     MessageDigest md = MessageDigest.getInstance("SHA-512");
                     swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                     if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {  //TODO check ip and else...
-                        swordGame.setScreen(new ScreenTest(swordGame,true));
+                        swordGame.setScreen(new ScreenTest(swordGame, true));
 //                        swordGame.setScreen(new PlayScreen(swordGame,true));
                     }
                 } catch (Exception e) {
@@ -196,7 +196,7 @@ public class LoadScreen implements Screen {
         stage.addActor(button);
     }
 
-    private void reconnectButton(){
+    private void reconnectButton() {
         TextButton button = new TextButton("Reconnect", swordGame.skin);
         button.setSize(100, 100);
         button.setPosition(100, 20);
@@ -205,6 +205,7 @@ public class LoadScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                     try {
+                        swordGame.setScreen(new ScreenTest(swordGame, false));
 //                        swordGame.setScreen(new PlayScreen(swordGame,false));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -214,7 +215,6 @@ public class LoadScreen implements Screen {
         });
         stage.addActor(button);
     }
-
 
 
     @Override

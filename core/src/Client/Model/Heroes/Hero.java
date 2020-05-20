@@ -19,6 +19,7 @@ public abstract class Hero extends Entity {
      * ArrayList of skills
      */
     protected ArrayList<Skill> skills;
+    protected int speed;
     /**
      * Owner of that hero
      */
@@ -32,9 +33,10 @@ public abstract class Hero extends Entity {
      */
     private int health;
     private float heathStatus;
-    protected int speed;
+    private int x;
+    private int y;
 
-    public Hero(Player owner, int weight, int startHealth, int health, int speed) {
+    public Hero(Player owner, int weight, int startHealth, int health, int speed, int y, int x) {
         this.owner = owner;
         this.speed = speed;
         this.weight = weight;
@@ -42,6 +44,8 @@ public abstract class Hero extends Entity {
         this.startHealth = startHealth;
         this.heathStatus = (float) health / startHealth;
         this.skills = new ArrayList<>();
+        this.x = x;
+        this.y = y;
     }
 
     public static int getIdGen() {
@@ -50,15 +54,19 @@ public abstract class Hero extends Entity {
 
     @Override
     public String toString() {
-        return "Hero{" +
-                "owner=" + owner +
-                ", skills=" + skills +
-                ", weight=" + weight +
-                ", health=" + health +
-                ", startHealth=" + startHealth +
-                ", heathStatus=" + heathStatus +
-                '}';
+        return "Hero";
     }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
 
     public Player getOwner() {
         return owner;

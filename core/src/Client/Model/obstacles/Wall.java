@@ -1,7 +1,8 @@
-package Client.Model.map;
+package Client.Model.obstacles;
 
 public class Wall extends Obstacle {
-    public Wall(){
+    public Wall(int y, int x) {
+        super(y, x);
         this.isFixed = true;
         this.isVisible = true;
         this.isCrossable = false;

@@ -1,23 +1,16 @@
-package Client.Model.map;
+package Client.Model.obstacles;
 
 public class Trap extends Obstacle {
-    private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
     protected int damage;
+    private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
     private boolean immobilize; // czy zatrzymuje gracza
 
-    public Trap(int damage) {
+    public Trap(int damage, int y, int x) {
+        super(y, x);
         this.isFixed = true;
         this.isVisible = true;
         this.isCrossable = true;
         this.damage = damage;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public int getDamage() {

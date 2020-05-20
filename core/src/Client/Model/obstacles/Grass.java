@@ -1,7 +1,8 @@
-package Client.Model.map;
+package Client.Model.obstacles;
 
 public class Grass extends Obstacle {
-    public Grass(){
+    public Grass(int y, int x) {
+        super(y, x);
         this.isFixed = true;
         this.isVisible = true;
         this.isCrossable = false;

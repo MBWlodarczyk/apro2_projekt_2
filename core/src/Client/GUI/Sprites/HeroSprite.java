@@ -1,23 +1,11 @@
 package Client.GUI.Sprites;
 
-import Client.GUI.Utility.Drawable;
+import Client.Model.Heroes.Hero;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class HeroSprite implements Drawable {
-    private final Sprite hero;
+public class HeroSprite extends EntitySprite<Hero> {
 
-
-    public HeroSprite(Texture texture) {
-        this.hero = new Sprite(texture,0,0,texture.getWidth(),texture.getHeight());
-
+    public HeroSprite(Hero hero, Texture texture) {
+        super(hero, texture);
     }
-
-    @Override
-    public void draw(SpriteBatch batch) {
-        hero.draw(batch);
-
-    }
-
 }

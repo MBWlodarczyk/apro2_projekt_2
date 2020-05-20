@@ -1,9 +1,5 @@
 package Client.Model;
 
-import Client.GUI.Utility.Constants;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
 import java.io.Serializable;
 
 /**
@@ -16,11 +12,6 @@ public abstract class Entity implements Serializable {
     protected boolean isAttackable = true;
     protected int x, y;
 
-    @Override
-    public String toString() { // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
-        return this.getClass().toString();
-    }
-
     public int getX() {
         return x;
     }
@@ -29,8 +20,9 @@ public abstract class Entity implements Serializable {
         return y;
     }
 
-    public void setFixed(boolean fixed) {
-        isFixed = fixed;
+    @Override
+    public String toString() { // na razie, pewnie będzie przysłoniona w każdej klasie dziedziczącej
+        return this.getClass().toString();
     }
 
     public void setX(int x) {
@@ -45,6 +37,10 @@ public abstract class Entity implements Serializable {
         return isFixed;
     }
 
+    public void setFixed(boolean fixed) {
+        isFixed = fixed;
+    }
+
     public boolean isVisible() {
         return isVisible;
     }
@@ -56,5 +52,4 @@ public abstract class Entity implements Serializable {
     public boolean isAttackable() {
         return isAttackable;
     }
-
 }

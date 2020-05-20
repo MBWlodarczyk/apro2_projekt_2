@@ -12,6 +12,12 @@ import java.util.Queue;
 public class Turn implements Serializable {
     private Player owner;
     private Queue<Move> moves;
+
+    public Turn(Player owner) {
+        this.owner = owner;
+        this.moves = new LinkedList<>();
+    }
+
     public Queue<Move> getMoves() {
         return moves;
     }
@@ -20,10 +26,6 @@ public class Turn implements Serializable {
         return owner;
     }
 
-    public Turn(Player owner) {
-        this.owner = owner;
-        this.moves = new LinkedList<>();
-    }
     public void addMove(Move move) {
         moves.add(move);
     }

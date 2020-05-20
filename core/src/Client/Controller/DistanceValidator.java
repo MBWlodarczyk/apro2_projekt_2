@@ -43,7 +43,7 @@ public class DistanceValidator {
      * Method to help dfs validate if the field is not null or wall.
      */
     private static boolean fieldValid(GameMap map, int y, int x) {
-        return y < map.getMap().length && y >= 0 && x >= 0 && x < map.getMap()[0].length && (map.getMap()[y][x].getObstacle()==null || map.getMap()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
+        return y < map.getMap().length && y >= 0 && x >= 0 && x < map.getMap()[0].length && (map.getMap()[y][x].getObstacle() == null || map.getMap()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
     }
 
     /**
@@ -56,5 +56,6 @@ public class DistanceValidator {
     public static boolean isValid(GameMap map, Move move) {
         boolean[][] marked = getValid(map, move);
         return marked[move.getWhere().getY()][move.getWhere().getX()];
-    }}
+    }
+}
 

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class SkillPanelSprite extends Sprite {
     public SkillPanelSprite(Texture texture) {
         super(texture, 0, 0, texture.getWidth(), texture.getHeight());
-        setPosition(Constants.HEIGHT,0);
+        setPosition(Constants.HEIGHT, 0);
     }
 
     @Override

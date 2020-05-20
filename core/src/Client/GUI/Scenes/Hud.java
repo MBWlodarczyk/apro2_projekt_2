@@ -49,9 +49,9 @@ public class Hud {
 
         Skin skin = new Skin(Gdx.files.internal("skin/rainbow-ui.json"));
 
-        TextButton button = new TextButton("simeno",skin);
-        button.setSize(300,100);
-        button.setPosition(700,300);
+        TextButton button = new TextButton("simeno", skin);
+        button.setSize(300, 100);
+        button.setPosition(700, 300);
         stage.addActor(button);
 
 

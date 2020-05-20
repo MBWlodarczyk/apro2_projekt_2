@@ -6,11 +6,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player implements Serializable {
-    private ArrayList<Hero> heroes;
     final private String nick;
     final private byte[] passhash;
+    private ArrayList<Hero> heroes;
 
-    public Player(String nick,byte[] hash) {
+    public Player(String nick, byte[] hash) {
         this.heroes = new ArrayList<>(4);
         this.nick = nick;
         this.passhash = hash;
@@ -25,7 +25,7 @@ public class Player implements Serializable {
     }
 
     public void addHero(Hero hero) {
-        if(hero.getOwner()==this){
+        if (hero.getOwner() == this) {
             heroes.add(hero);
         }
     }

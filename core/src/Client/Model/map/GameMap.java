@@ -2,8 +2,9 @@ package Client.Model.map;
 
 
 import Client.Controller.Move;
-import Client.Model.Heroes.*;
-import Client.Model.Player;
+import Client.Model.Heroes.Hero;
+import Client.Model.obstacles.Grass;
+import Client.Model.obstacles.Wall;
 
 import java.io.Serializable;
 
@@ -29,21 +30,21 @@ public class GameMap implements Serializable {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
-                map[i][j].setObstacle(new Grass());
+                map[i][j].setObstacle(new Grass(i, j));
             }
         }
-        byte[] hash = new byte[3];
-        map[1][1].setHero(new Archer(new Player("ktos",hash),1,1));
     }
 
     // PRIMITIVE VERY PRIMITIVE XD //TODO find out way to read map
-    private void addWalls(){
-        for(int i = 0; i < map.length;i++){
-            map[i][0].setObstacle(new Wall());
-            map[0][i].setObstacle(new Wall());
-            map[map.length-1][i].setObstacle(new Wall());
-            map[i][map.length-1].setObstacle(new Wall());
+    private void addWalls() {
+        for (int i = 0; i < map.length; i++) {
+            map[i][0].setObstacle(new Wall(i, 0));
+            map[0][i].setObstacle(new Wall(0, i));
+            map[map.length - 1][i].setObstacle(new Wall(map.length - 1, i));
+            map[i][map.length - 1].setObstacle(new Wall(i, map.length - 1));
         }
+//        byte[] hash = new byte[2];
+//        map[2][3].setHero(new Archer(new Player("ktos",hash),2,3));
     }
 
     public Field[][] getMap() {
@@ -52,14 +53,13 @@ public class GameMap implements Serializable {
 
 
     public void move(GameMap map, Move move) {
-            Hero temp = move.getWho();
-            int x = move.getFrom().getX();
-            int y = move.getFrom().getY();
-            map.getMap()[y][x].setHero(null);
-            x = move.getWhere().getX();
-            y = move.getWhere().getY();
-            map.getMap()[y][x].setHero(temp);
-
+        Hero temp = move.getWho();
+        int x = move.getFrom().getX();
+        int y = move.getFrom().getY();
+        map.getMap()[y][x].setHero(null);
+        x = move.getWhere().getX();
+        y = move.getWhere().getY();
+        map.getMap()[y][x].setHero(temp);
     }
 
 
@@ -68,7 +68,7 @@ public class GameMap implements Serializable {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                sb.append(map[i][j].getObstacle()).append(" ");
+                sb.append(map[i][j].getHero()).append(" ");
             }
             sb.append("\n");
         }
