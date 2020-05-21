@@ -1,6 +1,7 @@
 package Client.GUI.Utility;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -16,6 +17,7 @@ public class Assets implements Disposable {
         loadHeroes();
         loadSpecial();
         loadObstacles();
+        loadSound();
     }
 
     /**
@@ -56,14 +58,25 @@ public class Assets implements Disposable {
         manager.load("special/edge.png", Texture.class);
         manager.load("special/health.png", Texture.class);
         manager.load("special/background.png", Texture.class);
-        manager.load("special/bord.png", Texture.class);
-        manager.load("special/cross.png", Texture.class);
+        manager.load("special/move.png", Texture.class);
         manager.load("special/skillPanel.png", Texture.class);
     }
 
+    /**
+     * Load obstacles
+     */
     private void loadObstacles() {
         manager.load("obstacles/trap.png", Texture.class);
     }
+
+    /**
+     * load sound
+     */
+    private void loadSound(){
+        manager.load("sound/beep-03.wav", Sound.class);
+
+    }
+
 
 
     @Override

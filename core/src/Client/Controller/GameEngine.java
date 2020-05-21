@@ -19,7 +19,7 @@ public class GameEngine {
     public static boolean[][] getValid(GameMap map, Move move) {
 
         boolean[][] marked = new boolean[map.getMap().length][map.getMap()[0].length];
-        dfs(map, marked, move.getFrom().getY(), move.getFrom().getX(), move.getWhat().getDistance());
+        dfs(map, marked, move.getFrom().getY(), move.getFrom().getX(), move.getWhat().getRange());
         return marked;
     }
 

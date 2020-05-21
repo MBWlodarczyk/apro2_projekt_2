@@ -29,7 +29,7 @@ public class PlayScreen implements Screen {
     private Viewport gamePort;
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            crossTexture, edgeTexture, healthTexture, bordTexture, skillPanelTexture, trapTexture;
+            moveTexture, edgeTexture, healthTexture,skillPanelTexture, trapTexture;
 
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
@@ -52,7 +52,7 @@ public class PlayScreen implements Screen {
 
         mouseSprite = new MouseSprite(edgeTexture);
         skillPanelSprite = new SkillPanelSprite(skillPanelTexture);
-        moveDistanceSprite = new MoveDistanceSprite(edgeTexture);
+        moveDistanceSprite = new MoveDistanceSprite(moveTexture);
 
         wallSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
@@ -184,10 +184,9 @@ public class PlayScreen implements Screen {
         wizardTexture = swordGame.assets.manager.get("heroes/wizard.png", Texture.class);
         priestTexture = swordGame.assets.manager.get("heroes/priest.png", Texture.class);
 
-        crossTexture = swordGame.assets.manager.get("special/cross.png", Texture.class);
+        moveTexture = swordGame.assets.manager.get("special/move.png", Texture.class);
         edgeTexture = swordGame.assets.manager.get("special/edge.png", Texture.class);
         healthTexture = swordGame.assets.manager.get("special/health.png", Texture.class);
-        bordTexture = swordGame.assets.manager.get("special/bord.png", Texture.class);
         skillPanelTexture = swordGame.assets.manager.get("special/skillPanel.png", Texture.class);
 
         trapTexture = swordGame.assets.manager.get("obstacles/trap.png", Texture.class);
