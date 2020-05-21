@@ -7,8 +7,8 @@ public class Trap extends Obstacle {
     private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
     private boolean immobilize; // czy zatrzymuje gracza
 
-    public Trap(int damage, int y, int x) {
-        super(y, x);
+    public Trap(int damage) {
+        super();
         this.isFixed = true;
         this.isVisible = true;
         this.isCrossable = true;

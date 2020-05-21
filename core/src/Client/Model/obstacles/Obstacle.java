@@ -6,12 +6,9 @@ import Client.Model.Entity;
  * Class representing single obstacle on map.
  */
 public abstract class Obstacle extends Entity {
-    private int x;
-    private int y;
 
-    public Obstacle(int y, int x) {
-        this.x = x;
-        this.y = y;
+    public Obstacle() {
+
     }
 
     @Override

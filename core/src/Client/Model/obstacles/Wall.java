@@ -3,8 +3,8 @@ package Client.Model.obstacles;
  * Class representing single wall on map.
  */
 public class Wall extends Obstacle {
-    public Wall(int y, int x) {
-        super(y, x);
+    public Wall() {
+        super();
         this.isFixed = true;
         this.isVisible = true;
         this.isCrossable = false;
