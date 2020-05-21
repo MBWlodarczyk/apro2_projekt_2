@@ -1,7 +1,7 @@
 package Client.GUI.Screens;
 
 import Client.Controller.Client;
-import Client.Controller.DistanceValidator;
+import Client.Controller.GameEngine;
 import Client.Controller.HandleInput;
 import Client.Controller.Move;
 import Client.GUI.Sprites.*;
@@ -106,7 +106,7 @@ public class PlayScreen implements Screen {
             int x = handleInput.getX();
             int y = handleInput.getY();
             Move move = new Move(client.getReceived().getMap()[y][x].getHero(), client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[y][x], client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
-            boolean[][] marked = DistanceValidator.getValid(client.getReceived(), move);
+            boolean[][] marked = GameEngine.getValid(client.getReceived(), move);
             moveDistanceSprite.setSprites(marked);
         } else {
             moveDistanceSprite.clear();
