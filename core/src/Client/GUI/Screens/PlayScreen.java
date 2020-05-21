@@ -62,6 +62,7 @@ public class PlayScreen implements Screen {
 
         handleInput = new HandleInput(this,swordGame.size);
         Gdx.input.setInputProcessor(handleInput);
+        //TODO no kurde pora ogarnac to
 }
 
     private void rewriteMap() {
