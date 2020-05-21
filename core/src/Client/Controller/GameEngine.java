@@ -5,19 +5,15 @@ import java.util.Queue;
 public class GameEngine {
     public static boolean checkMove(Move move, Queue<Move> moves){
         //check if tile is crossable
-        /*
-        if(!move.getWhere().getObstacle().isCrossable()){
+        if(move.getWhere().getObstacle()!= null && !move.getWhere().getObstacle().isCrossable()){
             System.out.println("This tile is not crossable");
             return true;
         }
-
-         */
-        /*
+        // check if tile will is occupied
         if(move.getWhere().getHero() != null){
             System.out.println("This tile is occupied");
             return true;
         }
-        */
         // check if hero has moved yet.
         for (Move m:moves) {
             if(!m.equals(move) && m.getWho().equals(move.getWho())){
@@ -25,15 +21,13 @@ public class GameEngine {
                 return true;
             }
         }
-        /*
-        // check if tile is occupied
+        // check if tile will be occupied
         for (Move m:moves) {
             if(move.getWhere().equals(m.getWhere())){
                 System.out.println("This tile will be occupied");
                 return true;
             }
         }
-        */
         return false;
     }
 }
