@@ -118,6 +118,7 @@ public class ServerThread extends Thread {
     {
         exit = true;
     }
+
     public synchronized void send() throws IOException {
         os.reset();
         os.writeObject(Server.getMap());// sending object

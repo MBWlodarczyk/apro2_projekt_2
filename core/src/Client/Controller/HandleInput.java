@@ -16,6 +16,7 @@ public class HandleInput implements InputProcessor {
     private int size;
     private int x, y;
     private int[] tab = new int[2];
+    public final Object lock = new Object();
 
     public int[] getTab() {
         return tab;
@@ -53,7 +54,7 @@ public class HandleInput implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public synchronized boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (screenX <= Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
             Field field = game.client.getReceived().getMap()[tab[0]][tab[1]];
@@ -70,6 +71,9 @@ public class HandleInput implements InputProcessor {
                         game.client.getSend().addMove(move);
                         System.out.println("Adding move...");
                         System.out.println(move);
+                        synchronized (game.client.lock) {
+                            game.client.lock.notify();
+                        }
                     }
                     System.out.println(game.client.getSend().getMoves().size());
                     heroChosen = false;

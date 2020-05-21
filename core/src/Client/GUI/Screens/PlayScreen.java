@@ -38,7 +38,7 @@ public class PlayScreen implements Screen {
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
 
-    private HandleInput handleInput;
+    public HandleInput handleInput;
 
 
     public PlayScreen(SwordGame swordGame, boolean init) throws Exception {

@@ -23,6 +23,7 @@ public class Client {
     private boolean isSend=false;
     boolean exit=false;
     public Socket sock;
+    public final Object lock = new Object();
 
     public Client(SwordGame game, final boolean init) throws Exception {
 
@@ -30,13 +31,12 @@ public class Client {
         sock = s;
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
-        Object lock = new Object();
         Player player = new Player(game.nick,game.password);
         game.player = player;
 
         send = new Turn(player);
 
-        recieve();
+        receive();
 
         if(init) {
             createTurn(send, game);
@@ -44,7 +44,6 @@ public class Client {
 
         send();
 
-        final Object finalLock = lock;
         Thread t = new Thread(() -> {
             if(init) {
                 try {
@@ -56,7 +55,12 @@ public class Client {
                 }
             }
             while (!exit) {
-                synchronized (finalLock){
+                synchronized (lock){
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     if (send != null && !isSend && send.getMoves().size() == 4) {
                         try {
                             send();
@@ -67,7 +71,7 @@ public class Client {
 
                     if (isSend) {
                         try {
-                            recieve();
+                            receive();
                             isSend = false;
                             send.clearMoves();
                         } catch (IOException | ClassNotFoundException e) {
@@ -136,7 +140,7 @@ public class Client {
         isSend = true;
         os.flush();
     }
-    public synchronized void recieve() throws IOException, ClassNotFoundException {
+    public synchronized void receive() throws IOException, ClassNotFoundException {
         received = (GameMap) is.readObject();
         System.out.println("Reading...");
     }
