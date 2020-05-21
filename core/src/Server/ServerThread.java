@@ -66,21 +66,17 @@ public class ServerThread extends Thread {
             }
         } else { // reconnect
             try {
-            os.reset();
-            os.writeObject(Server.getMap());
-            os.flush();
 
-            this.recieved = (Turn) is.readObject();
-            System.out.println("received reconnect from " + name);
+            send();
+
+            recieve();
 
             if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
 
                 this.player = recieved.getOwner();
                 Server.playersClients.put(this, Server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
 
-                os.reset();
-                os.writeObject(Server.getMap());// sending object
-                os.flush();
+                send();
 
                 reciever = true;
             } else {
@@ -97,9 +93,8 @@ public class ServerThread extends Thread {
             try {
                 if(!Server.hasSendTurn(player)) {
                     System.out.println("Waiting for turn from " + name);
-                    this.recieved = (Turn) is.readObject();
+                    recieve();
                     Server.turns.add(recieved);
-                    System.out.println("received object from " + name);
                     reciever = true;
                 }
                     synchronized (lock) {
@@ -123,5 +118,14 @@ public class ServerThread extends Thread {
     public void dispose()
     {
         exit = true;
+    }
+    public synchronized void send() throws IOException {
+        os.reset();
+        os.writeObject(Server.getMap());// sending object
+        os.flush();
+    }
+    public synchronized void recieve() throws IOException, ClassNotFoundException {
+        this.recieved = (Turn) is.readObject();
+        System.out.println("received object from " + name);
     }
 }

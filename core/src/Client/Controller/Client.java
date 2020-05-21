@@ -35,19 +35,14 @@ public class Client {
         game.player = player;
 
         send = new Turn(player);
-        received = (GameMap) is.readObject();
-        System.out.println("Reading...");
+
+        recieve();
 
         if(init) {
             createTurn(send, game);
         }
 
-        System.out.println("Sending...");
-        os.reset();
-        os.writeObject(send);
-        send.clearMoves();
-        isSend = true;
-        os.flush();
+        send();
 
         final Object finalLock = lock;
         Thread t = new Thread(new Runnable() {
@@ -66,12 +61,7 @@ public class Client {
                     synchronized (finalLock){
                         if (send != null && !isSend && send.getMoves().size() == 4) {
                             try {
-                                System.out.println("Sending...");
-                                os.reset();
-                                os.writeObject(send);
-                                isSend = true;
-                                os.flush();
-                                send.clearMoves();
+                                send();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -79,8 +69,7 @@ public class Client {
 
                         if (isSend) {
                             try {
-                                received = (GameMap) is.readObject();
-                                System.out.println("Reading...");
+                                recieve();
                                 isSend = false;
                                 send.clearMoves();
                             } catch (IOException | ClassNotFoundException e) {
@@ -142,5 +131,16 @@ public class Client {
     {
         exit = true;
     }
-
+    public synchronized void send() throws IOException {
+        System.out.println("Sending...");
+        os.reset();
+        os.writeObject(send);
+        send.clearMoves();
+        isSend = true;
+        os.flush();
+    }
+    public synchronized void recieve() throws IOException, ClassNotFoundException {
+        received = (GameMap) is.readObject();
+        System.out.println("Reading...");
+    }
 }
