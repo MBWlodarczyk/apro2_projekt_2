@@ -11,4 +11,7 @@ public class Priest extends Hero {
         id = idGen++;
         this.skills.add(new Walk(3));
     }
+    public String toString() {
+        return "Priest";
+    }
 }

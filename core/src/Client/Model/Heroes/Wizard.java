@@ -13,4 +13,7 @@ public class Wizard extends Hero {
         this.skills.add(new Walk(3));
         this.skills.add(new FireBall(10));
     }
+    public String toString() {
+        return "Wizard";
+    }
 }

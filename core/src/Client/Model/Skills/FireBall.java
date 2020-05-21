@@ -8,6 +8,6 @@ public class FireBall extends Skill {
 
     @Override
     public String toString() {
-        return "FireBall";
+        return "Fireball";
     }
 }

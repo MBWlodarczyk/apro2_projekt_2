@@ -11,4 +11,7 @@ public class Archer extends Hero {
         id = idGen++;
         this.skills.add(new Walk(3));
     }
+    public String toString() {
+        return "Archer";
+    }
 }

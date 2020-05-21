@@ -67,6 +67,7 @@ public class HandleInput implements InputProcessor {
                     if(!GameEngine.checkMove(move,game.client.getSend().getMoves())) {
                         game.client.getSend().addMove(move);
                         System.out.println("Adding move...");
+                        System.out.println(move);
                     }
                     System.out.println(game.client.getSend().getMoves().size());
                     heroChosen = false;

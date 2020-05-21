@@ -48,8 +48,6 @@ public class Move implements Serializable {
 
         @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        //TODO preety String to show move
-        return sb.toString();
+            return "[" + getWhose().getNick() + "] " + getWho().toString() + " standing on [" + getFrom().getY() + ", " + getFrom().getX() + "] used " + getWhat().toString() + " on [" + getWhere().getY() + ", " + getWhere().getX() + "]";
     }
 }
