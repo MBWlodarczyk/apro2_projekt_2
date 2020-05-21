@@ -5,7 +5,9 @@ import Client.GUI.Utility.Constants;
 import Client.Model.map.Field;
 import com.badlogic.gdx.InputProcessor;
 
-
+/**
+ * Class to handle all input from user
+ */
 public class HandleInput implements InputProcessor {
 
     public boolean heroChosen;

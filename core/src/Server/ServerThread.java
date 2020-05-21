@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * test
+ * Class to represent single server client relation on server side
  */
 public class ServerThread extends Thread {
     public final Object lock = new Object();

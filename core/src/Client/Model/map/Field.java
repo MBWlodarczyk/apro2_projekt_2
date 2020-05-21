@@ -66,6 +66,8 @@ public class Field implements Serializable {
 
     public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
+        obstacle.setX(x);
+        obstacle.setY(y);
     }
 
     public Terrain getTerrain() {
@@ -74,5 +76,7 @@ public class Field implements Serializable {
 
     public void setTerrain(Terrain terrain) {
         this.terrain = terrain;
+        terrain.setX(x);
+        terrain.setY(y);
     }
 }

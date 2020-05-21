@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Class to represent single player.
+ */
 public class Player implements Serializable {
     private ArrayList<Hero> heroes;
     final private String nick;

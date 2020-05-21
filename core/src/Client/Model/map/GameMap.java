@@ -35,7 +35,7 @@ public class GameMap implements Serializable {
         }
     }
 
-    // PRIMITIVE VERY PRIMITIVE XD //TODO find out way to read map
+    // PRIMITIVE VERY PRIMITIVE //TODO find out way to read map
     private void addWalls() {
         for (int i = 0; i < map.length; i++) {
             map[i][0].setObstacle(new Wall(i, 0));

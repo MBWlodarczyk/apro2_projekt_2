@@ -45,5 +45,4 @@ public class Turn implements Serializable {
         this.moves = new LinkedList<>();
     }
 
-    // zakomentowalem jego linijke po czym zaczelo dzialac, pozniej odkomentowalem i dalej dzialalo XDDDDDDDDDDDDDDDDDDDD
 }

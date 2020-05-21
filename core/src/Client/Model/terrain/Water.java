@@ -6,7 +6,5 @@ public class Water extends Terrain {
 
     public Water(int y, int x) {
         super(y, x);
-        this.x = x;
-        this.y = y;
     }
 }

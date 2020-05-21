@@ -2,6 +2,9 @@ package Client.Model.obstacles;
 
 import Client.Model.Entity;
 
+/**
+ * Class representing single obstacle on map.
+ */
 public abstract class Obstacle extends Entity {
     private int x;
     private int y;

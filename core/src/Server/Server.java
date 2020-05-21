@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * test
+ * Main class to implement client server communication on server side
  */
 public class Server {
 
@@ -103,7 +103,8 @@ public class Server {
             turns.clear();
         }
 
-        ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
+        ArrayList<ServerThread> temp;
+        temp = (ArrayList<ServerThread>) clients.clone();
 
         while (temp.size() != 0) {
 

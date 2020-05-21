@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * test
+ * Class to implement client server communication on client side
  */
 public class Client {
     public ObjectInputStream is;
