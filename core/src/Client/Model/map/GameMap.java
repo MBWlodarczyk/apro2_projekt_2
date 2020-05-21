@@ -59,6 +59,29 @@ public class GameMap implements Serializable {
         map[18][10].setObstacle(new Wall(18,10));
         map[18][11].setObstacle(new Wall(18,11));
 
+        map[8][6].setObstacle(new Wall(8,6));
+        map[8][7].setObstacle(new Wall(8,7));
+        map[8][8].setObstacle(new Wall(8,8));
+        map[7][8].setObstacle(new Wall(7,8));
+        map[6][8].setObstacle(new Wall(6,8));
+
+        map[13][6].setObstacle(new Wall(13,6));
+        map[13][7].setObstacle(new Wall(13,7));
+        map[13][8].setObstacle(new Wall(13,8));
+        map[14][8].setObstacle(new Wall(14,8));
+        map[15][8].setObstacle(new Wall(15,8));
+
+        map[8][13].setObstacle(new Wall(8,13));
+        map[8][14].setObstacle(new Wall(8,14));
+        map[8][15].setObstacle(new Wall(8,15));
+        map[7][13].setObstacle(new Wall(7,13));
+        map[6][13].setObstacle(new Wall(6,13));
+
+        map[13][13].setObstacle(new Wall(13,13));
+        map[13][14].setObstacle(new Wall(13,14));
+        map[13][15].setObstacle(new Wall(13,15));
+        map[14][13].setObstacle(new Wall(14,13));
+        map[15][13].setObstacle(new Wall(15,13));
     }
 
     public Field[][] getMap() {
