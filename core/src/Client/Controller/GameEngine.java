@@ -8,7 +8,7 @@ import java.util.Queue;
 public class GameEngine {
 
     private static void playBeep() {
-        String path = "./core/assets/raw/beep-03.wav";
+        String path = "./core/assets/raw/bruh.wav";
         try {
             SimpleAudioPlayer player = new SimpleAudioPlayer(path);
             player.play();
@@ -21,14 +21,17 @@ public class GameEngine {
         }
 
     }
+
     public static boolean checkMove(Move move, Queue<Move> moves){
         //check if tile is crossable
         if(move.getWhere().getObstacle()!= null && !move.getWhere().getObstacle().isCrossable()){
+            playBeep();
             System.out.println("This tile is not crossable");
             return true;
         }
         // check if tile will is occupied
         if(move.getWhere().getHero() != null){
+            playBeep();
             System.out.println("This tile is occupied");
             return true;
         }
@@ -43,6 +46,7 @@ public class GameEngine {
         // check if tile will be occupied
         for (Move m:moves) {
             if(move.getWhere().equals(m.getWhere())){
+                playBeep();
                 System.out.println("This tile will be occupied");
                 return true;
             }
