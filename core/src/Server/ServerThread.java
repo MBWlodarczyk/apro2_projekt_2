@@ -57,7 +57,7 @@ public class ServerThread extends Thread {
 
             if (Server.playerNumber == Server.initPlayer) {
                 Server.init();
-                Server.send(false);
+                Server.sendToAll(false);
                 Server.unlock();
             }
 
@@ -110,7 +110,6 @@ public class ServerThread extends Thread {
                 Server.removeClient(this);
                 Server.playersClients.remove(this);
                 System.out.println("disconnect " + name);
-                e.printStackTrace();
                 this.dispose();
             }
         }

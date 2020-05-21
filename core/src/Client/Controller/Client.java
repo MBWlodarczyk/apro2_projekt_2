@@ -45,42 +45,39 @@ public class Client {
         send();
 
         final Object finalLock = lock;
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(init) {
-                    try {
-                        received = (GameMap) is.readObject();
-                        System.out.println("Reading...");
-                        isSend = false;
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+        Thread t = new Thread(() -> {
+            if(init) {
+                try {
+                    received = (GameMap) is.readObject();
+                    System.out.println("Reading...");
+                    isSend = false;
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-                while (!exit) {
-                    synchronized (finalLock){
-                        if (send != null && !isSend && send.getMoves().size() == 4) {
-                            try {
-                                send();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        if (isSend) {
-                            try {
-                                recieve();
-                                isSend = false;
-                                send.clearMoves();
-                            } catch (IOException | ClassNotFoundException e) {
-                                e.printStackTrace();
-                            }
-                            System.out.println(received);
-                        }
-                    }
-                }
-
             }
+            while (!exit) {
+                synchronized (finalLock){
+                    if (send != null && !isSend && send.getMoves().size() == 4) {
+                        try {
+                            send();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (isSend) {
+                        try {
+                            recieve();
+                            isSend = false;
+                            send.clearMoves();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println(received);
+                    }
+                }
+            }
+
         }
         );
         t.start();

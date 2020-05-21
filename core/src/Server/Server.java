@@ -64,7 +64,7 @@ public class Server {
         if (marker) {
             unlock();
             if (initPlayer == playerNumber) {
-                send(true);
+                sendToAll(true);
             }
             Server.clearTurns();
         }
@@ -85,7 +85,7 @@ public class Server {
         return map;
     }
 
-    public static synchronized void send(boolean moves) throws IOException {
+    public static synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
             for (Turn turn : Server.turns) {
@@ -120,7 +120,6 @@ public class Server {
                     System.out.println("disconnect error" + temp.get(0).name);
                     Server.removeClient(temp.get(0));
                     temp.remove(temp.get(0));
-                    e.printStackTrace();
                 }
             }
 
