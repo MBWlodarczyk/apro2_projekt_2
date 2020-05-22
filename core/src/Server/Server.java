@@ -171,6 +171,7 @@ public class Server {
         return turns.stream().anyMatch(turn -> turn.getOwner().equals(player));
     }
 
+    //ugly method don't look
     private synchronized void initPlayer(int playerNumber,int CornerX,int CornerY){
         Turn turn = clients.get(playerNumber).recieved;
         clients.get(playerNumber).player = clients.get(playerNumber).recieved.getOwner();

@@ -38,27 +38,28 @@ public class ServerThread extends Thread {
         init=server.playerNumber != server.initPlayer;
         System.out.println("Running thread");
         try {
-        if(init) { //initializing game
+            if(init) { //initializing game
 
                 send(); //sending starting map
                 recieve(); //receiving initial vector of heroes
                 recordPlayer(recieved.getOwner()); // recording player in server
                 checkIfAllConnected(); // checking if game can be started
 
-        } else { // reconnect
+            } else { // reconnect
 
-            send(); //sending actual map
-            recieve(); //receiving initial player info
-            recordPlayerIfExisting(recieved.getOwner());
-            sendWithTurnInfo(); //send map again //
-    }
-}catch (IOException | ClassNotFoundException e) {
+                send(); //sending actual map
+                recieve(); //receiving initial player info
+                recordPlayerIfExisting(recieved.getOwner());
+                sendWithTurnInfo(); //send map again //
+            }
+        }catch (IOException | ClassNotFoundException e) {
                 System.out.println("cos nie pykło w reconnect/init handling");
                 e.printStackTrace();
-            }
+        }
+
         while (!exit) {
             try {
-                recieveIfTurnNotSend(); //receive move if player hasn't made a move yet
+                receiveIfTurnNotSend(); //receive move if player hasn't made a move yet
                 checkIfAllSend(); //check if all have sent and then send map else wait
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
@@ -118,7 +119,7 @@ public class ServerThread extends Thread {
         }
     }
 
-    private synchronized void recieveIfTurnNotSend() throws IOException, ClassNotFoundException {
+    private synchronized void receiveIfTurnNotSend() throws IOException, ClassNotFoundException {
         if(!server.hasSendTurn(player)) {
             System.out.println("Waiting for turn from " + name);
             recieve();// receiveIfTurnNotSend
