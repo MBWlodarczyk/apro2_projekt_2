@@ -16,7 +16,6 @@ public class ServerThread extends Thread {
     public ObjectOutputStream os;
     public String name;
     Socket sock;
-    public boolean reciever;
     public Turn recieved;
     public ObjectInputStream is;
     boolean exit;
@@ -37,76 +36,30 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         init=server.playerNumber != server.initPlayer;
-        System.out.println("Running");
+        System.out.println("Running thread");
+        try {
+        if(init) { //initializing game
 
-        if(init) {
-            try {
-                os.reset();
-                os.writeObject(server.getMap());// sending object
-                os.flush();
+                send(); //sending starting map
+                recieve(); //receiving initial vector of heroes
+                recordPlayer(recieved.getOwner()); // recording player in server
+                checkIfAllConnected(); // checking if game can be started
 
-                this.recieved = (Turn) is.readObject();
-                System.out.println("received object from " + name);
+        } else { // reconnect //TODO reconnect when turn has been already made (checker)
 
-                server.initPlayer++;
-                reciever = true;
-
-            if (recieved.getOwner() != null) {
-                this.player=recieved.getOwner();
-                server.playersClients.put(this, recieved.getOwner());
-                server.players.add(recieved.getOwner());
-            }
-
-            if (server.playerNumber == server.initPlayer) {
-                server.init();
-                server.sendToAll(false);
-                server.unlock();
-            }
-
-            } catch (IOException | ClassNotFoundException e) {
+            send(); //sending actual map
+            recieve(); //receiving initial player info
+            recordPlayerIfExisting(recieved.getOwner());
+            send(); //send map again //TODO send info if player has already made move to fix case when player 1 makes move player 1 disconnects and reconnects and then 2player makes move
+    }
+}catch (IOException | ClassNotFoundException e) {
+                System.out.println("cos nie pykło w reconnect/init handling");
                 e.printStackTrace();
             }
-        } else { // reconnect //TODO reconnect when turn has been already made (checker)
-            try {
-
-            send();
-
-            recieve();
-
-            if (recieved.getOwner() != null && server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
-
-                this.player = recieved.getOwner();
-                server.playersClients.put(this, server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
-
-                send();
-
-                reciever = true;
-            } else {
-                server.removeClient(this);
-                server.playersClients.remove(this);
-                System.out.println("disconnect " + name);
-                this.dispose();
-            }
-    } catch (IOException | ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-}       reciever = !init;
         while (!exit) {
             try {
-                if(!server.hasSendTurn(player)) {
-                    System.out.println("Waiting for turn from " + name);
-                    recieve();
-                    server.turns.add(recieved);
-                    reciever = true;
-                }
-                    synchronized (lock) {
-                        {
-                            System.out.println("lock " + name);
-                            if (!server.check()){
-                                lock.wait();
-                                }
-                        }
-                    }
+                recieveIfTurnNotSend(); //receive move if player hasn't made a move yet
+                checkIfAllSend(); //check if all have sent and then send map else wait
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 server.removeClient(this);
@@ -116,17 +69,70 @@ public class ServerThread extends Thread {
             }
         }
     }
+
     public void dispose()
     {
         exit = true;
     }
+
     public synchronized void send() throws IOException {
         os.reset();
         os.writeObject(server.getMap());// sending object
         os.flush();
     }
+
     public synchronized void recieve() throws IOException, ClassNotFoundException {
         this.recieved = (Turn) is.readObject();
         System.out.println("received object from " + name);
+    }
+
+    private synchronized void recordPlayer(Player player) {
+        if (player != null) {
+            this.player = player;
+            server.playersClients.put(this, player);
+            server.players.add(player);
+            server.initPlayer++;
+        }
+    }
+
+    private synchronized void checkIfAllConnected() throws IOException {
+        if (server.playerNumber == server.initPlayer) {
+            server.init();
+            server.sendToAll(false);
+            server.unlock();
+        }
+    }
+
+    private synchronized void recordPlayerIfExisting(Player player) throws IOException {
+        if (player != null && server.look(player.getNick(),player.getPasshash())) {
+
+            this.player = player;
+            server.playersClients.put(this, server.get(player.getNick(),player.getPasshash()));
+
+        } else {
+            server.removeClient(this);
+            server.playersClients.remove(this);
+            System.out.println("disconnect " + name);
+            this.dispose();
+        }
+    }
+
+    private synchronized void recieveIfTurnNotSend() throws IOException, ClassNotFoundException {
+        if(!server.hasSendTurn(player)) {
+            System.out.println("Waiting for turn from " + name);
+            recieve();// receiveIfTurnNotSend
+            server.turns.add(recieved);
+        }
+    }
+
+    private synchronized void checkIfAllSend() throws IOException, InterruptedException {
+        synchronized (lock) {
+            {
+                System.out.println("lock " + name);
+                if (!server.check()){
+                    lock.wait();
+                }
+            }
+        }
     }
 }

@@ -51,7 +51,7 @@ public class Server {
 
 
     public static void main(String[] args) throws IOException {
-        new Server(2);
+        new Server(3);
     }
 
     public void dispose(){
@@ -75,7 +75,6 @@ public class Server {
         for (ServerThread client : clients) {
             synchronized (client.lock) {
                 client.lock.notify();
-                client.reciever = false;
                 System.out.println("Unlocking " + client.name);
             }
         }
@@ -134,57 +133,13 @@ public class Server {
     public synchronized void init() {
         switch (initPlayer) {
             case 4:
-
-                Turn turn = clients.get(3).recieved;
-                clients.get(3).player = clients.get(3).recieved.getOwner();
-                Hero hero1 = turn.getMoves().poll().getWho();
-                Hero hero2 = turn.getMoves().poll().getWho();
-                Hero hero3 = turn.getMoves().poll().getWho();
-                Hero hero4 = turn.getMoves().poll().getWho();
-                map.getMap()[1][20].setHero(hero1);
-                map.getMap()[2][19].setHero(hero2);
-                map.getMap()[1][20].setHero(hero3);
-                map.getMap()[2][19].setHero(hero4);
-
+                initPlayer(3,1,19);
             case 3:
-
-                turn = clients.get(2).recieved;
-                clients.get(2).player = clients.get(2).recieved.getOwner();
-                hero1 = turn.getMoves().poll().getWho();
-                hero2 = turn.getMoves().poll().getWho();
-                hero3 = turn.getMoves().poll().getWho();
-                hero4 = turn.getMoves().poll().getWho();
-                map.getMap()[20][1].setHero(hero1);
-                map.getMap()[20][2].setHero(hero2);
-                map.getMap()[19][1].setHero(hero3);
-                map.getMap()[19][2].setHero(hero4);
-
+                initPlayer(2,19,1);
             case 2:
-
-                turn = clients.get(1).recieved;
-                clients.get(1).player = clients.get(1).recieved.getOwner();
-                hero1 = turn.getMoves().poll().getWho();
-                hero2 = turn.getMoves().poll().getWho();
-                hero3 = turn.getMoves().poll().getWho();
-                hero4 = turn.getMoves().poll().getWho();
-                map.getMap()[20][20].setHero(hero1);
-                map.getMap()[20][19].setHero(hero2);
-                map.getMap()[19][20].setHero(hero3);
-                map.getMap()[19][19].setHero(hero4);
-
+                initPlayer(1,19,19);
             case 1:
-
-                turn = clients.get(0).recieved;
-                clients.get(0).player = clients.get(0).recieved.getOwner();
-                hero1 = turn.getMoves().poll().getWho();
-                hero2 = turn.getMoves().poll().getWho();
-                hero3 = turn.getMoves().poll().getWho();
-                hero4 = turn.getMoves().poll().getWho();
-                map.getMap()[1][1].setHero(hero1);
-                map.getMap()[1][2].setHero(hero2);
-                map.getMap()[2][1].setHero(hero3);
-                map.getMap()[2][2].setHero(hero4);
-
+                initPlayer(0,1,1);
         }
         gameInit = true;
     }
@@ -218,5 +173,17 @@ public class Server {
             }
         }
         return false;
+    }
+    private synchronized void initPlayer(int playerNumber,int CornerX,int CornerY){
+        Turn turn = clients.get(playerNumber).recieved;
+        clients.get(playerNumber).player = clients.get(playerNumber).recieved.getOwner();
+        Hero hero1 = turn.getMoves().poll().getWho();
+        Hero hero2 = turn.getMoves().poll().getWho();
+        Hero hero3 = turn.getMoves().poll().getWho();
+        Hero hero4 = turn.getMoves().poll().getWho();
+        map.getMap()[CornerX][CornerY].setHero(hero1);
+        map.getMap()[CornerX][CornerY+1].setHero(hero2);
+        map.getMap()[CornerX+1][CornerY].setHero(hero3);
+        map.getMap()[CornerX+1][CornerY+1].setHero(hero4);
     }
 }
