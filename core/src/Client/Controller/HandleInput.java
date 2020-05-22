@@ -16,7 +16,6 @@ public class HandleInput implements InputProcessor {
     private int size;
     private int x, y;
     private int[] tab = new int[2];
-    public final Object lock = new Object();
 
     public int[] getTab() {
         return tab;

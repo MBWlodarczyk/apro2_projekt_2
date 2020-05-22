@@ -1,5 +1,6 @@
 package Client.Controller;
 
+import Client.GUI.Screens.LoadScreen;
 import Client.GUI.SwordGame;
 import Client.Model.Heroes.*;
 import Client.Model.Player;
@@ -16,6 +17,7 @@ import java.net.Socket;
  * Class to implement client server communication on client side
  */
 public class Client {
+
     public ObjectInputStream is;
     public ObjectOutputStream os;
     private Turn send;
@@ -132,6 +134,7 @@ public class Client {
     {
         exit = true;
     }
+
     public synchronized void send() throws IOException {
         System.out.println("Sending...");
         os.reset();

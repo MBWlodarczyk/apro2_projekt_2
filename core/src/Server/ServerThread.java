@@ -71,7 +71,7 @@ public class ServerThread extends Thread {
 
             recieve();
 
-            if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
+            if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()) && !Server.isPlayerConnected(recieved.getOwner())) {
 
                 this.player = recieved.getOwner();
                 Server.playersClients.put(this, Server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
@@ -83,6 +83,7 @@ public class ServerThread extends Thread {
                 Server.removeClient(this);
                 Server.playersClients.remove(this);
                 System.out.println("disconnect " + name);
+                sock.close();
                 this.dispose();
             }
     } catch (IOException | ClassNotFoundException e) {

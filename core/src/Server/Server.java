@@ -219,4 +219,7 @@ public class Server {
         }
         return false;
     }
+    public static synchronized boolean isPlayerConnected(Player player){
+        return clients.stream().anyMatch(client -> playersClients.get(client).equals(player));
+    }
 }
