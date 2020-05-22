@@ -45,12 +45,12 @@ public class ServerThread extends Thread {
                 recordPlayer(recieved.getOwner()); // recording player in server
                 checkIfAllConnected(); // checking if game can be started
 
-        } else { // reconnect //TODO reconnect when turn has been already made (checker)
+        } else { // reconnect //
 
             send(); //sending actual map
             recieve(); //receiving initial player info
             recordPlayerIfExisting(recieved.getOwner());
-            send(); //send map again //TODO send info if player has already made move to fix case when player 1 makes move player 1 disconnects and reconnects and then 2player makes move
+            sendWithTurnInfo(); //send map again //
     }
 }catch (IOException | ClassNotFoundException e) {
                 System.out.println("cos nie pykło w reconnect/init handling");
@@ -103,7 +103,7 @@ public class ServerThread extends Thread {
         }
     }
 
-    private synchronized void recordPlayerIfExisting(Player player) throws IOException {
+    private synchronized void recordPlayerIfExisting(Player player) {
         if (player != null && server.look(player.getNick(),player.getPasshash())) {
 
             this.player = player;
@@ -133,6 +133,15 @@ public class ServerThread extends Thread {
                     lock.wait();
                 }
             }
+        }
+    }
+    private synchronized void sendWithTurnInfo() throws IOException {
+        if(server.hasSendTurn(player)) {
+            server.getMap().setHasSendMove(true);
+            send();
+            server.getMap().setHasSendMove(false);
+        } else {
+            send();
         }
     }
 }

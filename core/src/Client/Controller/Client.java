@@ -45,14 +45,13 @@ public class Client {
         send();
 
         Thread t = new Thread(() -> {
-            if(init) {
                 try {
                     receive();
-                    isSend = false;
+                    System.out.println(received.hasSendMove());
+                    isSend = received.hasSendMove();
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-            }
             while (!exit) { //TODO stop this while from running whole time
                 synchronized (lock){
                     if (send != null && !isSend && send.getMoves().size() == 4) {
@@ -71,7 +70,7 @@ public class Client {
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
-                        System.out.println(received);
+                        System.out.println(received.hasSendMove());
                     }
                 }
             }

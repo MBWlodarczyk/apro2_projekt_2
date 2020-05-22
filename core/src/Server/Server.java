@@ -34,24 +34,26 @@ public class Server {
 
         this.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
-        int i = 1;
+        int number = 1;
 
 
         while (!exit) {
-            Socket s = server.accept();
-
-            String name = "client " + i;
-            i++;
-            ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
-            ObjectInputStream is = new ObjectInputStream(s.getInputStream());
-            ServerThread t = new ServerThread(s, is, os, name,this);
-            clients.add(t);
+            Socket socket = server.accept();
+            acceptConnection(number,socket);
         }
     }
 
+    private void acceptConnection(int i,Socket s) throws IOException {
+        String name = "client " + i;
+        i++;
+        ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
+        ObjectInputStream is = new ObjectInputStream(s.getInputStream());
+        ServerThread t = new ServerThread(s, is, os, name,this);
+        clients.add(t);
+    }
 
     public static void main(String[] args) throws IOException {
-        new Server(3);
+        new Server(2);
     }
 
     public void dispose(){

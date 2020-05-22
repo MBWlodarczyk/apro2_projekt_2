@@ -18,6 +18,15 @@ public class GameMap implements Serializable {
      */
     private Field[][] map;
 
+    private boolean hasSendMove = false; //reconnect variable
+    public boolean hasSendMove() {
+        return hasSendMove;
+    }
+
+    public void setHasSendMove(boolean hasSendMove) {
+        this.hasSendMove = hasSendMove;
+    }
+
 
     public GameMap(int size) {
         this.map = new Field[size][size];
