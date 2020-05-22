@@ -1,5 +1,6 @@
 package Server;
 
+import Client.Controller.Client;
 import Client.Controller.Turn;
 import Client.Model.Heroes.Hero;
 import Client.Model.Player;
@@ -29,23 +30,27 @@ public class Server {
     boolean gameInit;
     private final GameMap map = new GameMap(22);
     private boolean exit=false;
+    ServerSocket server;
 
     public Server(int playerNumber) throws IOException {
 
         this.playerNumber = playerNumber;
-        ServerSocket server = new ServerSocket(1701);
+        this.server = new ServerSocket(1701);
+
+        run();
+    }
+
+    private void run() throws IOException {
         int number = 1;
-
-
         while (!exit) {
             Socket socket = server.accept();
             acceptConnection(number,socket);
+            number++;
         }
     }
 
     private void acceptConnection(int i,Socket s) throws IOException {
         String name = "client " + i;
-        i++;
         ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream is = new ObjectInputStream(s.getInputStream());
         ServerThread t = new ServerThread(s, is, os, name,this);
@@ -85,7 +90,7 @@ public class Server {
     public GameMap getMap() {
         return map;
     }
-
+    //TODO reformat sendToAll when we have engine
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
@@ -146,22 +151,16 @@ public class Server {
         gameInit = true;
     }
 
-    public synchronized boolean look(String nick, byte[] passhash) {
-        for (Player player : players) {
-            if (player.getNick().equals(nick) && Arrays.equals(player.getPasshash(), passhash)) {
-                return true;
-            }
-        }
-        return false;
+    public synchronized boolean checkIfPlayerExists(String nick, byte[] passhash) {
+
+        return players.stream().anyMatch(player -> player.getNick().equals(nick) && Arrays.equals(player.getPasshash(), passhash));
     }
 
-    public synchronized Player get(String nick, byte[] passhash) {
-        for (Player player : players) {
-            if (player.getNick().equals(nick) && player.getPasshash() == passhash) {
-                return player;
-            }
-        }
-        return null;
+    public synchronized Player getPlayer(String nick, byte[] passhash) {
+        return players.stream()
+                .filter(player -> player.getNick().equals(nick) && player.getPasshash() == passhash)
+                .findAny()
+                .orElse(null);
     }
 
     public synchronized void clearTurns() {
@@ -169,13 +168,9 @@ public class Server {
     }
 
     public synchronized boolean hasSendTurn(Player player) {
-        for (Turn turn : turns) {
-            if (turn.getOwner().equals(player)) {
-                return true;
-            }
-        }
-        return false;
+        return turns.stream().anyMatch(turn -> turn.getOwner().equals(player));
     }
+
     private synchronized void initPlayer(int playerNumber,int CornerX,int CornerY){
         Turn turn = clients.get(playerNumber).recieved;
         clients.get(playerNumber).player = clients.get(playerNumber).recieved.getOwner();

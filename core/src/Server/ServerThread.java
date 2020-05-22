@@ -45,7 +45,7 @@ public class ServerThread extends Thread {
                 recordPlayer(recieved.getOwner()); // recording player in server
                 checkIfAllConnected(); // checking if game can be started
 
-        } else { // reconnect //
+        } else { // reconnect
 
             send(); //sending actual map
             recieve(); //receiving initial player info
@@ -92,6 +92,7 @@ public class ServerThread extends Thread {
             server.playersClients.put(this, player);
             server.players.add(player);
             server.initPlayer++;
+            this.name += " (" + player.getNick() +")";
         }
     }
 
@@ -104,11 +105,11 @@ public class ServerThread extends Thread {
     }
 
     private synchronized void recordPlayerIfExisting(Player player) {
-        if (player != null && server.look(player.getNick(),player.getPasshash())) {
+        if (player != null && server.checkIfPlayerExists(player.getNick(),player.getPasshash())) {
 
             this.player = player;
-            server.playersClients.put(this, server.get(player.getNick(),player.getPasshash()));
-
+            server.playersClients.put(this, server.getPlayer(player.getNick(),player.getPasshash()));
+            this.name += " (" + player.getNick() +")";
         } else {
             server.removeClient(this);
             server.playersClients.remove(this);
