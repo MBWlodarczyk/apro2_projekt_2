@@ -22,7 +22,7 @@ public class Field implements Serializable {
      * Hero on field
      */
     private Hero hero;
-    /**
+     /**
      * Obstacle on field
      */
     private Obstacle obstacle;

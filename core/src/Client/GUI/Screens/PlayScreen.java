@@ -62,7 +62,7 @@ public class PlayScreen implements Screen {
 
         handleInput = new HandleInput(this,swordGame.size);
         Gdx.input.setInputProcessor(handleInput);
-        //TODO no kurde pora ogarnac to
+
 }
 
     private void rewriteMap() {
@@ -134,7 +134,6 @@ public class PlayScreen implements Screen {
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta));
 
         moveDistanceSprite.draw(swordGame.batch);
-
         mouseSprite.draw(swordGame.batch);
 
         swordGame.batch.end();
