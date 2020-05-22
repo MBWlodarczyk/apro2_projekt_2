@@ -22,68 +22,69 @@ public class ServerThread extends Thread {
     boolean exit;
     public boolean init;
     public Player player;
+    private Server server;
 
-    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name) {
+    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name,Server server) {
         System.out.println("Creating thread");
         this.is = is;
         this.os = os;
         this.name = name;
         this.sock = sock;
+        this.server=server;
         this.start();
     }
 
     @Override
     public void run() {
-        init=Server.playerNumber != Server.initPlayer;
+        init=server.playerNumber != server.initPlayer;
         System.out.println("Running");
 
         if(init) {
             try {
                 os.reset();
-                os.writeObject(Server.getMap());// sending object
+                os.writeObject(server.getMap());// sending object
                 os.flush();
 
                 this.recieved = (Turn) is.readObject();
                 System.out.println("received object from " + name);
 
-                Server.initPlayer++;
+                server.initPlayer++;
                 reciever = true;
 
             if (recieved.getOwner() != null) {
                 this.player=recieved.getOwner();
-                Server.playersClients.put(this, recieved.getOwner());
-                Server.players.add(recieved.getOwner());
+                server.playersClients.put(this, recieved.getOwner());
+                server.players.add(recieved.getOwner());
             }
 
-            if (Server.playerNumber == Server.initPlayer) {
-                Server.init();
-                Server.sendToAll(false);
-                Server.unlock();
+            if (server.playerNumber == server.initPlayer) {
+                server.init();
+                server.sendToAll(false);
+                server.unlock();
             }
 
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-        } else { // reconnect
+        } else { // reconnect //TODO reconnect when turn has been already made (checker)
             try {
 
             send();
 
             recieve();
 
-            if (recieved.getOwner() != null && Server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()) && !Server.isPlayerConnected(recieved.getOwner())) {
+            if (recieved.getOwner() != null && server.look(recieved.getOwner().getNick(),recieved.getOwner().getPasshash())) {
 
                 this.player = recieved.getOwner();
-                Server.playersClients.put(this, Server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
+                server.playersClients.put(this, server.get(recieved.getOwner().getNick(),recieved.getOwner().getPasshash()));
 
                 send();
 
                 reciever = true;
             } else {
-                Server.removeClient(this);
-                Server.playersClients.remove(this);
+                server.removeClient(this);
+                server.playersClients.remove(this);
                 System.out.println("disconnect " + name);
-                sock.close();
                 this.dispose();
             }
     } catch (IOException | ClassNotFoundException e) {
@@ -92,24 +93,24 @@ public class ServerThread extends Thread {
 }       reciever = !init;
         while (!exit) {
             try {
-                if(!Server.hasSendTurn(player)) {
+                if(!server.hasSendTurn(player)) {
                     System.out.println("Waiting for turn from " + name);
                     recieve();
-                    Server.turns.add(recieved);
+                    server.turns.add(recieved);
                     reciever = true;
                 }
                     synchronized (lock) {
                         {
                             System.out.println("lock " + name);
-                            if (!Server.check()){
+                            if (!server.check()){
                                 lock.wait();
                                 }
                         }
                     }
 
             } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                Server.removeClient(this);
-                Server.playersClients.remove(this);
+                server.removeClient(this);
+                server.playersClients.remove(this);
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
@@ -119,10 +120,9 @@ public class ServerThread extends Thread {
     {
         exit = true;
     }
-
     public synchronized void send() throws IOException {
         os.reset();
-        os.writeObject(Server.getMap());// sending object
+        os.writeObject(server.getMap());// sending object
         os.flush();
     }
     public synchronized void recieve() throws IOException, ClassNotFoundException {

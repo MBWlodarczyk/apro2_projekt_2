@@ -20,7 +20,6 @@ public class SwordGame extends Game {
     public boolean[] chosen = new boolean[6];
     public Player player;
     public Assets assets; //load textures manager
-    final public Object lock = new Object();
 
     @Override
     public void create() {

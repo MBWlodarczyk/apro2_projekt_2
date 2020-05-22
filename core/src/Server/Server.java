@@ -20,19 +20,19 @@ import java.util.HashMap;
  */
 public class Server {
 
-    public static final ArrayList<ServerThread> clients = new ArrayList<>();
-    public static final HashMap<ServerThread, Player> playersClients = new HashMap<>();
-    public static final ArrayList<Player> players = new ArrayList<>();
-    public static ArrayList<Turn> turns = new ArrayList<>();
-    public static int playerNumber;
-    public static int initPlayer;
-    static boolean gameInit;
-    private static final GameMap map = new GameMap(22);
+    public final ArrayList<ServerThread> clients = new ArrayList<>();
+    public final HashMap<ServerThread, Player> playersClients = new HashMap<>();
+    public final ArrayList<Player> players = new ArrayList<>();
+    public ArrayList<Turn> turns = new ArrayList<>();
+    public int playerNumber;
+    public int initPlayer;
+    boolean gameInit;
+    private final GameMap map = new GameMap(22);
     private boolean exit=false;
 
     public Server(int playerNumber) throws IOException {
 
-        Server.playerNumber = playerNumber;
+        this.playerNumber = playerNumber;
         ServerSocket server = new ServerSocket(1701);
         int i = 1;
 
@@ -44,7 +44,7 @@ public class Server {
             i++;
             ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
             ObjectInputStream is = new ObjectInputStream(s.getInputStream());
-            ServerThread t = new ServerThread(s, is, os, name);
+            ServerThread t = new ServerThread(s, is, os, name,this);
             clients.add(t);
         }
     }
@@ -58,7 +58,7 @@ public class Server {
         exit = true;
     }
 
-    public static synchronized boolean check() throws IOException {
+    public synchronized boolean check() throws IOException {
         boolean marker;
         marker = turns.size() == playerNumber;
         if (marker) {
@@ -66,12 +66,12 @@ public class Server {
             if (initPlayer == playerNumber) {
                 sendToAll(true);
             }
-            Server.clearTurns();
+            clearTurns();
         }
         return marker;
     }
 
-    public static synchronized void unlock() {
+    public synchronized void unlock() {
         for (ServerThread client : clients) {
             synchronized (client.lock) {
                 client.lock.notify();
@@ -81,23 +81,23 @@ public class Server {
         }
     }
 
-    public static GameMap getMap() {
+    public GameMap getMap() {
         return map;
     }
 
-    public static synchronized void sendToAll(boolean moves) throws IOException {
+    public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
-            for (Turn turn : Server.turns) {
+            for (Turn turn : turns) {
                 map.move(map, turn.getMoves().poll());
             }
-            for (Turn turn : Server.turns) {
+            for (Turn turn : turns) {
                 map.move(map, turn.getMoves().poll());
             }
-            for (Turn turn : Server.turns) {
+            for (Turn turn : turns) {
                 map.move(map, turn.getMoves().poll());
             }
-            for (Turn turn : Server.turns) {
+            for (Turn turn : turns) {
                 map.move(map, turn.getMoves().poll());
             }
             turns.clear();
@@ -117,9 +117,9 @@ public class Server {
                     temp.remove(temp.get(0));
                 } catch (SocketException e) {
                     temp.get(0).sock.close();
-                    Server.playersClients.remove(temp.get(0));
+                    playersClients.remove(temp.get(0));
                     System.out.println("disconnect error" + temp.get(0).name);
-                    Server.removeClient(temp.get(0));
+                    removeClient(temp.get(0));
                     temp.remove(temp.get(0));
                 }
             }
@@ -127,11 +127,11 @@ public class Server {
         }
     }
 
-    public static synchronized void removeClient(ServerThread client) {
+    public synchronized void removeClient(ServerThread client) {
         clients.remove(client);
     }
 
-    public static synchronized void init() {
+    public synchronized void init() {
         switch (initPlayer) {
             case 4:
 
@@ -186,10 +186,10 @@ public class Server {
                 map.getMap()[2][2].setHero(hero4);
 
         }
-        Server.gameInit = true;
+        gameInit = true;
     }
 
-    public static synchronized boolean look(String nick, byte[] passhash) {
+    public synchronized boolean look(String nick, byte[] passhash) {
         for (Player player : players) {
             if (player.getNick().equals(nick) && Arrays.equals(player.getPasshash(), passhash)) {
                 return true;
@@ -198,7 +198,7 @@ public class Server {
         return false;
     }
 
-    public static synchronized Player get(String nick, byte[] passhash) {
+    public synchronized Player get(String nick, byte[] passhash) {
         for (Player player : players) {
             if (player.getNick().equals(nick) && player.getPasshash() == passhash) {
                 return player;
@@ -207,19 +207,16 @@ public class Server {
         return null;
     }
 
-    public static synchronized void clearTurns() {
-        Server.turns = new ArrayList<>();
+    public synchronized void clearTurns() {
+        turns = new ArrayList<>();
     }
 
-    public static synchronized boolean hasSendTurn(Player player) {
-        for (Turn turn : Server.turns) {
+    public synchronized boolean hasSendTurn(Player player) {
+        for (Turn turn : turns) {
             if (turn.getOwner().equals(player)) {
                 return true;
             }
         }
         return false;
-    }
-    public static synchronized boolean isPlayerConnected(Player player){
-        return clients.stream().anyMatch(client -> playersClients.get(client).equals(player));
     }
 }
