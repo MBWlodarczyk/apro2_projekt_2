@@ -44,7 +44,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(SwordGame swordGame, boolean init) throws Exception {
         this.swordGame = swordGame;
         this.client = new Client(swordGame, init);
-        this.map = client.getReceived().getMap();
+        this.map = client.getReceived().getMap().getFieldsArray();
         this.gameCam = new OrthographicCamera();
         this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
         loadData();
@@ -66,7 +66,7 @@ public class PlayScreen implements Screen {
 }
 
     private void rewriteMap() {
-        this.map = client.getReceived().getMap(); //Update map every time
+        this.map = client.getReceived().getMap().getFieldsArray(); //Update map every time
         wallSprite.clear();
         grassSprites.clear();
         heroesSprites.clear();
@@ -106,8 +106,8 @@ public class PlayScreen implements Screen {
             int[] tab = handleInput.getTab();
             int x = handleInput.getX();
             int y = handleInput.getY();
-            Move move = new Move(client.getReceived().getMap()[y][x].getHero(), client.getReceived().getMap()[tab[0]][tab[1]], client.getReceived().getMap()[y][x], client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
-            boolean[][] marked = GameEngine.getValid(client.getReceived(), move);
+            Move move = new Move(client.getReceived().getMap().getFieldsArray()[y][x].getHero(), client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]], client.getReceived().getMap().getFieldsArray()[y][x], client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(0));
+            boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
             moveDistanceSprite.setSprites(marked);
         } else {
             moveDistanceSprite.clear();

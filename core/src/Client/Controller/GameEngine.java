@@ -18,7 +18,7 @@ public class GameEngine {
      */
     public static boolean[][] getValid(GameMap map, Move move) {
 
-        boolean[][] marked = new boolean[map.getMap().length][map.getMap()[0].length];
+        boolean[][] marked = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
         dfs(map, marked, move.getFrom().getY(), move.getFrom().getX(), move.getWhat().getRange());
         return marked;
     }
@@ -97,7 +97,7 @@ public class GameEngine {
      * Method to help dfs validate if the field is not null or wall.
      */
     private static boolean fieldValid(GameMap map, int y, int x) {
-        return y < map.getMap().length && y >= 0 && x >= 0 && x < map.getMap()[0].length && (map.getMap()[y][x].getObstacle() == null || map.getMap()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
+        return y < map.getFieldsArray().length && y >= 0 && x >= 0 && x < map.getFieldsArray()[0].length && (map.getFieldsArray()[y][x].getObstacle() == null || map.getFieldsArray()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
     }
 
 

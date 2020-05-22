@@ -6,6 +6,7 @@ import Client.Model.Player;
 import Client.Model.Skills.Walk;
 import Client.Model.map.Field;
 import Client.Model.map.GameMap;
+import Server.Answer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,7 +20,7 @@ public class Client {
     public ObjectInputStream is;
     public ObjectOutputStream os;
     private Turn send;
-    private GameMap received;
+    private Answer received;
     private boolean isSend=false;
     boolean exit=false;
     public Socket sock;
@@ -47,34 +48,27 @@ public class Client {
         Thread t = new Thread(() -> {
                 try {
                     receive();
-                    System.out.println(received.hasSendMove());
                     isSend = received.hasSendMove();
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             while (!exit) { //TODO stop this while from running whole time
                 synchronized (lock){
-                    if (send != null && !isSend && send.getMoves().size() == 4) {
-                        try {
-                            send();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    try {
+                        if (send != null && !isSend && send.getMoves().size() == 4) {
+                                send();
                         }
-                    }
+                        if (isSend) {
+                                receive();
+                                isSend = false;
+                                send.clearMoves();
 
-                    if (isSend) {
-                        try {
-                            receive();
-                            isSend = false;
-                            send.clearMoves();
+                            }
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
-                        }
-                        System.out.println(received.hasSendMove());
-                    }
                 }
             }
-        });
+        }});
         t.start();
     }
 
@@ -82,7 +76,7 @@ public class Client {
         return send;
     }
 
-    public GameMap getReceived() {
+    public Answer getReceived() {
         return this.received;
     }
 
@@ -132,7 +126,7 @@ public class Client {
         os.flush();
     }
     public synchronized void receive() throws IOException, ClassNotFoundException {
-        received = (GameMap) is.readObject();
+        received = (Answer) is.readObject();
         System.out.println("Reading...");
     }
 }

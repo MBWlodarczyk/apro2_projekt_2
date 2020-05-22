@@ -1,6 +1,5 @@
 package Server;
 
-import Client.Controller.Client;
 import Client.Controller.Turn;
 import Client.Model.Heroes.Hero;
 import Client.Model.Player;
@@ -28,7 +27,7 @@ public class Server {
     public int playerNumber;
     public int initPlayer;
     boolean gameInit;
-    private final GameMap map = new GameMap(22);
+    public final Answer answer = new Answer(new GameMap(22));
     private boolean exit=false;
     ServerSocket server;
 
@@ -88,23 +87,23 @@ public class Server {
     }
 
     public GameMap getMap() {
-        return map;
+        return answer.getMap();
     }
     //TODO reformat sendToAll when we have engine
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
             for (Turn turn : turns) {
-                map.move(map, turn.getMoves().poll());
+                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
             }
             for (Turn turn : turns) {
-                map.move(map, turn.getMoves().poll());
+                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
             }
             for (Turn turn : turns) {
-                map.move(map, turn.getMoves().poll());
+                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
             }
             for (Turn turn : turns) {
-                map.move(map, turn.getMoves().poll());
+                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
             }
             turns.clear();
         }
@@ -118,7 +117,7 @@ public class Server {
             if (!temp.get(0).sock.isOutputShutdown()) {
                 try {
                     temp.get(0).os.reset();
-                    temp.get(0).os.writeObject(map);// sending object
+                    temp.get(0).os.writeObject(answer);// sending object
                     temp.get(0).os.flush();
                     temp.remove(temp.get(0));
                 } catch (SocketException e) {
@@ -179,9 +178,9 @@ public class Server {
         Hero hero2 = turn.getMoves().poll().getWho();
         Hero hero3 = turn.getMoves().poll().getWho();
         Hero hero4 = turn.getMoves().poll().getWho();
-        map.getMap()[CornerX][CornerY].setHero(hero1);
-        map.getMap()[CornerX][CornerY+1].setHero(hero2);
-        map.getMap()[CornerX+1][CornerY].setHero(hero3);
-        map.getMap()[CornerX+1][CornerY+1].setHero(hero4);
+        answer.getMap().getFieldsArray()[CornerX][CornerY].setHero(hero1);
+        answer.getMap().getFieldsArray()[CornerX][CornerY+1].setHero(hero2);
+        answer.getMap().getFieldsArray()[CornerX+1][CornerY].setHero(hero3);
+        answer.getMap().getFieldsArray()[CornerX+1][CornerY+1].setHero(hero4);
     }
 }

@@ -78,7 +78,7 @@ public class ServerThread extends Thread {
 
     public synchronized void send() throws IOException {
         os.reset();
-        os.writeObject(server.getMap());// sending object
+        os.writeObject(server.answer);// sending object
         os.flush();
     }
 
@@ -105,13 +105,16 @@ public class ServerThread extends Thread {
         }
     }
 
-    private synchronized void recordPlayerIfExisting(Player player) {
+    private synchronized void recordPlayerIfExisting(Player player) throws IOException {
         if (player != null && server.checkIfPlayerExists(player.getNick(),player.getPasshash())) {
 
             this.player = player;
             server.playersClients.put(this, server.getPlayer(player.getNick(),player.getPasshash()));
             this.name += " (" + player.getNick() +")";
         } else {
+            server.answer.setWrongNickPassword(true);
+            send();
+            server.answer.setWrongNickPassword(false);
             server.removeClient(this);
             server.playersClients.remove(this);
             System.out.println("disconnect " + name);
@@ -139,9 +142,9 @@ public class ServerThread extends Thread {
     }
     private synchronized void sendWithTurnInfo() throws IOException {
         if(server.hasSendTurn(player)) {
-            server.getMap().setHasSendMove(true);
+            server.answer.setHasSendMove(true);
             send();
-            server.getMap().setHasSendMove(false);
+            server.answer.setHasSendMove(false);
         } else {
             send();
         }

@@ -18,16 +18,6 @@ public class GameMap implements Serializable {
      */
     private Field[][] map;
 
-    private boolean hasSendMove = false; //reconnect variable
-    public boolean hasSendMove() {
-        return hasSendMove;
-    }
-
-    public void setHasSendMove(boolean hasSendMove) {
-        this.hasSendMove = hasSendMove;
-    }
-
-
     public GameMap(int size) {
         this.map = new Field[size][size];
         loadMap();
@@ -93,7 +83,7 @@ public class GameMap implements Serializable {
         map[15][13].setObstacle(new Wall());
     }
 
-    public Field[][] getMap() {
+    public Field[][] getFieldsArray() {
         return map;
     }
 
@@ -102,11 +92,11 @@ public class GameMap implements Serializable {
         Hero temp = move.getWho();
         int x = move.getFrom().getX();
         int y = move.getFrom().getY();
-        gameMap.getMap()[y][x].setHero(null);
+        gameMap.getFieldsArray()[y][x].setHero(null);
 
         x = move.getWhere().getX();
         y = move.getWhere().getY();
-        gameMap.getMap()[y][x].setHero(temp);
+        gameMap.getFieldsArray()[y][x].setHero(temp);
     }
 
 

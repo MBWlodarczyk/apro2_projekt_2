@@ -56,7 +56,7 @@ public class HandleInput implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (screenX <= Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
-            Field field = game.client.getReceived().getMap()[tab[0]][tab[1]];
+            Field field = game.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
             if (!heroChosen && field.getHero() != null && field.getHero().getOwner().getNick().equals(game.swordGame.player.getNick())) {
                 heroChosen = true;
                 this.y = tab[0];
@@ -64,8 +64,8 @@ public class HandleInput implements InputProcessor {
                 return true;
             }
             if (heroChosen) {
-                Move move = new Move(game.client.getReceived().getMap()[y][x].getHero(), field, game.client.getReceived().getMap()[y][x], game.client.getReceived().getMap()[y][x].getHero().getSkills().get(0));
-                if (GameEngine.isValid(game.client.getReceived(), move)) {
+                Move move = new Move(game.client.getReceived().getMap().getFieldsArray()[y][x].getHero(), field, game.client.getReceived().getMap().getFieldsArray()[y][x], game.client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(0));
+                if (GameEngine.isValid(game.client.getReceived().getMap(), move)) {
                     if(!GameEngine.checkMove(move,game.client.getSend().getMoves())) {
                         game.client.getSend().addMove(move);
                         System.out.println("Adding move...");
