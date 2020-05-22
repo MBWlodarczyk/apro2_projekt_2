@@ -52,24 +52,18 @@ public class ServerThread extends Thread {
                 recordPlayerIfExisting(recieved.getOwner());
                 sendWithTurnInfo(); //send map again //
             }
-        }catch (IOException | ClassNotFoundException e) {
-                System.out.println("cos nie pykło w reconnect/init handling");
-                e.printStackTrace();
-        }
 
         while (!exit) {
-            try {
                 receiveIfTurnNotSend(); //receive move if player hasn't made a move yet
                 checkIfAllSend(); //check if all have sent and then send map else wait
 
-            } catch (IOException | ClassNotFoundException | InterruptedException e) {
+            }} catch (IOException | ClassNotFoundException | InterruptedException e) {
                 server.removeClient(this);
                 server.playersClients.remove(this);
                 System.out.println("disconnect " + name);
                 this.dispose();
             }
         }
-    }
 
     public void dispose()
     {
@@ -125,7 +119,7 @@ public class ServerThread extends Thread {
     private synchronized void receiveIfTurnNotSend() throws IOException, ClassNotFoundException {
         if(!server.hasSendTurn(player)) {
             System.out.println("Waiting for turn from " + name);
-            recieve();// receiveIfTurnNotSend
+            recieve();
             server.turns.add(recieved);
         }
     }
