@@ -15,7 +15,4 @@ public class Wizard extends Hero {
         this.skills.add(new SettingTrap());
         this.skills.add(new Teleport());
     }
-    public String toString() {
-        return "Wizard";
-    }
 }

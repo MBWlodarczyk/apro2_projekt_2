@@ -1,9 +1,9 @@
 package client.controller;
 
-import client.model.heroes.Hero;
 import client.model.Player;
-import client.model.skills.Skill;
+import client.model.heroes.Hero;
 import client.model.map.Field;
+import client.model.skills.Skill;
 
 import java.io.Serializable;
 
@@ -46,8 +46,8 @@ public class Move implements Serializable {
     }
 
 
-        @Override
+    @Override
     public String toString() {
-            return "[" + getWhose().getNick() + "] " + getWho().toString() + " standing on [" + getFrom().getY() + ", " + getFrom().getX() + "] used " + getWhat().toString() + " on [" + getWhere().getY() + ", " + getWhere().getX() + "]";
+        return "[" + getWhose().getNick() + "] " + getWho().toString() + " standing on [" + getFrom().getY() + ", " + getFrom().getX() + "] used " + getWhat().toString() + " on [" + getWhere().getY() + ", " + getWhere().getX() + "]";
     }
 }

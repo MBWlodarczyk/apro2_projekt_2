@@ -59,7 +59,6 @@ public class HandleInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println(rectangles.size());
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
             field = game.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
@@ -75,7 +74,7 @@ public class HandleInput implements InputProcessor {
                 if (rectangles.get(i).contains(screenX, screenY)) {
                     skillChosen = i;
                     currentState = PERFORM_SKILL;
-                    if (skillChosen == rectangles.size() - 1) { // if exit stop
+                    if (skillChosen == rectangles.size() - 1) { // if the last rectangle is chosen (exit) then and go to idle
                         currentState = IDLE;
                         return true;
                     }

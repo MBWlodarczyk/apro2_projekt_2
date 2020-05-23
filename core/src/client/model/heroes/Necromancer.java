@@ -15,7 +15,4 @@ public class Necromancer extends Hero {
         this.skills.add(new Heal(false));
         this.skills.add(new SettingTrap());
     }
-    public String toString() {
-        return "Necromancer";
-    }
 }

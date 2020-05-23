@@ -14,7 +14,4 @@ public class Paladin extends Hero {
         this.skills.add(new Melee());
         this.skills.add(new SettingTrap());
     }
-    public String toString() {
-        return "Paladin";
-    }
 }

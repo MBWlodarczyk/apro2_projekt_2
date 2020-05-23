@@ -15,7 +15,4 @@ public class Warrior extends Hero {
         this.skills.add(new Melee());
         this.skills.add(new Stomp());
     }
-    public String toString() {
-        return "Warrior";
-    }
 }

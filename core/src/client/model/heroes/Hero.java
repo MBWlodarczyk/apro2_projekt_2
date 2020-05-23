@@ -54,7 +54,7 @@ public abstract class Hero extends Entity {
 
     @Override
     public String toString() {
-        return "Hero";
+        return getClass().getSimpleName();
     }
 
     @Override

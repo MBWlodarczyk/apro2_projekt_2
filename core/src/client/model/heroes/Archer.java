@@ -15,8 +15,4 @@ public class Archer extends Hero {
         this.skills.add(new ArrowShortDist());
         this.skills.add(new SettingTrap());
     }
-
-    public String toString() {
-        return "Archer";
-    }
 }

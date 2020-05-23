@@ -14,7 +14,4 @@ public class Priest extends Hero {
         this.skills.add(new Heal(true));
         this.skills.add(new SettingWall());
     }
-    public String toString() {
-        return "Priest";
-    }
 }

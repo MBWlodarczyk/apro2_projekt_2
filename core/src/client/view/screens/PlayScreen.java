@@ -114,11 +114,11 @@ public class PlayScreen implements Screen {
     }
 
     private void distanceMove() {
-        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN) {
+        if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL) {
             int[] tab = handleInput.getTab();
             int x = handleInput.getX();
             int y = handleInput.getY();
-            Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(0));
+            Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(handleInput.getSkillChosen()));
             boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
             moveDistanceSprite.setSprites(marked);
         } else {
