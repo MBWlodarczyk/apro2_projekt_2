@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class SwordGame extends Game {
 
-    public final int size = 22;
     public SpriteBatch batch;
     public Skin skin;
     public String nick;

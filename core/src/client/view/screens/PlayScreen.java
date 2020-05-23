@@ -4,18 +4,19 @@ import client.controller.Client;
 import client.controller.GameEngine;
 import client.controller.HandleInput;
 import client.controller.Move;
-import client.view.sprites.*;
-import client.view.SwordGame;
-import client.view.utility.Constants;
 import client.model.heroes.*;
 import client.model.map.Field;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
+import client.view.SwordGame;
+import client.view.sprites.*;
+import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -29,7 +30,7 @@ public class PlayScreen implements Screen {
     private Viewport gamePort;
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            moveTexture, edgeTexture, healthTexture,skillPanelTexture, trapTexture;
+            moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture;
 
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
@@ -37,8 +38,12 @@ public class PlayScreen implements Screen {
     private ArrayList<ObstacleSprite> wallSprite;
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
+    private ArrayList<TextField> textFields;
 
     private HandleInput handleInput;
+
+//    private InputMultiplexer multiplexer;
+//    private Stage stage;
 
 
     public PlayScreen(SwordGame swordGame, boolean init) throws Exception {
@@ -57,25 +62,32 @@ public class PlayScreen implements Screen {
         wallSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
         heroesSprites = new ArrayList<>();
+        textFields = new ArrayList<>();
 
         rewriteMap();
 
-        handleInput = new HandleInput(this,swordGame.size);
+        handleInput = new HandleInput(this);
         Gdx.input.setInputProcessor(handleInput);
-
-}
+//        stage = new Stage();
+//
+//        multiplexer = new InputMultiplexer();
+//        multiplexer.addProcessor(handleInput);
+//        multiplexer.addProcessor(stage);
+//
+//        Gdx.input.setInputProcessor(multiplexer);
+    }
 
     private void rewriteMap() {
         this.map = client.getReceived().getMap().getFieldsArray(); //Update map every time
         wallSprite.clear();
         grassSprites.clear();
         heroesSprites.clear();
-        for (int i = 0; i < swordGame.size; i++) {
-            for (int j = 0; j < swordGame.size; j++) {
+        for (int i = 0; i < Constants.GAME_SIZE; i++) {
+            for (int j = 0; j < Constants.GAME_SIZE; j++) {
                 if (map[i][j].getObstacle() instanceof Wall) {
                     wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), wallTexture));
                 }
-                if(map[i][j].getTerrain() instanceof Grass){
+                if (map[i][j].getTerrain() instanceof Grass) {
                     grassSprites.add(new TerrainSprite(map[i][j].getTerrain(), grassTexture));
                 }
                 if (map[i][j].getHero() != null) {
@@ -106,7 +118,7 @@ public class PlayScreen implements Screen {
             int[] tab = handleInput.getTab();
             int x = handleInput.getX();
             int y = handleInput.getY();
-            Move move = new Move(client.getReceived().getMap().getFieldsArray()[y][x].getHero(), client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]], client.getReceived().getMap().getFieldsArray()[y][x], client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(0));
+            Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(0));
             boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
             moveDistanceSprite.setSprites(marked);
         } else {
@@ -114,13 +126,37 @@ public class PlayScreen implements Screen {
         }
     }
 
+    private void skillOptions() {
+        TextField text;
+        String s;
+        int x = 750, y = 50, height = 50, width = 200;
+        int[] tab = handleInput.getTab();
+        int size = map[tab[0]][tab[1]].getHero().getSkills().size();
+        for (int i = 0; i < size + 1; i++) { //adding one in order to add exit
+            if(i < size)
+                s = map[tab[0]][tab[1]].getHero().getSkills().get(i).toString();
+            else
+                s = "Exit";
+            text = new TextField(s, swordGame.skin);
+            text.setSize(width, height);
+            text.setPosition(x, Constants.HEIGHT - y * (i + 2));
+            handleInput.addRectangles(x, y * (i + 1), width, height);
+            textFields.add(text);
+        }
+    }
+
 
     private void update(float delta) {
         gameCam.update();
+        this.map = client.getReceived().getMap().getFieldsArray();
         rewriteMap();
         distanceMove();
 
+        textFields.clear();
+        if (handleInput.heroChosen)
+            skillOptions();
     }
+
 
     @Override
     public void render(float delta) {
@@ -132,9 +168,10 @@ public class PlayScreen implements Screen {
         grassSprites.forEach(n -> n.draw(swordGame.batch, delta));
         wallSprite.forEach(n -> n.draw(swordGame.batch, delta));
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta));
-
         moveDistanceSprite.draw(swordGame.batch);
         mouseSprite.draw(swordGame.batch);
+
+        textFields.forEach(n -> n.draw(swordGame.batch, 1));
 
         swordGame.batch.end();
     }

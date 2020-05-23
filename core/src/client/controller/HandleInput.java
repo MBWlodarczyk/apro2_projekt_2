@@ -1,9 +1,12 @@
 package client.controller;
 
+import client.model.map.Field;
 import client.view.screens.PlayScreen;
 import client.view.utility.Constants;
-import client.model.map.Field;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Rectangle;
+
+import java.util.ArrayList;
 
 /**
  * Class to handle all input from user
@@ -11,11 +14,12 @@ import com.badlogic.gdx.InputProcessor;
 public class HandleInput implements InputProcessor {
 
     public boolean heroChosen;
-    private boolean skillChosen;
+    private int skillChosen;
     private PlayScreen game;
-    private int size;
     private int x, y;
     private int[] tab = new int[2];
+    private Field field;
+    private ArrayList<Rectangle> rectangles;
 
     public int[] getTab() {
         return tab;
@@ -29,13 +33,71 @@ public class HandleInput implements InputProcessor {
         return y;
     }
 
-    public HandleInput(PlayScreen game, int size) {
-        this.heroChosen = false;
-        this.skillChosen = false;
-        this.game = game;
-        this.size = size;
+    public int getSkillChosen() {
+        return skillChosen;
     }
 
+    public void setSkillChosen(int skillChosen) {
+        this.skillChosen = skillChosen;
+    }
+
+    public void addRectangles(float x, float y, float width, float height) {
+        this.rectangles.add(new Rectangle(x, y, width, height));
+    }
+
+    public HandleInput(PlayScreen game) {
+        this.heroChosen = false;
+        this.game = game;
+        this.rectangles = new ArrayList<>();
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (screenX < Constants.HEIGHT) {
+            getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
+            field = game.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
+            if (!heroChosen && field.getHero() != null && field.getHero().getOwner().getNick().equals(game.swordGame.player.getNick())) {
+                heroChosen = true;
+                this.y = tab[0];
+                this.x = tab[1];
+                return true;
+            }
+        }
+        if (heroChosen) {
+            for (int i = 0; i < rectangles.size(); i++) {
+                if (rectangles.get(i).contains(screenX, screenY)) {
+                    skillChosen = i;
+                    break;
+                }
+            }
+            if (skillChosen == rectangles.size()-1) {
+                heroChosen = false;
+                return true;
+            }
+            performSkill(skillChosen);
+            heroChosen = false;
+        }
+
+        return false;
+    }
+
+    private void performSkill(int index) {
+        Field[][] fieldsArray = game.client.getReceived().getMap().getFieldsArray();
+        Move move = new Move(fieldsArray[y][x].getHero(), field, fieldsArray[y][x], fieldsArray[y][x].getHero().getSkills().get(index));
+        if (GameEngine.isValid(game.client.getReceived().getMap(), move)) {
+            if (!GameEngine.checkMove(move, game.client.getSend().getMoves())) {
+                game.client.getSend().addMove(move);
+                System.out.println("Adding move...");
+                System.out.println(move);
+            }
+            System.out.println(game.client.getSend().getMoves().size());
+        }
+    }
+
+    private void getCord(int screenX, int screenY) {
+        tab[0] = (screenX - screenX % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
+        tab[1] = (screenY - screenY % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -51,42 +113,6 @@ public class HandleInput implements InputProcessor {
     public boolean keyTyped(char character) {
         return false;
     }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (screenX <= Constants.HEIGHT) {
-            getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
-            Field field = game.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
-            if (!heroChosen && field.getHero() != null && field.getHero().getOwner().getNick().equals(game.swordGame.player.getNick())) {
-                heroChosen = true;
-                this.y = tab[0];
-                this.x = tab[1];
-                return true;
-            }
-            if (heroChosen) {
-                Move move = new Move(game.client.getReceived().getMap().getFieldsArray()[y][x].getHero(), field, game.client.getReceived().getMap().getFieldsArray()[y][x], game.client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(0));
-                if (GameEngine.isValid(game.client.getReceived().getMap(), move)) {
-                    if(!GameEngine.checkMove(move,game.client.getSend().getMoves())) {
-                        game.client.getSend().addMove(move);
-                        System.out.println("Adding move...");
-                        System.out.println(move);
-                    }
-                    System.out.println(game.client.getSend().getMoves().size());
-                    heroChosen = false;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void getCord(int screenX, int screenY) {
-        tab[0] = (screenX - screenX % Constants.TEXTURE_SIZE)/Constants.TEXTURE_SIZE;
-        tab[1] = (screenY - screenY % Constants.TEXTURE_SIZE)/Constants.TEXTURE_SIZE;
-        System.out.println(tab[0] + " " + tab[1]);
-    }
-
-
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
