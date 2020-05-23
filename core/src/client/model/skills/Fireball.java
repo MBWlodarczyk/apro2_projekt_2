@@ -1,7 +1,7 @@
 package client.model.skills;
 
 /**
- * Abstract class to represent skill of shooting fireball.
+ * Class to represent skill of shooting fireball.
  */
 public class Fireball extends Skill {
 

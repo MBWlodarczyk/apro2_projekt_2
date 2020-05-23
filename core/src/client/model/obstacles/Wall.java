@@ -1,4 +1,5 @@
 package client.model.obstacles;
+
 /**
  * Class representing single wall on map.
  */

@@ -1,9 +1,7 @@
 package client.model.heroes;
 
 import client.model.Player;
-import client.model.skills.Fireball;
-import client.model.skills.Stay;
-import client.model.skills.Walk;
+import client.model.skills.*;
 
 public class Wizard extends Hero {
     final int id;
@@ -14,6 +12,8 @@ public class Wizard extends Hero {
         this.skills.add(new Walk(3));
         this.skills.add(new Stay());
         this.skills.add(new Fireball());
+        this.skills.add(new SettingTrap());
+        this.skills.add(new Teleport());
     }
     public String toString() {
         return "Wizard";

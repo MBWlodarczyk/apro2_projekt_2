@@ -1,9 +1,9 @@
 package client.controller;
 
+import client.model.skills.Walk;
 import client.view.SwordGame;
 import client.model.heroes.*;
 import client.model.Player;
-import client.model.skills.Walk;
 import client.model.map.Field;
 import server.Answer;
 
