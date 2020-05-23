@@ -114,7 +114,7 @@ public class PlayScreen implements Screen {
     }
 
     private void distanceMove() {
-        if (handleInput.heroChosen) {
+        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN) {
             int[] tab = handleInput.getTab();
             int x = handleInput.getX();
             int y = handleInput.getY();
@@ -131,17 +131,23 @@ public class PlayScreen implements Screen {
         String s;
         int x = 750, y = 50, height = 50, width = 200;
         int[] tab = handleInput.getTab();
-        int size = map[tab[0]][tab[1]].getHero().getSkills().size();
-        for (int i = 0; i < size + 1; i++) { //adding one in order to add exit
-            if(i < size)
-                s = map[tab[0]][tab[1]].getHero().getSkills().get(i).toString();
-            else
-                s = "Exit";
-            text = new TextField(s, swordGame.skin);
-            text.setSize(width, height);
-            text.setPosition(x, Constants.HEIGHT - y * (i + 2));
-            handleInput.addRectangles(x, y * (i + 1), width, height);
-            textFields.add(text);
+        if(map[tab[0]][tab[1]].getHero()!=null) {
+            int size = map[tab[0]][tab[1]].getHero().getSkills().size();
+            for (int i = 0; i < size + 1; i++) { //adding one in order to add exit
+                if (i < size)
+                    s = map[tab[0]][tab[1]].getHero().getSkills().get(i).toString();
+                else
+                    s = "Exit";
+                text = new TextField(s, swordGame.skin);
+                text.setSize(width, height);
+                text.setPosition(x, Constants.HEIGHT - y * (i + 2));
+                handleInput.addRectangles(x, y * (i + 1), width, height);
+                textFields.add(text);
+            }
+        }
+        else{
+            handleInput.currentState = HandleInput.ControllerState.IDLE; // state to idle if we chose incorrect field
+            //this problem could be also solved by changing in handleInput statement if(screenX > Constants.HEIGHT)  and change it to be more precise
         }
     }
 
@@ -153,7 +159,8 @@ public class PlayScreen implements Screen {
         distanceMove();
 
         textFields.clear();
-        if (handleInput.heroChosen)
+        handleInput.getRectangles().clear();
+        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptions();
     }
 
@@ -172,6 +179,8 @@ public class PlayScreen implements Screen {
         mouseSprite.draw(swordGame.batch);
 
         textFields.forEach(n -> n.draw(swordGame.batch, 1));
+
+//        System.out.println(handleInput.getRectangles().size());
 
         swordGame.batch.end();
     }
