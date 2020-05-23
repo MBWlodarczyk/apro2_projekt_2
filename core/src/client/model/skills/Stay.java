@@ -1,8 +1,16 @@
 package client.model.skills;
 
-public class Stay extends Skill{
-    public Stay(){
+/**
+ * Abstract class to represent skill of staying in place.
+ */
+public class Stay extends Skill {
 
-        range =0;
+    public Stay() {
+        distance = 0;
+
+        afterAttack = SkillProperty.StayOnSpot;
+        useDistance = SkillProperty.Flood;
+        rangeType = SkillProperty.PointRange;
     }
+
 }

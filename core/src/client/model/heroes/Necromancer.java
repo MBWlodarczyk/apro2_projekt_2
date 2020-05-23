@@ -1,7 +1,7 @@
 package client.model.heroes;
 
 import client.model.Player;
-import client.model.skills.Walk;
+import client.model.skills.*;
 
 public class Necromancer extends Hero {
     final int id;
@@ -10,6 +10,9 @@ public class Necromancer extends Hero {
         super(owner, 110, 100, 50, 5, y, x);
         id = idGen++;
         this.skills.add(new Walk(3));
+        this.skills.add(new Stay());
+        this.skills.add(new Necromancy());
+        this.skills.add(new Heal(false));
     }
     public String toString() {
         return "Necromancer";

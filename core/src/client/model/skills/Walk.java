@@ -1,13 +1,18 @@
 package client.model.skills;
 
+/**
+ * Abstract class to represent skill of walking.
+ */
 public class Walk extends Skill {
 
+    /**
+     * @param distance longest possible distance to walk
+     */
     public Walk(int distance) {
-        range = distance;
-    }
+        this.distance = distance;
 
-    @Override
-    public String toString() {
-        return "Walk";
+        afterAttack=SkillProperty.GoToTarget;
+        useDistance=SkillProperty.Flood;
+        rangeType=SkillProperty.PointRange;
     }
 }
