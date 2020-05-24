@@ -17,7 +17,7 @@ public class HandleInput implements InputProcessor {
 
     public ControllerState currentState;
     private int skillChosen;
-    private PlayScreen game;
+    private PlayScreen playScreen;
     private int x, y;
     private int[] tab = new int[2];
     private Field field;
@@ -51,9 +51,9 @@ public class HandleInput implements InputProcessor {
         return rectangles;
     }
 
-    public HandleInput(PlayScreen game) {
+    public HandleInput(PlayScreen playScreen) {
         this.currentState = IDLE;
-        this.game = game;
+        this.playScreen = playScreen;
         this.rectangles = new ArrayList<>();
     }
 
@@ -61,8 +61,8 @@ public class HandleInput implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
-            field = game.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
-            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().getNick().equals(game.swordGame.player.getNick())) {
+            field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
+            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().getNick().equals(playScreen.swordGame.player.getNick())) {
                 currentState = HERO_CHOSEN;
                 this.y = tab[0];
                 this.x = tab[1];
@@ -92,15 +92,16 @@ public class HandleInput implements InputProcessor {
 
     private void performSkill(int index) {
         System.out.println("performed skill: " + index);
-        Field[][] fieldsArray = game.client.getReceived().getMap().getFieldsArray();
+        Field[][] fieldsArray = playScreen.client.getReceived().getMap().getFieldsArray();
         Move move = new Move(fieldsArray[y][x].getHero(), field, fieldsArray[y][x], fieldsArray[y][x].getHero().getSkills().get(index));
-        if (GameEngine.isValid(game.client.getReceived().getMap(), move)) {
-            if (!GameEngine.checkMove(move, game.client.getSend().getMoves())) {
-                game.client.getSend().addMove(move);
+        if (GameEngine.isValid(playScreen.client.getReceived().getMap(), move)) {
+            if (!GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
+                playScreen.client.getSend().addMove(move);
                 System.out.println("Adding move...");
                 System.out.println(move);
+                playScreen.sb.append(move+"\n");
             }
-            System.out.println(game.client.getSend().getMoves().size());
+            System.out.println(playScreen.client.getSend().getMoves().size());
         }
     }
 

@@ -41,9 +41,9 @@ public class PlayScreen implements Screen {
     private ArrayList<TextField> textFields;
 
     private HandleInput handleInput;
+    public StringBuilder sb;
+    private TextField textField;
 
-//    private InputMultiplexer multiplexer;
-//    private Stage stage;
 
 
     public PlayScreen(SwordGame swordGame, boolean init) throws Exception {
@@ -63,18 +63,16 @@ public class PlayScreen implements Screen {
         grassSprites = new ArrayList<>();
         heroesSprites = new ArrayList<>();
         textFields = new ArrayList<>();
+        sb = new StringBuilder();
+
+        textField = new TextField("",swordGame.skin);
+        textField.setPosition(720,200);
+        textField.setSize(300,300);
 
         rewriteMap();
 
         handleInput = new HandleInput(this);
         Gdx.input.setInputProcessor(handleInput);
-//        stage = new Stage();
-//
-//        multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(handleInput);
-//        multiplexer.addProcessor(stage);
-//
-//        Gdx.input.setInputProcessor(multiplexer);
     }
 
     private void rewriteMap() {
@@ -126,6 +124,7 @@ public class PlayScreen implements Screen {
         }
     }
 
+
     private void skillOptions() {
         TextField text;
         String s;
@@ -151,12 +150,18 @@ public class PlayScreen implements Screen {
         }
     }
 
+    private void updateSkillHistory(){
+//        textField.setMessageText(sb.toString());
+        textField.appendText(sb.toString()+"\n");
+    }
+
 
     private void update(float delta) {
         gameCam.update();
         this.map = client.getReceived().getMap().getFieldsArray();
         rewriteMap();
         distanceMove();
+        updateSkillHistory();
 
         textFields.clear();
         handleInput.getRectangles().clear();
@@ -179,6 +184,8 @@ public class PlayScreen implements Screen {
         mouseSprite.draw(swordGame.batch);
 
         textFields.forEach(n -> n.draw(swordGame.batch, 1));
+
+        textField.draw(swordGame.batch,1);
 
 //        System.out.println(handleInput.getRectangles().size());
 
