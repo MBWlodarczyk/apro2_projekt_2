@@ -15,4 +15,5 @@ public class Walk extends Skill {
         useDistance=SkillProperty.Flood;
         rangeType=SkillProperty.PointRange;
     }
+
 }

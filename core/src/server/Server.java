@@ -91,21 +91,22 @@ public class Server {
     public GameMap getMap() {
         return answer.getMap();
     }
+
     //TODO reformat sendToAll when we have engine
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
             for (Turn turn : turns) {
-                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
+                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
             }
             for (Turn turn : turns) {
-                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
+                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
             }
             for (Turn turn : turns) {
-                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
+                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
             }
             for (Turn turn : turns) {
-                answer.getMap().move(answer.getMap(), turn.getMoves().poll());
+                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
             }
             turns.clear();
         }

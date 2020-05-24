@@ -88,18 +88,6 @@ public class GameMap implements Serializable {
     }
 
 
-    public void move(GameMap gameMap, Move move) {
-        Hero temp = move.getWho();
-        int x = move.getFrom().getX();
-        int y = move.getFrom().getY();
-        gameMap.getFieldsArray()[y][x].setHero(null);
-
-        x = move.getWhere().getX();
-        y = move.getWhere().getY();
-        gameMap.getFieldsArray()[y][x].setHero(temp);
-    }
-
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
