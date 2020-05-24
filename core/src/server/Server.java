@@ -3,6 +3,7 @@ package server;
 import client.controller.Turn;
 import client.model.heroes.Hero;
 import client.model.Player;
+import client.model.map.Field;
 import client.model.map.GameMap;
 
 import java.io.IOException;
@@ -14,13 +15,14 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Main class to implement client server communication on server side
  */
 public class Server {
 
-    public final ArrayList<ServerThread> clients = new ArrayList<>();
+    public final ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
     public final HashMap<ServerThread, Player> playersClients = new HashMap<>();
     public final ArrayList<Player> players = new ArrayList<>();
     public ArrayList<Turn> turns = new ArrayList<>();
@@ -108,9 +110,7 @@ public class Server {
             turns.clear();
         }
 
-        ArrayList<ServerThread> temp;
-        temp = (ArrayList<ServerThread>) clients.clone();
-
+        ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
         while (temp.size() != 0) {
 
             System.out.println("Sending");
@@ -150,14 +150,14 @@ public class Server {
         gameInit = true;
     }
 
-    public synchronized boolean checkIfPlayerExists(String nick, byte[] passhash) {
+    public synchronized boolean checkIfPlayerExists(Player player) {
 
-        return players.stream().anyMatch(player -> player.getNick().equals(nick) && Arrays.equals(player.getPasshash(), passhash));
+        return players.stream().anyMatch(player1 -> player1.equals(player));
     }
 
-    public synchronized Player getPlayer(String nick, byte[] passhash) {
+    public synchronized Player getPlayer(Player player) {
         return players.stream()
-                .filter(player -> player.getNick().equals(nick) && player.getPasshash() == passhash)
+                .filter(player1 -> player1.equals(player))
                 .findAny()
                 .orElse(null);
     }
@@ -174,10 +174,10 @@ public class Server {
     private synchronized void initPlayer(int playerNumber,int CornerX,int CornerY){
         Turn turn = clients.get(playerNumber).recieved;
         clients.get(playerNumber).player = clients.get(playerNumber).recieved.getOwner();
-        Hero hero1 = turn.getMoves().poll().getWho();
-        Hero hero2 = turn.getMoves().poll().getWho();
-        Hero hero3 = turn.getMoves().poll().getWho();
-        Hero hero4 = turn.getMoves().poll().getWho();
+        Hero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
+        Hero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
+        Hero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
+        Hero hero4 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
         answer.getMap().getFieldsArray()[CornerX][CornerY].setHero(hero1);
         answer.getMap().getFieldsArray()[CornerX][CornerY+1].setHero(hero2);
         answer.getMap().getFieldsArray()[CornerX+1][CornerY].setHero(hero3);

@@ -100,10 +100,10 @@ public class ServerThread extends Thread {
     }
 
     private synchronized void recordPlayerIfExisting(Player player) throws IOException {
-        if (player != null && server.checkIfPlayerExists(player.getNick(),player.getPasshash())) {
+        if (player != null && server.checkIfPlayerExists(player)) {
 
             this.player = player;
-            server.playersClients.put(this, server.getPlayer(player.getNick(),player.getPasshash()));
+            server.playersClients.put(this, server.getPlayer(player));
             this.name += " (" + player.getNick() +")";
         } else {
             server.answer.setWrongNickPassword(true);
