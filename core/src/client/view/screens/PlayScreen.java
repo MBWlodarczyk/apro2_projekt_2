@@ -16,6 +16,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -43,7 +44,7 @@ public class PlayScreen implements Screen {
     private HandleInput handleInput;
     public StringBuilder sb;
     private TextField textField;
-
+    private BitmapFont bitmapFont;
 
 
     public PlayScreen(SwordGame swordGame, boolean init) throws Exception {
@@ -65,9 +66,10 @@ public class PlayScreen implements Screen {
         textFields = new ArrayList<>();
         sb = new StringBuilder();
 
-        textField = new TextField("",swordGame.skin);
-        textField.setPosition(720,200);
-        textField.setSize(300,300);
+        bitmapFont = new BitmapFont();
+//        textField = new TextField("",swordGame.skin);
+//        textField.setPosition(720,200);
+//        textField.setSize(300,300);
 
         rewriteMap();
 
@@ -151,8 +153,9 @@ public class PlayScreen implements Screen {
     }
 
     private void updateSkillHistory(){
-//        textField.setMessageText(sb.toString());
-        textField.appendText(sb.toString()+"\n");
+        if(client.getSend().getMoves().size()==4){
+            sb.setLength(0); //clean up StringBuilder
+        }
     }
 
 
@@ -185,7 +188,9 @@ public class PlayScreen implements Screen {
 
         textFields.forEach(n -> n.draw(swordGame.batch, 1));
 
-        textField.draw(swordGame.batch,1);
+        bitmapFont.draw(swordGame.batch,sb.toString(),720,300);
+
+//        textField.draw(swordGame.batch,1);
 
 //        System.out.println(handleInput.getRectangles().size());
 
