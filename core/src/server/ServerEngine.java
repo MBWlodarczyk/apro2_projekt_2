@@ -12,7 +12,12 @@ import client.model.skills.SkillProperty;
 import java.util.Queue;
 
 public class ServerEngine {
-
+    /**
+     * static method for making sendable answer
+     * @param players
+     * @param map
+     * @return
+     */
     public static Answer Calculate(Turn[] players, GameMap map){
         Answer answer = new Answer(map);
         Queue<Move> player0 = players[0].getMoves();
@@ -25,6 +30,12 @@ public class ServerEngine {
 
         return answer;
     }
+
+    /**
+     * static method for handling skills
+     * @param gameMap
+     * @param move
+     */
     public static void move(GameMap gameMap, Move move){
         //distance check section
         if(!GameEngine.isValid(gameMap,move)) return;
@@ -32,16 +43,8 @@ public class ServerEngine {
             if(GameEngine.isWallOnWay(gameMap,move)) return;
         }
         //movement section
-        Hero temp;
         if(move.getWhat().getAfterAttack() == SkillProperty.GoToTarget){
-            temp = move.getWho();
-            int x = move.getFrom().getX();
-            int y = move.getFrom().getY();
-            gameMap.getFieldsArray()[y][x].setHero(null);
-
-            x = move.getWhere().getX();
-            y = move.getWhere().getY();
-            gameMap.getFieldsArray()[y][x].setHero(temp);
+            moveHero(gameMap, move);
         }
         if(move.getWhat().toString().equals("Walk") || move.getWhat().toString().equals("Stay")) return;
         //damage dealing section
@@ -75,6 +78,31 @@ public class ServerEngine {
                     }catch (IndexOutOfBoundsException ignored){}
                 }
             }
+        }
+    }
+    private static void moveHero(GameMap gameMap, Move move){
+        if(gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null){
+            Hero temp = move.getWho();
+            int x = move.getFrom().getX();
+            int y = move.getFrom().getY();
+            gameMap.getFieldsArray()[y][x].setHero(null);
+
+            x = move.getWhere().getX();
+            y = move.getWhere().getY();
+            gameMap.getFieldsArray()[y][x].setHero(temp);
+        }else {
+            if(move.getWho().getWeight() < move.getWhere().getHero().getWeight()) return;
+            Move next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[move.getWhere().getY()+1][move.getWhere().getX()+1]
+                    ,move.getWhere(), move.getWhat()); //moving next hero - move.where is now from, new where is +[1,1]
+            moveHero(gameMap, next);
+            Hero temp = move.getWho();
+            int x = move.getFrom().getX();
+            int y = move.getFrom().getY();
+            gameMap.getFieldsArray()[y][x].setHero(null);
+
+            x = move.getWhere().getX();
+            y = move.getWhere().getY();
+            gameMap.getFieldsArray()[y][x].setHero(temp);
         }
     }
 }
