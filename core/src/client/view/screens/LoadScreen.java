@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -34,6 +35,9 @@ public class LoadScreen implements Screen {
     private TextField portField;
     private TextField nickField;
     private TextField passwordField;
+    private int WIDTH = 200;
+    private int HEIGHT = 80;
+
 
 
     /**
@@ -57,10 +61,7 @@ public class LoadScreen implements Screen {
         addBackground();
         heroes();
         //text inputs
-        nickInput();
-        ipInput();
-        portInput();
-        passwordInput();
+        inputFields();
         //buttons
         nextScreenButton();
         reconnectButton();
@@ -84,6 +85,14 @@ public class LoadScreen implements Screen {
         textures_dark.add(wizardTexture_dark);
     }
 
+    private void inputFields(){
+        int x = 50, y = 150;
+        ipInput(x,y);
+        portInput(x+=230,y);
+        nickInput(x+=230,y);
+        passwordInput(x+=230,y);
+    }
+
     private void addBackground() {
         TextureRegion textureRegion = new TextureRegion(background);
         final Image background = new Image(textureRegion);
@@ -92,35 +101,39 @@ public class LoadScreen implements Screen {
         stage.addActor(background);
     }
 
-    private void ipInput() {
+    private void ipInput(int x, int y) {
         ipField = new TextField("", swordGame.skin);
         ipField.setMessageText("IP");
-        ipField.setPosition(50, 150);
-        ipField.setSize(200, 40);
+        ipField.setPosition(x, y);
+        ipField.setSize(WIDTH, HEIGHT);
+        ipField.setAlignment(Align.center);
         stage.addActor(ipField);
     }
 
-    private void portInput() {
+    private void portInput(int x, int y) {
         portField = new TextField("", swordGame.skin);
         portField.setMessageText("Port");
-        portField.setPosition(280, 150);
-        portField.setSize(200, 40);
+        portField.setPosition(x, y);
+        portField.setSize(WIDTH, HEIGHT);
+        portField.setAlignment(Align.center);
         stage.addActor(portField);
     }
 
-    private void nickInput() {
+    private void nickInput(int x, int y) {
         nickField = new TextField("", swordGame.skin);
         nickField.setMessageText("Nick");
-        nickField.setPosition(510, 150);
-        nickField.setSize(200, 40);
+        nickField.setPosition(x, y);
+        nickField.setSize(WIDTH, HEIGHT);
+        nickField.setAlignment(Align.center);
         stage.addActor(nickField);
     }
 
-    private void passwordInput() {
+    private void passwordInput(int x, int y) {
         passwordField = new TextField("", swordGame.skin);
         passwordField.setMessageText("Password");
-        passwordField.setPosition(740, 150);
-        passwordField.setSize(200, 40);
+        passwordField.setPosition(x, y);
+        passwordField.setSize(WIDTH, HEIGHT);
+        passwordField.setAlignment(Align.center);
         stage.addActor(passwordField);
     }
 

@@ -32,7 +32,7 @@ public abstract class Hero extends Entity {
      * Health of hero
      */
     private int health;
-    private float heathStatus;
+    private float healthStatus;
     private int x;
     private int y;
 
@@ -42,7 +42,7 @@ public abstract class Hero extends Entity {
         this.weight = weight;
         this.health = health;
         this.startHealth = startHealth;
-        this.heathStatus = (float) health / startHealth;
+        this.healthStatus = (float) health / startHealth;
         this.skills = new ArrayList<>();
         this.x = x;
         this.y = y;
@@ -109,8 +109,18 @@ public abstract class Hero extends Entity {
         this.health = health;
     }
 
+    public float getHealthStatus() {
+        return healthStatus;
+    }
 
-    public float getHeathStatus() {
-        return heathStatus;
+    public String description() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()+'\n');
+        sb.append("Speed: "+speed+'\n');
+        sb.append("Weight: "+ weight+'\n');
+        sb.append("Max health: "+health+'\n');
+        sb.append("Current health: "+health* healthStatus +'\n');
+        sb.append("Percent health: "+100* healthStatus+"%" +'\n');
+        return sb.toString();
     }
 }

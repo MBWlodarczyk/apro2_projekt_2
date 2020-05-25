@@ -98,16 +98,17 @@ public class HandleInput implements InputProcessor {
             if (!GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
                 playScreen.client.getSend().addMove(move);
                 System.out.println("Adding move...");
-                System.out.println(move);
-                playScreen.sb.append(move+"\n");
+//                System.out.println(move);
             }
             System.out.println(playScreen.client.getSend().getMoves().size());
         }
     }
 
-    private void getCord(int screenX, int screenY) {
-        tab[0] = (screenX - screenX % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
-        tab[1] = (screenY - screenY % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
+    public void getCord(int screenX, int screenY) {
+        if (screenX < Constants.HEIGHT) {
+            tab[0] = (screenX - screenX % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
+            tab[1] = (screenY - screenY % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public class SwordGame extends Game {
         assets.manager.finishLoading();
 
         batch = new SpriteBatch();
-        skin = new Skin(Gdx.files.internal("skin/rainbow-ui.json"));
+        skin = new Skin(Gdx.files.internal("pixthulhuui/pixthulhu-ui.json"));
         setScreen(new LoadScreen(this));
     }
 
