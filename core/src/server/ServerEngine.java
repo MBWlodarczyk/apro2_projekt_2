@@ -48,12 +48,11 @@ public class ServerEngine {
         int health;
         if(move.getWhat().getRangeType() == SkillProperty.FloodRange){
             for (Field f: GameEngine.findPath(gameMap,move.getFrom(),move.getWhere(),move.getWhat())) {
-                System.out.println("y" + f.getY() + "x" + f.getX());
                 try {
                     health = f.getHero().getHealth() + move.getWhat().getValue();
                     f.getHero().setHealth(health);
                     System.out.println(f.getHero().toString() + " is at: " + health + "HP");
-                }catch (NullPointerException ignored){System.out.println("No hero there");}
+                }catch (NullPointerException ignored){}
             }
         }
         if(move.getWhat().getRangeType() == SkillProperty.PointRange) {

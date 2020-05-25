@@ -88,8 +88,7 @@ public class GameEngine {
     }
 
     /**
-     * path of skill first Yaxis then Xaxis
-     * isn't working as intended
+     * path of flood type skill first Xaxis then Yaxis
      * @param gameMap
      * @param position
      * @param destination
@@ -98,16 +97,18 @@ public class GameEngine {
     public static Queue<Field> findPath(GameMap gameMap, Field position, Field destination, Skill skill) {
         int maxDistance = skill.getDistance(); //for furthrer development (walls etc)
         Queue<Field> result = new LinkedList<>();
-        //which is right
-        int Xmultiplier = (int) Math.signum(destination.getX()-position.getX());
-        //which is down
-        int Ymultiplier = (int) Math.signum(destination.getY()-position.getY());
-
-        for (int i = 1; i < Math.abs(position.getX()-destination.getX()); i++) {
-            result.add(gameMap.getFieldsArray()[position.getY()][position.getX()+(i*Xmultiplier)]);
+        //if -1 you have to subtract, if 1 you add
+        int Xdir = (int) Math.signum(destination.getX()-position.getX());
+        int Ydir = (int) Math.signum(destination.getY()-position.getY());
+        int x = position.getX();
+        int y = position.getY();
+        while(x != destination.getX()){
+            x+= Xdir;
+            result.add(gameMap.getFieldsArray()[y][x]);
         }
-        for (int i = 0; i < Math.abs(destination.getY()+position.getY())-1; i++) {
-            result.add(gameMap.getFieldsArray()[position.getY()+(i*Ymultiplier)][destination.getX()]);
+        while (y != destination.getY()){
+            y+= Ydir;
+            result.add(gameMap.getFieldsArray()[y][x]);
         }
         return result;
     }
