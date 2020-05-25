@@ -1,11 +1,13 @@
 package client.controller;
 
+import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.*;
 
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class GameEngine {
@@ -83,6 +85,31 @@ public class GameEngine {
             }
         }
         return false;
+    }
+
+    /**
+     * path of skill first Yaxis then Xaxis
+     * isn't working as intended
+     * @param gameMap
+     * @param position
+     * @param destination
+     * @return array of next fields
+     */
+    public static Queue<Field> findPath(GameMap gameMap, Field position, Field destination, Skill skill) {
+        int maxDistance = skill.getDistance(); //for furthrer development (walls etc)
+        Queue<Field> result = new LinkedList<>();
+        //which is right
+        int Xmultiplier = (int) Math.signum(destination.getX()-position.getX());
+        //which is down
+        int Ymultiplier = (int) Math.signum(destination.getY()-position.getY());
+
+        for (int i = 1; i < Math.abs(position.getX()-destination.getX()); i++) {
+            result.add(gameMap.getFieldsArray()[position.getY()][position.getX()+(i*Xmultiplier)]);
+        }
+        for (int i = 0; i < Math.abs(destination.getY()+position.getY())-1; i++) {
+            result.add(gameMap.getFieldsArray()[position.getY()+(i*Ymultiplier)][destination.getX()]);
+        }
+        return result;
     }
 
     //Private methods section

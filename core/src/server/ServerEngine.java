@@ -4,6 +4,7 @@ import client.controller.GameEngine;
 import client.controller.Move;
 import client.controller.Turn;
 import client.model.heroes.Hero;
+import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.SkillProperty;
 
@@ -45,6 +46,16 @@ public class ServerEngine {
         if(move.getWhat().toString().equals("Walk") || move.getWhat().toString().equals("Stay")) return;
         //damage dealing section
         int health;
+        if(move.getWhat().getRangeType() == SkillProperty.FloodRange){
+            for (Field f: GameEngine.findPath(gameMap,move.getFrom(),move.getWhere(),move.getWhat())) {
+                System.out.println("y" + f.getY() + "x" + f.getX());
+                try {
+                    health = f.getHero().getHealth() + move.getWhat().getValue();
+                    f.getHero().setHealth(health);
+                    System.out.println(f.getHero().toString() + " is at: " + health + "HP");
+                }catch (NullPointerException ignored){System.out.println("No hero there");}
+            }
+        }
         if(move.getWhat().getRangeType() == SkillProperty.PointRange) {
             try {
                 health = move.getWhere().getHero().getHealth() + move.getWhat().getValue();
