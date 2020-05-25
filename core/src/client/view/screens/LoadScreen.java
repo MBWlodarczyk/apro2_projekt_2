@@ -199,7 +199,7 @@ public class LoadScreen implements Screen {
                     MessageDigest md = MessageDigest.getInstance("SHA-512");
                     swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                     if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
-                        swordGame.setScreen(new PlayScreen(swordGame, true));
+                        swordGame.setScreen(new WaitScreen(swordGame, true));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -228,7 +228,7 @@ public class LoadScreen implements Screen {
                 swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                 if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                     try {
-                        swordGame.setScreen(new PlayScreen(swordGame, false));
+                        swordGame.setScreen(new WaitScreen(swordGame, false));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

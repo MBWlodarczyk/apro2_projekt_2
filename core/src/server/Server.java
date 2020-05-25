@@ -59,7 +59,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        new Server(1);
+        new Server(2);
     }
 
     public void dispose(){

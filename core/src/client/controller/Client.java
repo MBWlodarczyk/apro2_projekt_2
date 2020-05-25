@@ -77,6 +77,10 @@ public class Client {
         return send;
     }
 
+    public boolean isSend() {
+        return isSend;
+    }
+
     public Answer getReceived() {
         return this.received;
     }
@@ -130,4 +134,6 @@ public class Client {
         received = (Answer) is.readObject();
         System.out.println("Reading...");
     }
+
+
 }

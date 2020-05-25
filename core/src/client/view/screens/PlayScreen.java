@@ -47,9 +47,9 @@ public class PlayScreen implements Screen {
     private BitmapFont bitmapFont;
 
 
-    public PlayScreen(SwordGame swordGame, boolean init) throws Exception {
+    public PlayScreen(SwordGame swordGame, Client client) {
         this.swordGame = swordGame;
-        this.client = new Client(swordGame, init);
+        this.client = client;
         this.map = client.getReceived().getMap().getFieldsArray();
         this.gameCam = new OrthographicCamera();
         this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
