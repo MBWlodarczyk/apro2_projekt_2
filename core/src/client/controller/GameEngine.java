@@ -62,25 +62,11 @@ public class GameEngine {
             System.out.println("This tile is not crossable");
             return true;
         }
-        // check if tile will is occupied
-        if(move.getWhat().toString().equals("Walk") && move.getWhere().getHero() != null){
-            playBeep("./core/assets/raw/bruh.wav", 0);
-            System.out.println("This tile is occupied");
-            return true;
-        }
         // check if hero has moved yet.
         for (Move m:moves) {
             if(!m.equals(move) && m.getWho().equals(move.getWho())){
                 playBeep("./core/assets/raw/bruh.wav", 0);
                 System.out.println("This hero has made a move already");
-                return true;
-            }
-        }
-        // check if tile will be occupied
-        for (Move m:moves) {
-            if(move.getWhere().equals(m.getWhere()) && (m.getWhat().toString().equals("Walk") || m.getWhat().toString().equals("Stay"))){
-                playBeep("./core/assets/raw/bruh.wav", 0);
-                System.out.println("This tile will be occupied");
                 return true;
             }
         }
