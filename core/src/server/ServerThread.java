@@ -24,7 +24,7 @@ public class ServerThread extends Thread {
     private Server server;
 
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name,Server server) {
-        System.out.println("Creating thread");
+        System.out.println("Server: Creating thread for " + name);
         this.is = is;
         this.os = os;
         this.name = name;
@@ -36,19 +36,19 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         init=server.playerNumber != server.initPlayer;
-        System.out.println("Running thread");
+        System.out.println("Server: Running thread for " + name);
         try {
             if(init) { //initializing game
 
                 send(); //sending starting map
-                recieve(); //receiving initial vector of heroes
+                receive(); //receiving initial vector of heroes
                 recordPlayer(recieved.getOwner()); // recording player in server
                 checkIfAllConnected(); // checking if game can be started
 
             } else { // reconnect
 
                 send(); //sending actual map
-                recieve(); //receiving initial player info
+                receive(); //receiving initial player info
                 recordPlayerIfExisting(recieved.getOwner());
                 sendWithTurnInfo(); //send map again //
             }
@@ -60,7 +60,7 @@ public class ServerThread extends Thread {
             }} catch (IOException | ClassNotFoundException | InterruptedException e) {
                 server.removeClient(this);
                 server.playersClients.remove(this);
-                System.out.println("disconnect " + name);
+                System.out.println("Server: disconnect " + name);
                 this.dispose();
             }
         }
@@ -76,9 +76,9 @@ public class ServerThread extends Thread {
         os.flush();
     }
 
-    public synchronized void recieve() throws IOException, ClassNotFoundException {
+    public synchronized void receive() throws IOException, ClassNotFoundException {
         this.recieved = (Turn) is.readObject();
-        System.out.println("received object from " + name);
+        System.out.println("Server: received object from " + name);
     }
 
     private synchronized void recordPlayer(Player player) {
@@ -100,10 +100,10 @@ public class ServerThread extends Thread {
     }
 
     private synchronized void recordPlayerIfExisting(Player player) throws IOException {
-        if (player != null && server.checkIfPlayerExists(player.getNick(),player.getPasshash())) {
+        if (player != null && server.checkIfPlayerExists(player)) {
 
             this.player = player;
-            server.playersClients.put(this, server.getPlayer(player.getNick(),player.getPasshash()));
+            server.playersClients.put(this, server.getPlayer(player));
             this.name += " (" + player.getNick() +")";
         } else {
             server.answer.setWrongNickPassword(true);
@@ -111,15 +111,15 @@ public class ServerThread extends Thread {
             server.answer.setWrongNickPassword(false);
             server.removeClient(this);
             server.playersClients.remove(this);
-            System.out.println("disconnect " + name);
+            System.out.println("Server: disconnect " + name);
             this.dispose();
         }
     }
 
     private synchronized void receiveIfTurnNotSend() throws IOException, ClassNotFoundException {
         if(!server.hasSendTurn(player)) {
-            System.out.println("Waiting for turn from " + name);
-            recieve();
+            System.out.println("Server: Waiting for turn from " + name);
+            receive();
             server.turns.add(recieved);
         }
     }
@@ -127,7 +127,7 @@ public class ServerThread extends Thread {
     private synchronized void checkIfAllSend() throws IOException, InterruptedException {
         synchronized (lock) {
             {
-                System.out.println("lock " + name);
+                System.out.println("Server: lock " + name);
                 if (!server.check()){
                     lock.wait();
                 }

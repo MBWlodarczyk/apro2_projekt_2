@@ -1,6 +1,8 @@
 package client.controller;
 
 import client.model.map.GameMap;
+import client.model.skills.*;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,16 @@ public class GameEngine {
     }
 
     /**
+     * method to check if there is a wall on way of skill
+     * @param map
+     * @param move
+     * @return
+     */
+    public static boolean isWallOnWay(GameMap map, Move move){
+        return false;
+    }
+
+    /**
      * Method to check if move is along the rules
      * @param move
      * @param moves (queue)
@@ -49,7 +61,7 @@ public class GameEngine {
             return true;
         }
         // check if tile will is occupied
-        if(move.getWhere().getHero() != null){
+        if(move.getWhat().toString().equals("Walk") && move.getWhere().getHero() != null){
             playBeep("./core/assets/raw/bruh.wav", 0);
             System.out.println("This tile is occupied");
             return true;
@@ -64,7 +76,7 @@ public class GameEngine {
         }
         // check if tile will be occupied
         for (Move m:moves) {
-            if(move.getWhere().equals(m.getWhere())){
+            if(move.getWhere().equals(m.getWhere()) && (m.getWhat().toString().equals("Walk") || m.getWhat().toString().equals("Stay"))){
                 playBeep("./core/assets/raw/bruh.wav", 0);
                 System.out.println("This tile will be occupied");
                 return true;
