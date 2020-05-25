@@ -12,10 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Main class to implement client server communication on server side
@@ -31,9 +28,11 @@ public class Server {
     boolean gameInit;
     public final Answer answer = new Answer(new GameMap(22));
     private boolean exit=false;
+    private int port;
     ServerSocket server;
 
     public Server(int playerNumber) throws IOException {
+        //initServer();
 
         this.playerNumber = playerNumber;
         this.server = new ServerSocket(1701);
@@ -42,6 +41,7 @@ public class Server {
     }
 
     private void run() throws IOException {
+        System.out.println("Server: Waiting for players");
         int number = 1;
         while (!exit) {
             Socket socket = server.accept();
@@ -83,7 +83,7 @@ public class Server {
         for (ServerThread client : clients) {
             synchronized (client.lock) {
                 client.lock.notify();
-                System.out.println("Unlocking " + client.name);
+                System.out.println("Server: Unlocking " + client.name);
             }
         }
     }
@@ -114,7 +114,7 @@ public class Server {
         ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
         while (temp.size() != 0) {
 
-            System.out.println("Sending");
+            System.out.println("Server: sending to all");
             if (!temp.get(0).sock.isOutputShutdown()) {
                 try {
                     temp.get(0).os.reset();
@@ -183,5 +183,16 @@ public class Server {
         answer.getMap().getFieldsArray()[CornerX][CornerY+1].setHero(hero2);
         answer.getMap().getFieldsArray()[CornerX+1][CornerY].setHero(hero3);
         answer.getMap().getFieldsArray()[CornerX+1][CornerY+1].setHero(hero4);
+    }
+    private synchronized void initServer(){
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("Specify the port:");
+            this.port = sc.nextInt();
+            System.out.println("Specify player number:");
+            this.playerNumber = sc.nextInt();
+        } catch (Exception e){
+            System.out.println("Not a valid input, try again.");
+        }
     }
 }
