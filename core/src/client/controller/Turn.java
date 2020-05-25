@@ -30,15 +30,16 @@ public class Turn implements Serializable {
         moves.add(move);
     }
     public void rmMove() {
+
         moves.remove();
     }
 
     @Override
     public String toString() {
-        return "Turn{" +
-                "owner=" + owner +
-                ", moves=" + moves +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        for(Move m : moves)
+            sb.append(m.toString()+'\n');
+        return sb.toString();
     }
 
     public void clearMoves() {

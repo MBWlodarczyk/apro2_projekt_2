@@ -16,7 +16,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -42,8 +44,7 @@ public class PlayScreen implements Screen {
 
     private HandleInput handleInput;
 
-//    private InputMultiplexer multiplexer;
-//    private Stage stage;
+    private BitmapFont bitmapFont;
 
 
     public PlayScreen(SwordGame swordGame, boolean init) throws Exception {
@@ -64,17 +65,12 @@ public class PlayScreen implements Screen {
         heroesSprites = new ArrayList<>();
         textFields = new ArrayList<>();
 
+        bitmapFont = new BitmapFont();
+
         rewriteMap();
 
         handleInput = new HandleInput(this);
         Gdx.input.setInputProcessor(handleInput);
-//        stage = new Stage();
-//
-//        multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(handleInput);
-//        multiplexer.addProcessor(stage);
-//
-//        Gdx.input.setInputProcessor(multiplexer);
     }
 
     private void rewriteMap() {
@@ -126,10 +122,11 @@ public class PlayScreen implements Screen {
         }
     }
 
+
     private void skillOptions() {
         TextField text;
         String s;
-        int x = 750, y = 50, height = 50, width = 200;
+        int x = 730, y = 60, height = 60, width = 250;
         int[] tab = handleInput.getTab();
         if(map[tab[0]][tab[1]].getHero()!=null) {
             int size = map[tab[0]][tab[1]].getHero().getSkills().size();
@@ -141,6 +138,7 @@ public class PlayScreen implements Screen {
                 text = new TextField(s, swordGame.skin);
                 text.setSize(width, height);
                 text.setPosition(x, Constants.HEIGHT - y * (i + 2));
+                text.setAlignment(Align.center);
                 handleInput.addRectangles(x, y * (i + 1), width, height);
                 textFields.add(text);
             }
@@ -157,13 +155,11 @@ public class PlayScreen implements Screen {
         this.map = client.getReceived().getMap().getFieldsArray();
         rewriteMap();
         distanceMove();
-
         textFields.clear();
         handleInput.getRectangles().clear();
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptions();
     }
-
 
     @Override
     public void render(float delta) {
@@ -180,7 +176,12 @@ public class PlayScreen implements Screen {
 
         textFields.forEach(n -> n.draw(swordGame.batch, 1));
 
-//        System.out.println(handleInput.getRectangles().size());
+        bitmapFont.draw(swordGame.batch,client.getSend().toString(),Constants.HEIGHT-20,300);
+
+        if(handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN){
+            String s = map[handleInput.getTab()[0]][handleInput.getTab()[1]].getHero().description();
+            bitmapFont.draw(swordGame.batch,s,Constants.HEIGHT+100,150);
+        }
 
         swordGame.batch.end();
     }
