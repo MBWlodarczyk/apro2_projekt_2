@@ -15,30 +15,30 @@ public class ServerThread extends Thread {
     public final Object lock = new Object();
     public ObjectOutputStream os;
     public String name;
-    Socket sock;
     public Turn recieved;
     public ObjectInputStream is;
-    boolean exit;
     public boolean init;
     public Player player;
+    Socket sock;
+    boolean exit;
     private Server server;
 
-    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name,Server server) {
+    public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name, Server server) {
         System.out.println("Server: Creating thread for " + name);
         this.is = is;
         this.os = os;
         this.name = name;
         this.sock = sock;
-        this.server=server;
+        this.server = server;
         this.start();
     }
 
     @Override
     public void run() {
-        init=server.playerNumber != server.initPlayer;
+        init = server.playerNumber != server.initPlayer;
         System.out.println("Server: Running thread for " + name);
         try {
-            if(init) { //initializing game
+            if (init) { //initializing game
 
                 send(); //sending starting map
                 receive(); //receiving initial vector of heroes
@@ -53,20 +53,20 @@ public class ServerThread extends Thread {
                 sendWithTurnInfo(); //send map again //
             }
 
-        while (!exit) {
+            while (!exit) {
                 receiveIfTurnNotSend(); //receive move if player hasn't made a move yet
                 checkIfAllSend(); //check if all have sent and then send map else wait
 
-            }} catch (IOException | ClassNotFoundException | InterruptedException e) {
-                server.removeClient(this);
-                server.playersClients.remove(this);
-                System.out.println("Server: disconnect " + name);
-                this.dispose();
             }
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+            server.removeClient(this);
+            server.playersClients.remove(this);
+            System.out.println("Server: disconnect " + name);
+            this.dispose();
         }
+    }
 
-    public void dispose()
-    {
+    public void dispose() {
         exit = true;
     }
 
@@ -87,7 +87,7 @@ public class ServerThread extends Thread {
             server.playersClients.put(this, player);
             server.players.add(player);
             server.initPlayer++;
-            this.name += " (" + player.getNick() +")";
+            this.name += " (" + player.getNick() + ")";
         }
     }
 
@@ -104,7 +104,7 @@ public class ServerThread extends Thread {
 
             this.player = player;
             server.playersClients.put(this, server.getPlayer(player));
-            this.name += " (" + player.getNick() +")";
+            this.name += " (" + player.getNick() + ")";
         } else {
             server.answer.setWrongNickPassword(true);
             send();
@@ -117,7 +117,7 @@ public class ServerThread extends Thread {
     }
 
     private synchronized void receiveIfTurnNotSend() throws IOException, ClassNotFoundException {
-        if(!server.hasSendTurn(player)) {
+        if (!server.hasSendTurn(player)) {
             System.out.println("Server: Waiting for turn from " + name);
             receive();
             server.turns.add(recieved);
@@ -128,14 +128,15 @@ public class ServerThread extends Thread {
         synchronized (lock) {
             {
                 System.out.println("Server: lock " + name);
-                if (!server.check()){
+                if (!server.check()) {
                     lock.wait();
                 }
             }
         }
     }
+
     private synchronized void sendWithTurnInfo() throws IOException {
-        if(server.hasSendTurn(player)) {
+        if (server.hasSendTurn(player)) {
             server.answer.setHasSendMove(true);
             send();
             server.answer.setHasSendMove(false);

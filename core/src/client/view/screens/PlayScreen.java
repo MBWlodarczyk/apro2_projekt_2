@@ -9,6 +9,8 @@ import client.model.map.Field;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.view.SwordGame;
+import client.view.scenes.HeroStatisticHud;
+import client.view.scenes.SkillOptionsHud;
 import client.view.sprites.*;
 import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
@@ -18,7 +20,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -43,6 +44,8 @@ public class PlayScreen implements Screen {
     private ArrayList<TextField> textFields;
 
     private HandleInput handleInput;
+    private HeroStatisticHud heroStatisticHud;
+    private SkillOptionsHud skillOptionsHud;
 
     private BitmapFont bitmapFont;
 
@@ -53,7 +56,10 @@ public class PlayScreen implements Screen {
         this.map = client.getReceived().getMap().getFieldsArray();
         this.gameCam = new OrthographicCamera();
         this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
+        this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
+        this.skillOptionsHud = new SkillOptionsHud();
         loadData();
+
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         mouseSprite = new MouseSprite(edgeTexture);
@@ -123,42 +129,18 @@ public class PlayScreen implements Screen {
     }
 
 
-    private void skillOptions() {
-        TextField text;
-        String s;
-        int x = 730, y = 60, height = 60, width = 250;
-        int[] tab = handleInput.getTab();
-        if(map[tab[0]][tab[1]].getHero()!=null) {
-            int size = map[tab[0]][tab[1]].getHero().getSkills().size();
-            for (int i = 0; i < size + 1; i++) { //adding one in order to add exit
-                if (i < size)
-                    s = map[tab[0]][tab[1]].getHero().getSkills().get(i).toString();
-                else
-                    s = "Exit";
-                text = new TextField(s, swordGame.skin);
-                text.setSize(width, height);
-                text.setPosition(x, Constants.HEIGHT - y * (i + 2));
-                text.setAlignment(Align.center);
-                handleInput.addRectangles(x, y * (i + 1), width, height);
-                textFields.add(text);
-            }
-        }
-        else{
-            handleInput.currentState = HandleInput.ControllerState.IDLE; // state to idle if we chose incorrect field
-            //this problem could be also solved by changing in handleInput statement if(screenX > Constants.HEIGHT)  and change it to be more precise
-        }
-    }
-
-
     private void update(float delta) {
         gameCam.update();
         this.map = client.getReceived().getMap().getFieldsArray();
         rewriteMap();
         distanceMove();
         textFields.clear();
+
         handleInput.getRectangles().clear();
+
+        skillOptionsHud.textFields.clear();
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
-            skillOptions();
+            skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
     }
 
     @Override
@@ -167,23 +149,26 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         swordGame.batch.begin();
 
-        skillPanelSprite.draw(swordGame.batch);
-        grassSprites.forEach(n -> n.draw(swordGame.batch, delta));
-        wallSprite.forEach(n -> n.draw(swordGame.batch, delta));
-        heroesSprites.forEach(n -> n.draw(swordGame.batch, delta));
-        moveDistanceSprite.draw(swordGame.batch);
-        mouseSprite.draw(swordGame.batch);
+        skillPanelSprite.draw(swordGame.batch); //draw skill panel
+        grassSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw grass
+        wallSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw walls
+        heroesSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw heroes
+        moveDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
+        mouseSprite.draw(swordGame.batch);  //draw mouse
+        skillOptionsHud.draw(swordGame.batch, delta);  //draw skill options hud
 
-        textFields.forEach(n -> n.draw(swordGame.batch, 1));
-
-        bitmapFont.draw(swordGame.batch,client.getSend().toString(),Constants.HEIGHT-20,300);
-
-        if(handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN){
-            String s = map[handleInput.getTab()[0]][handleInput.getTab()[1]].getHero().description();
-            bitmapFont.draw(swordGame.batch,s,Constants.HEIGHT+100,150);
-        }
+        bitmapFont.draw(swordGame.batch, client.getSend().toString(), Constants.HEIGHT - 20, 300); //draw queue od moves
 
         swordGame.batch.end();
+
+
+        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN) {
+            String s = map[handleInput.getTab()[0]][handleInput.getTab()[1]].getHero().description();
+            heroStatisticHud.updateText(s);
+            heroStatisticHud.draw(swordGame.batch, delta);
+        }
+
+        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined);
     }
 
     @Override

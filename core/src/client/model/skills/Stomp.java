@@ -3,15 +3,15 @@ package client.model.skills;
 /**
  * Abstract class to represent skill of stomping.
  */
-public class Stomp extends Skill{
+public class Stomp extends Skill {
 
-    public Stomp(){
+    public Stomp() {
         distance = 5;
         value = -10;
         range = 4;
 
-        afterAttack= SkillProperty.StayOnSpot;
-        useDistance=SkillProperty.Flood;
-        rangeType=SkillProperty.AreaRange;
+        afterAttack = SkillProperty.StayOnSpot;
+        useDistance = SkillProperty.Flood;
+        rangeType = SkillProperty.AreaRange;
     }
 }

@@ -63,13 +63,13 @@ public abstract class Hero extends Entity {
     }
 
     @Override
-    public int getY() {
-        return y;
+    public void setX(int x) {
+        this.x = x;
     }
 
     @Override
-    public void setX(int x) {
-        this.x = x;
+    public int getY() {
+        return y;
     }
 
     @Override
@@ -115,12 +115,12 @@ public abstract class Hero extends Entity {
 
     public String description() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName()+'\n');
-        sb.append("Speed: "+speed+'\n');
-        sb.append("Weight: "+ weight+'\n');
-        sb.append("Max health: "+health+'\n');
-        sb.append("Current health: "+health* healthStatus +'\n');
-        sb.append("Percent health: "+100* healthStatus+"%" +'\n');
+        sb.append(getClass().getSimpleName() + '\n');
+        sb.append("Speed: " + speed + '\n');
+        sb.append("Weight: " + weight + '\n');
+        sb.append("Max health: " + health + '\n');
+        sb.append("Current health: " + health * healthStatus + '\n');
+        sb.append("Percent health: " + 100 * healthStatus + "%" + '\n');
         return sb.toString();
     }
 }

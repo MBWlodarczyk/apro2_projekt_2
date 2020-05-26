@@ -1,7 +1,10 @@
 package client.model.heroes;
 
 import client.model.Player;
-import client.model.skills.*;
+import client.model.skills.Melee;
+import client.model.skills.Stay;
+import client.model.skills.Stomp;
+import client.model.skills.Walk;
 
 public class Warrior extends Hero {
 

@@ -2,7 +2,7 @@ package client.controller;
 
 import client.model.map.Field;
 import client.model.map.GameMap;
-import client.model.skills.*;
+import client.model.skills.Skill;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -41,30 +41,32 @@ public class GameEngine {
 
     /**
      * method to check if there is a wall on way of skill
+     *
      * @param map
      * @param move
      * @return
      */
-    public static boolean isWallOnWay(GameMap map, Move move){
+    public static boolean isWallOnWay(GameMap map, Move move) {
         return false;
     }
 
     /**
      * Method to check if move is along the rules
+     *
      * @param move
      * @param moves (queue)
      * @return
      */
-    public static boolean checkMove(Move move, Queue<Move> moves){
+    public static boolean checkMove(Move move, Queue<Move> moves) {
         //check if tile is crossable
-        if(move.getWhere().getObstacle()!= null && !move.getWhere().getObstacle().isCrossable()){
-            playBeep("./core/assets/raw/bruh.wav",0);
+        if (move.getWhere().getObstacle() != null && !move.getWhere().getObstacle().isCrossable()) {
+            playBeep("./core/assets/raw/bruh.wav", 0);
             System.out.println("This tile is not crossable");
             return true;
         }
         // check if hero has moved yet.
-        for (Move m:moves) {
-            if(!m.equals(move) && m.getWho().equals(move.getWho())){
+        for (Move m : moves) {
+            if (!m.equals(move) && m.getWho().equals(move.getWho())) {
                 playBeep("./core/assets/raw/bruh.wav", 0);
                 System.out.println("This hero has made a move already");
                 return true;
@@ -75,6 +77,7 @@ public class GameEngine {
 
     /**
      * path of flood type skill first Xaxis then Yaxis
+     *
      * @param gameMap
      * @param position
      * @param destination
@@ -84,22 +87,23 @@ public class GameEngine {
         int maxDistance = skill.getDistance(); //for furthrer development (walls etc)
         Queue<Field> result = new LinkedList<>();
         //if -1 you have to subtract, if 1 you add
-        int Xdir = (int) Math.signum(destination.getX()-position.getX());
-        int Ydir = (int) Math.signum(destination.getY()-position.getY());
+        int Xdir = (int) Math.signum(destination.getX() - position.getX());
+        int Ydir = (int) Math.signum(destination.getY() - position.getY());
         int x = position.getX();
         int y = position.getY();
-        while(x != destination.getX()){
-            x+= Xdir;
+        while (x != destination.getX()) {
+            x += Xdir;
             result.add(gameMap.getFieldsArray()[y][x]);
         }
-        while (y != destination.getY()){
-            y+= Ydir;
+        while (y != destination.getY()) {
+            y += Ydir;
             result.add(gameMap.getFieldsArray()[y][x]);
         }
         return result;
     }
 
     //Private methods section
+
     /**
      * DFS method to look for valid fields
      */
@@ -129,6 +133,7 @@ public class GameEngine {
 
     /**
      * method that uses SimpleAudioPlayer to play music
+     *
      * @param filePath
      */
     private static void playBeep(String filePath, int mode) {
@@ -148,18 +153,17 @@ public class GameEngine {
     /**
      * class for music player
      */
-    private static class SimpleAudioPlayer
-    {
+    private static class SimpleAudioPlayer {
         // to store current position
         Long currentFrame;
         Clip clip;
         // current status of clip
         String status;
         AudioInputStream audioInputStream;
+
         // constructor to initialize streams and clip
         public SimpleAudioPlayer(String filePath)
-                throws UnsupportedAudioFileException, IOException, LineUnavailableException
-        {
+                throws UnsupportedAudioFileException, IOException, LineUnavailableException {
             // create AudioInputStream object
             audioInputStream =
                     AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
@@ -171,11 +175,10 @@ public class GameEngine {
         }
 
         // Method to play the audio
-        public void play(int mode)
-        {
-            if(mode < 0){
+        public void play(int mode) {
+            if (mode < 0) {
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
-            }else clip.loop(mode);
+            } else clip.loop(mode);
             //start the clip
             clip.start();
             status = "play";
@@ -184,8 +187,7 @@ public class GameEngine {
 
         // Method to restart the audio
         public void restart(String filePath) throws IOException, LineUnavailableException,
-                UnsupportedAudioFileException
-        {
+                UnsupportedAudioFileException {
             clip.stop();
             clip.close();
             resetAudioStream(filePath);
@@ -196,8 +198,7 @@ public class GameEngine {
 
         // Method to stop the audio
         public void stop() throws UnsupportedAudioFileException,
-                IOException, LineUnavailableException
-        {
+                IOException, LineUnavailableException {
             currentFrame = 0L;
             clip.stop();
             clip.close();
@@ -205,8 +206,7 @@ public class GameEngine {
 
         // Method to reset audio stream
         public void resetAudioStream(String filePath) throws UnsupportedAudioFileException, IOException,
-                LineUnavailableException
-        {
+                LineUnavailableException {
             audioInputStream = AudioSystem.getAudioInputStream(
                     new File(filePath).getAbsoluteFile());
             clip.open(audioInputStream);

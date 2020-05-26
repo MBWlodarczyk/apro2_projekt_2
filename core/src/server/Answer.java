@@ -5,17 +5,16 @@ import client.model.map.GameMap;
 import java.io.Serializable;
 
 public class Answer implements Serializable {
-    public GameMap getMap() {
-        return map;
-    }
-
+    private GameMap map = new GameMap(22);
+    private boolean hasSendMove = false; //reconnect variable
+    private boolean WrongNickPassword = false; //reconnect flag if true then server refused connection wrong nick
     public Answer(GameMap map) {
         this.map = map;
     }
 
-    private GameMap map = new GameMap(22);
-    private boolean hasSendMove = false; //reconnect variable
-    private boolean WrongNickPassword = false; //reconnect flag if true then server refused connection wrong nick
+    public GameMap getMap() {
+        return map;
+    }
 
     public boolean isWrongNickPassword() {
         return WrongNickPassword;

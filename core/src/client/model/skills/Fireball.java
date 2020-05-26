@@ -14,7 +14,8 @@ public class Fireball extends Skill {
         useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.FloodRange;
     }
-    public void throwFireball(int yh, int xh, int yt, int xt){
+
+    public void throwFireball(int yh, int xh, int yt, int xt) {
 
     }
 }

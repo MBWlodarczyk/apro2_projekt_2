@@ -1,9 +1,9 @@
 package client.view.sprites;
 
+import client.model.Entity;
 import client.view.utility.Constants;
 import client.view.utility.Drawable;
 import client.view.utility.Updatable;
-import client.model.Entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +25,6 @@ public abstract class EntitySprite<E extends Entity> implements Updatable, Drawa
 
     @Override
     public void update(float delta) {
-        sprite.setPosition(entity.getY() * Constants.TEXTURE_SIZE,  Constants.HEIGHT-(entity.getX()+1)  * Constants.TEXTURE_SIZE);
+        sprite.setPosition(entity.getY() * Constants.TEXTURE_SIZE, Constants.HEIGHT - (entity.getX() + 1) * Constants.TEXTURE_SIZE);
     }
 }

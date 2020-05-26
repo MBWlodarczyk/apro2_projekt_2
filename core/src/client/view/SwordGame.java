@@ -1,8 +1,8 @@
 package client.view;
 
+import client.model.Player;
 import client.view.screens.LoadScreen;
 import client.view.utility.Assets;
-import client.model.Player;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

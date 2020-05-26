@@ -11,12 +11,12 @@ import java.util.Objects;
  * Class to represent single player.
  */
 public class Player implements Serializable {
-    private ArrayList<Hero> heroes;
     final private String nick;
     final private byte[] passhash;
+    private ArrayList<Hero> heroes;
     private boolean turn = true;
 
-    public Player(String nick,byte[] hash) {
+    public Player(String nick, byte[] hash) {
         this.heroes = new ArrayList<>(4);
         this.nick = nick;
         this.passhash = hash;
@@ -41,14 +41,16 @@ public class Player implements Serializable {
     }
 
     public void addHero(Hero hero) {
-        if(hero.getOwner()==this){
+        if (hero.getOwner() == this) {
             heroes.add(hero);
         }
     }
-    public boolean hasMove(){
+
+    public boolean hasMove() {
         return turn;
     }
-    public void setTurn(boolean turn){
+
+    public void setTurn(boolean turn) {
         this.turn = turn;
     }
 }

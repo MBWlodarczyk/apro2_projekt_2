@@ -72,11 +72,10 @@ public class Assets implements Disposable {
     /**
      * load sound
      */
-    private void loadSound(){
+    private void loadSound() {
         manager.load("sound/beep-03.wav", Sound.class);
 
     }
-
 
 
     @Override

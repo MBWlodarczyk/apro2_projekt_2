@@ -1,4 +1,5 @@
 package client.model.obstacles;
+
 /**
  * Class representing single trap on map.
  */

@@ -23,6 +23,12 @@ public class HandleInput implements InputProcessor {
     private Field field;
     private ArrayList<Rectangle> rectangles;
 
+    public HandleInput(PlayScreen playScreen) {
+        this.currentState = IDLE;
+        this.playScreen = playScreen;
+        this.rectangles = new ArrayList<>();
+    }
+
     public int[] getTab() {
         return tab;
     }
@@ -49,12 +55,6 @@ public class HandleInput implements InputProcessor {
 
     public ArrayList<Rectangle> getRectangles() {
         return rectangles;
-    }
-
-    public HandleInput(PlayScreen playScreen) {
-        this.currentState = IDLE;
-        this.playScreen = playScreen;
-        this.rectangles = new ArrayList<>();
     }
 
     @Override

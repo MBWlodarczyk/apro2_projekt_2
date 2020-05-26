@@ -1,9 +1,8 @@
 package server;
 
 import client.controller.Turn;
-import client.model.heroes.Hero;
 import client.model.Player;
-import client.model.map.Field;
+import client.model.heroes.Hero;
 import client.model.map.GameMap;
 
 import java.io.IOException;
@@ -12,7 +11,10 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Scanner;
 
 /**
  * Main class to implement client server communication on server side
@@ -22,14 +24,14 @@ public class Server {
     public final ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
     public final HashMap<ServerThread, Player> playersClients = new HashMap<>();
     public final ArrayList<Player> players = new ArrayList<>();
+    public final Answer answer = new Answer(new GameMap(22));
     public ArrayList<Turn> turns = new ArrayList<>();
     public int playerNumber;
     public int initPlayer;
     boolean gameInit;
-    public final Answer answer = new Answer(new GameMap(22));
-    private boolean exit=false;
-    private int port;
     ServerSocket server;
+    private boolean exit = false;
+    private int port;
 
     public Server(int playerNumber) throws IOException {
         //initServer();
@@ -40,29 +42,29 @@ public class Server {
         run();
     }
 
+    public static void main(String[] args) throws IOException {
+        new Server(1);
+    }
+
     private void run() throws IOException {
         System.out.println("Server: Waiting for players");
         int number = 1;
         while (!exit) {
             Socket socket = server.accept();
-            acceptConnection(number,socket);
+            acceptConnection(number, socket);
             number++;
         }
     }
 
-    private void acceptConnection(int i,Socket s) throws IOException {
+    private void acceptConnection(int i, Socket s) throws IOException {
         String name = "client " + i;
         ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
         ObjectInputStream is = new ObjectInputStream(s.getInputStream());
-        ServerThread t = new ServerThread(s, is, os, name,this);
+        ServerThread t = new ServerThread(s, is, os, name, this);
         clients.add(t);
     }
 
-    public static void main(String[] args) throws IOException {
-        new Server(2);
-    }
-
-    public void dispose(){
+    public void dispose() {
         exit = true;
     }
 
@@ -140,13 +142,13 @@ public class Server {
     public synchronized void init() {
         switch (initPlayer) {
             case 4:
-                initPlayer(3,1,19);
+                initPlayer(3, 1, 19);
             case 3:
-                initPlayer(2,19,1);
+                initPlayer(2, 19, 1);
             case 2:
-                initPlayer(1,19,19);
+                initPlayer(1, 19, 19);
             case 1:
-                initPlayer(0,1,1);
+                initPlayer(0, 1, 1);
         }
         gameInit = true;
     }
@@ -172,7 +174,7 @@ public class Server {
     }
 
     //ugly method don't look
-    private synchronized void initPlayer(int playerNumber,int CornerX,int CornerY){
+    private synchronized void initPlayer(int playerNumber, int CornerX, int CornerY) {
         Turn turn = clients.get(playerNumber).recieved;
         clients.get(playerNumber).player = clients.get(playerNumber).recieved.getOwner();
         Hero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
@@ -180,18 +182,19 @@ public class Server {
         Hero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
         Hero hero4 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
         answer.getMap().getFieldsArray()[CornerX][CornerY].setHero(hero1);
-        answer.getMap().getFieldsArray()[CornerX][CornerY+1].setHero(hero2);
-        answer.getMap().getFieldsArray()[CornerX+1][CornerY].setHero(hero3);
-        answer.getMap().getFieldsArray()[CornerX+1][CornerY+1].setHero(hero4);
+        answer.getMap().getFieldsArray()[CornerX][CornerY + 1].setHero(hero2);
+        answer.getMap().getFieldsArray()[CornerX + 1][CornerY].setHero(hero3);
+        answer.getMap().getFieldsArray()[CornerX + 1][CornerY + 1].setHero(hero4);
     }
-    private synchronized void initServer(){
+
+    private synchronized void initServer() {
         Scanner sc = new Scanner(System.in);
         try {
             System.out.println("Specify the port:");
             this.port = sc.nextInt();
             System.out.println("Specify player number:");
             this.playerNumber = sc.nextInt();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Not a valid input, try again.");
         }
     }

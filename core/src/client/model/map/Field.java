@@ -22,7 +22,7 @@ public class Field implements Serializable {
      * Hero on field
      */
     private Hero hero;
-     /**
+    /**
      * Obstacle on field
      */
     private Obstacle obstacle;
@@ -53,7 +53,7 @@ public class Field implements Serializable {
     }
 
     public void setHero(Hero hero) {
-        if(hero!=null){
+        if (hero != null) {
             hero.setX(x); //in order to change the x and y Hero coordinates
             hero.setY(y);  //FK BLAD
         }

@@ -29,6 +29,7 @@ public class Turn implements Serializable {
     public void addMove(Move move) {
         moves.add(move);
     }
+
     public void rmMove() {
 
         moves.remove();
@@ -37,8 +38,8 @@ public class Turn implements Serializable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(Move m : moves)
-            sb.append(m.toString()+'\n');
+        for (Move m : moves)
+            sb.append(m.toString() + '\n');
         return sb.toString();
     }
 

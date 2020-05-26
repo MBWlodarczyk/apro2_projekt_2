@@ -1,8 +1,6 @@
 package client.model.map;
 
 
-import client.controller.Move;
-import client.model.heroes.Hero;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 
@@ -29,7 +27,7 @@ public class GameMap implements Serializable {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
-                map[i][j].setTerrain(new Grass(i,j));
+                map[i][j].setTerrain(new Grass(i, j));
             }
         }
     }

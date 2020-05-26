@@ -39,7 +39,6 @@ public class LoadScreen implements Screen {
     private int HEIGHT = 80;
 
 
-
     /**
      * Constructor which take sword game to use batch etc...
      *
@@ -85,12 +84,12 @@ public class LoadScreen implements Screen {
         textures_dark.add(wizardTexture_dark);
     }
 
-    private void inputFields(){
+    private void inputFields() {
         int x = 50, y = 150;
-        ipInput(x,y);
-        portInput(x+=230,y);
-        nickInput(x+=230,y);
-        passwordInput(x+=230,y);
+        ipInput(x, y);
+        portInput(x += 230, y);
+        nickInput(x += 230, y);
+        passwordInput(x += 230, y);
     }
 
     private void addBackground() {

@@ -7,8 +7,8 @@ public class Jump extends Skill {
     public Jump(int distance) {
         this.distance = distance;
 
-        afterAttack=SkillProperty.GoToTarget;
-        useDistance=SkillProperty.Lob;
-        rangeType=SkillProperty.PointRange;
+        afterAttack = SkillProperty.GoToTarget;
+        useDistance = SkillProperty.Lob;
+        rangeType = SkillProperty.PointRange;
     }
 }

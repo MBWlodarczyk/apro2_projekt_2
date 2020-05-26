@@ -22,6 +22,7 @@ public class WaitScreen implements Screen {
         animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
 
     }
+
     @Override
     public void show() {
 
@@ -35,14 +36,14 @@ public class WaitScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         swordGame.batch.begin();
 
-        swordGame.batch.draw(animation.getKeyFrame(elapsed),272.0f,112.0f);
+        swordGame.batch.draw(animation.getKeyFrame(elapsed), 272.0f, 112.0f);
 
         swordGame.batch.end();
     }
 
-    private void update(){
-        if(client.isReceived)
-            swordGame.setScreen(new PlayScreen(swordGame,client));
+    private void update() {
+        if (client.isReceived)
+            swordGame.setScreen(new PlayScreen(swordGame, client));
     }
 
     @Override
