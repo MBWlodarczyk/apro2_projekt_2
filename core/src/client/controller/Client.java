@@ -23,6 +23,7 @@ public class Client {
     private boolean isSend=false;
     boolean exit=false;
     public Socket sock;
+    public boolean isReceived =false;
     final Object lock = new Object();
 
     public Client(SwordGame game, final boolean init) throws Exception {
@@ -47,6 +48,7 @@ public class Client {
         Thread t = new Thread(() -> {
                 try {
                     receive();
+                    isReceived =true;
                     isSend = received.hasSendMove();
                     System.out.println(received.isWrongNickPassword());
                 } catch (IOException | ClassNotFoundException e) {
@@ -57,9 +59,11 @@ public class Client {
                     try {
                         if (send != null && !isSend && send.getMoves().size() == 4) {
                                 send();
+                                isReceived =false;
                         }
                         if (isSend) {
                                 receive();
+                                isReceived =true;
                                 isSend = false;
                                 send.clearMoves();
 

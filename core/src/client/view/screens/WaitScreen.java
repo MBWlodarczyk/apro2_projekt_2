@@ -41,7 +41,7 @@ public class WaitScreen implements Screen {
     }
 
     private void update(){
-        if(!client.isSend())
+        if(client.isReceived)
             swordGame.setScreen(new PlayScreen(swordGame,client));
     }
 

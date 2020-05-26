@@ -47,7 +47,7 @@ public class ServerThread extends Thread {
 
             } else { // reconnect
 
-                send(); //sending actual map
+                send();
                 receive(); //receiving initial player info
                 recordPlayerIfExisting(recieved.getOwner());
                 sendWithTurnInfo(); //send map again //
