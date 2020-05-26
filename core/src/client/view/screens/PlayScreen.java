@@ -57,7 +57,7 @@ public class PlayScreen implements Screen {
         this.gameCam = new OrthographicCamera();
         this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
         this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
-        this.skillOptionsHud = new SkillOptionsHud();
+        this.skillOptionsHud = new SkillOptionsHud(swordGame.batch,swordGame.skin);
         loadData();
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
@@ -138,7 +138,7 @@ public class PlayScreen implements Screen {
 
         handleInput.getRectangles().clear();
 
-        skillOptionsHud.textFields.clear();
+        skillOptionsHud.update(delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
     }
@@ -155,20 +155,22 @@ public class PlayScreen implements Screen {
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw heroes
         moveDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
         mouseSprite.draw(swordGame.batch);  //draw mouse
-        skillOptionsHud.draw(swordGame.batch, delta);  //draw skill options hud
 
         bitmapFont.draw(swordGame.batch, client.getSend().toString(), Constants.HEIGHT - 20, 300); //draw queue od moves
 
         swordGame.batch.end();
 
 
-        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN) {
+        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || handleInput.anyHeroChosen) {
             String s = map[handleInput.getTab()[0]][handleInput.getTab()[1]].getHero().description();
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);
         }
 
+        skillOptionsHud.draw(swordGame.batch,delta);
+
         swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined);
+        swordGame.batch.setProjectionMatrix(skillOptionsHud.stage.getCamera().combined);
     }
 
     @Override

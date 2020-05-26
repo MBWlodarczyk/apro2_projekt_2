@@ -4,24 +4,30 @@ import client.controller.HandleInput;
 import client.model.map.Field;
 import client.view.utility.Constants;
 import client.view.utility.Drawable;
+import client.view.utility.Updatable;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
+public class SkillOptionsHud implements Drawable, Updatable {
 
-public class SkillOptionsHud implements Drawable {
+    public Stage stage;
+    private Viewport viewport;
 
-    public ArrayList<TextField> textFields;
-
-    public SkillOptionsHud() {
-        textFields = new ArrayList<>();
+    public SkillOptionsHud(SpriteBatch spriteBatch, Skin skin) {
+        viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
+        stage = new Stage(viewport, spriteBatch);
     }
 
     @Override
     public void draw(SpriteBatch batch, float delta) {
-        textFields.forEach(n -> n.draw(batch, 1));
+        stage.draw();
     }
 
     public void skillOptions(HandleInput handleInput, Field[][] map, Skin skin) {
@@ -41,11 +47,17 @@ public class SkillOptionsHud implements Drawable {
                 text.setPosition(x, Constants.HEIGHT - y * (i + 2));
                 text.setAlignment(Align.center);
                 handleInput.addRectangles(x, y * (i + 1), width, height);
-                textFields.add(text);
+                stage.addActor(text);
             }
         } else {
-            handleInput.currentState = HandleInput.ControllerState.IDLE; // state to idle if we chose incorrect field
-            //this problem could be also solved by changing in handleInput statement if(screenX > Constants.HEIGHT)  and change it to be more precise
+            handleInput.currentState = HandleInput.ControllerState.IDLE;
+        }
+    }
+
+    @Override
+    public void update(float delta) {
+        for (Actor actor : stage.getActors()) {
+            actor.remove();
         }
     }
 }

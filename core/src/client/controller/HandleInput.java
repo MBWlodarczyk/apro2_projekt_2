@@ -15,6 +15,7 @@ import static client.controller.HandleInput.ControllerState.*;
  */
 public class HandleInput implements InputProcessor {
 
+    public boolean anyHeroChosen;
     public ControllerState currentState;
     private int skillChosen;
     private PlayScreen playScreen;
@@ -68,6 +69,10 @@ public class HandleInput implements InputProcessor {
                 this.x = tab[1];
                 return true;
             }
+            if (currentState == IDLE && field.getHero() != null)
+                anyHeroChosen = true;
+            else
+                anyHeroChosen = false;
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {
