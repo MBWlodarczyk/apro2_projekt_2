@@ -44,6 +44,10 @@ public class WaitScreen implements Screen {
     private void update() {
         if (client.isReceived)
             swordGame.setScreen(new PlayScreen(swordGame, client));
+        if (client.wrongPass){
+            client.dispose();
+            swordGame.setScreen(new LoadScreen(swordGame));
+        }
     }
 
     @Override

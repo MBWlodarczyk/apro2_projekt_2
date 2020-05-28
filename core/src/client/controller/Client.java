@@ -25,6 +25,7 @@ public class Client {
     private Turn send;
     private Answer received;
     private boolean isSend = false;
+    public boolean wrongPass;
 
     public Client(SwordGame game, final boolean init) throws Exception {
 
@@ -50,7 +51,7 @@ public class Client {
                 receive();
                 isReceived = true;
                 isSend = received.hasSendMove();
-                System.out.println(received.isWrongNickPassword());
+                wrongPass = received.isWrongNickPassword();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
