@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Save implements Serializable {
     public final Answer answer;
-    public ArrayList<Turn> turns;
-    public int playerNumber;
+    public final ArrayList<Turn> turns;
+    public final int playerNumber;
     public final ArrayList<Player> players;
 
     public Save(Answer answer, ArrayList<Turn> turns, int playerNumber, ArrayList<Player> players) {

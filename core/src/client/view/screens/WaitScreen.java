@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.net.ConnectException;
+import java.util.Objects;
+
 public class WaitScreen implements Screen {
 
     private SwordGame swordGame;
@@ -18,8 +21,12 @@ public class WaitScreen implements Screen {
 
     public WaitScreen(SwordGame swordGame, boolean init) throws Exception {
         this.swordGame = swordGame;
-        this.client = new Client(swordGame, init);
-        animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
+        try {
+            this.client = new Client(swordGame, init);
+            animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
+        } catch (ConnectException e){
+            System.out.println("can't connect"); //TODO change screen to loadscreen here - problem with update
+        }
 
     }
 
@@ -35,19 +42,18 @@ public class WaitScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         swordGame.batch.begin();
-
         swordGame.batch.draw(animation.getKeyFrame(elapsed), 272.0f, 112.0f);
-
         swordGame.batch.end();
     }
 
     private void update() {
-        if (client.isReceived)
-            swordGame.setScreen(new PlayScreen(swordGame, client));
-        if (client.wrongPass){
-            client.dispose();
-            swordGame.setScreen(new LoadScreen(swordGame));
-        }
+             if (client.isReceived) {
+                swordGame.setScreen(new PlayScreen(swordGame, client));
+            }
+             if (client.wrongPass) {
+                client.dispose(); //TODO add popupwindow saying wrong pass
+                swordGame.setScreen(new LoadScreen(swordGame));
+            }
     }
 
     @Override
