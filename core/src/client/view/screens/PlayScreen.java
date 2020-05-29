@@ -15,6 +15,7 @@ import client.view.sprites.*;
 import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -48,7 +49,7 @@ public class PlayScreen implements Screen {
     private SkillOptionsHud skillOptionsHud;
 
     private BitmapFont bitmapFont;
-
+    Music music = Gdx.audio.newMusic(Gdx.files.internal("sound/IngameMainTheme.mp3"));
 
     public PlayScreen(SwordGame swordGame, Client client) {
         this.swordGame = swordGame;
@@ -59,6 +60,9 @@ public class PlayScreen implements Screen {
         this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch,swordGame.skin);
         loadData();
+        music.setVolume(0.25f);
+        music.setLooping(true);
+        music.play();
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
