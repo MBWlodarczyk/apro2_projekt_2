@@ -75,7 +75,19 @@ public class Assets implements Disposable {
      */
     private void loadSound() {
         manager.load("sound/beep-03.wav", Sound.class);
-
+        manager.load("sound/bruh.wav", Sound.class);
+        manager.load("sound/fireball.mp3", Sound.class);
+        manager.load("sound/Induktancja1.mp3", Sound.class);
+        manager.load("sound/IngameMainTheme.mp3", Sound.class);
+        manager.load("sound/miecz.mp3", Sound.class);
+        manager.load("sound/necromancy.mp3", Sound.class);
+        manager.load("sound/ruch.mp3", Sound.class);
+        manager.load("sound/skok.mp3", Sound.class);
+        manager.load("sound/stomp.mp3", Sound.class);
+        manager.load("sound/strzala_long.mp3", Sound.class);
+        manager.load("sound/strzala_short.mp3", Sound.class);
+        manager.load("sound/teleport.mp3", Sound.class);
+        manager.load("sound/uzdrowienie.mp3", Sound.class);
     }
 
 
