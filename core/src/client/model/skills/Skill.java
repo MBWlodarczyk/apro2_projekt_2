@@ -12,15 +12,10 @@ public abstract class Skill implements Serializable {
     protected SkillProperty afterAttack;  //where is hero after attack
     protected SkillProperty useDistance;  //whether can use over uncrossable or not etc.
     protected SkillProperty rangeType;
-    protected String soundPath;
 
 
     public int getDistance() {
         return distance;
-    }
-
-    public String getSoundPath() {
-        return soundPath;
     }
 
     public int getValue() {
@@ -47,5 +42,4 @@ public abstract class Skill implements Serializable {
     public String toString() {
         return String.valueOf(getClass().getSimpleName());
     }
-
 }
