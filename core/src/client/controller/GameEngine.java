@@ -60,14 +60,12 @@ public class GameEngine {
     public static boolean checkMove(Move move, Queue<Move> moves) {
         //check if tile is crossable
         if (move.getWhere().getObstacle() != null && !move.getWhere().getObstacle().isCrossable()) {
-            playBeep("./core/assets/raw/bruh.wav", 0);
             System.out.println("This tile is not crossable");
             return true;
         }
         // check if hero has moved yet.
         for (Move m : moves) {
             if (!m.equals(move) && m.getWho().equals(move.getWho())) {
-                playBeep("./core/assets/raw/bruh.wav", 0);
                 System.out.println("This hero has made a move already");
                 return true;
             }
@@ -130,89 +128,5 @@ public class GameEngine {
         return y < map.getFieldsArray().length && y >= 0 && x >= 0 && x < map.getFieldsArray()[0].length && (map.getFieldsArray()[y][x].getObstacle() == null || map.getFieldsArray()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
     }
 
-
-    /**
-     * method that uses SimpleAudioPlayer to play music
-     *
-     * @param filePath
-     */
-    private static void playBeep(String filePath, int mode) {
-        try {
-            SimpleAudioPlayer player = new SimpleAudioPlayer(filePath);
-            player.play(mode);
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * class for music player
-     */
-    private static class SimpleAudioPlayer {
-        // to store current position
-        Long currentFrame;
-        Clip clip;
-        // current status of clip
-        String status;
-        AudioInputStream audioInputStream;
-
-        // constructor to initialize streams and clip
-        public SimpleAudioPlayer(String filePath)
-                throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-            // create AudioInputStream object
-            audioInputStream =
-                    AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
-            // create clip reference
-            clip = AudioSystem.getClip();
-            // open audioInputStream to the clip
-            clip.open(audioInputStream);
-            clip.loop(0);
-        }
-
-        // Method to play the audio
-        public void play(int mode) {
-            if (mode < 0) {
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-            } else clip.loop(mode);
-            //start the clip
-            clip.start();
-            status = "play";
-        }
-
-
-        // Method to restart the audio
-        public void restart(String filePath) throws IOException, LineUnavailableException,
-                UnsupportedAudioFileException {
-            clip.stop();
-            clip.close();
-            resetAudioStream(filePath);
-            currentFrame = 0L;
-            clip.setMicrosecondPosition(0);
-            this.play(0);
-        }
-
-        // Method to stop the audio
-        public void stop() throws UnsupportedAudioFileException,
-                IOException, LineUnavailableException {
-            currentFrame = 0L;
-            clip.stop();
-            clip.close();
-        }
-
-        // Method to reset audio stream
-        public void resetAudioStream(String filePath) throws UnsupportedAudioFileException, IOException,
-                LineUnavailableException {
-            audioInputStream = AudioSystem.getAudioInputStream(
-                    new File(filePath).getAbsoluteFile());
-            clip.open(audioInputStream);
-            clip.loop(0);
-        }
-
-    }
 
 }

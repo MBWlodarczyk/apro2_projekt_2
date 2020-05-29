@@ -22,5 +22,6 @@ public class Heal extends Skill {
             useDistance = SkillProperty.Lob;
             rangeType = SkillProperty.AreaRange;
         }
+        soundPath = "sound/uzdrowienie.mp3";
     }
 }
