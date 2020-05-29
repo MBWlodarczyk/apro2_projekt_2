@@ -16,8 +16,6 @@ public class SettingWall extends Skill { //temporary: unbreakable wall
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;
-
-        soundPath="";
     }
 
     public void buildWall(GameMap gameMap, int x, int y) {

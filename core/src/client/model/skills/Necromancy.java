@@ -11,8 +11,6 @@ public class Necromancy extends Skill {
         afterAttack = SkillProperty.GoToTarget;
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;
-
-        soundPath= "sound/necromancy.mp3";
     }
 
 }
