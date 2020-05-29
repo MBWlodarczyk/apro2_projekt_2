@@ -14,6 +14,8 @@ public class ArrowShortDist extends Skill {
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.Lob;
         rangeType = SkillProperty.PointRange;
+
+        soundPath= "sound/strzala_short.mp3";
     }
 
     public void fireArrow(int yh, int xh, int yt, int xt) {

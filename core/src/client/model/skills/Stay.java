@@ -11,6 +11,8 @@ public class Stay extends Skill {
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;
+
+        soundPath= "";
     }
 
 }

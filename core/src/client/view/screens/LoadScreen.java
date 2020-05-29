@@ -4,6 +4,7 @@ import client.view.SwordGame;
 import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -37,6 +38,7 @@ public class LoadScreen implements Screen {
     private TextField passwordField;
     private int WIDTH = 200;
     private int HEIGHT = 80;
+    public static Music music = Gdx.audio.newMusic(Gdx.files.internal("sound/Induktancja1.mp3"));
 
 
     /**
@@ -48,6 +50,9 @@ public class LoadScreen implements Screen {
         this.swordGame = swordGame;
         stage = new Stage();  //initialize stage
         loadData(); //load all textures using AssetManager
+        music.setVolume(0.6f);
+        music.setLooping(true);
+        music.play();
         Gdx.input.setInputProcessor(stage);  //set stage as a input processor
         init();
     }
@@ -199,6 +204,7 @@ public class LoadScreen implements Screen {
                     swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                     if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                         swordGame.setScreen(new WaitScreen(swordGame, true));
+                        music.dispose();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -228,6 +234,7 @@ public class LoadScreen implements Screen {
                 if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                     try {
                         swordGame.setScreen(new WaitScreen(swordGame, false));
+                        music.dispose();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -3,7 +3,9 @@ package client.controller;
 import client.model.map.Field;
 import client.view.screens.PlayScreen;
 import client.view.utility.Constants;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
@@ -100,13 +102,15 @@ public class HandleInput implements InputProcessor {
         Field[][] fieldsArray = playScreen.client.getReceived().getMap().getFieldsArray();
         Move move = new Move(fieldsArray[y][x].getHero(), field, fieldsArray[y][x], fieldsArray[y][x].getHero().getSkills().get(index));
         if (GameEngine.isValid(playScreen.client.getReceived().getMap(), move)) {
-            if (!GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
-                playScreen.client.getSend().addMove(move);
-                System.out.println("Adding move...");
-//                System.out.println(move);
+            if(!move.getWhat().getSoundPath().equals("")) {
+                Sound sound = Gdx.audio.newSound(Gdx.files.internal(move.getWhat().getSoundPath()));
+                sound.play(0.6f);
             }
-            System.out.println(playScreen.client.getSend().getMoves().size());
+        }else {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/bruh.wav"));
+            sound.play(0.6f);
         }
+        System.out.println(playScreen.client.getSend().getMoves().size());
     }
 
     public void getCord(int screenX, int screenY) {

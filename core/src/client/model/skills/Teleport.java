@@ -15,6 +15,8 @@ public class Teleport extends Skill {
         afterAttack = SkillProperty.GoToTarget;
         useDistance = SkillProperty.Lob;
         rangeType = SkillProperty.PointRange;
+
+        soundPath = "sound/teleport.mp3";
     }
 
     public void teleportation(GameMap gameMap, int x, int y, Hero hero) {
