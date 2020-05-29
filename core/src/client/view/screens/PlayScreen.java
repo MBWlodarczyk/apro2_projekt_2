@@ -49,7 +49,7 @@ public class PlayScreen implements Screen {
     private SkillOptionsHud skillOptionsHud;
 
     private BitmapFont bitmapFont;
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("sound/IngameMainTheme.mp3"));
+    private Music ingameTheme;
 
     public PlayScreen(SwordGame swordGame, Client client) {
         this.swordGame = swordGame;
@@ -60,9 +60,7 @@ public class PlayScreen implements Screen {
         this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch,swordGame.skin);
         loadData();
-        music.setVolume(0.25f);
-        music.setLooping(true);
-        music.play();
+        addMusic();
 
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
@@ -102,7 +100,11 @@ public class PlayScreen implements Screen {
             }
         }
     }
-
+    private void addMusic(){
+        ingameTheme.setVolume(0.25f);
+        ingameTheme.setLooping(true);
+        ingameTheme.play();
+    }
     private Texture checkHero(int i, int j) {
         if (map[i][j].getHero() instanceof Paladin)
             return paladinTexture;
@@ -228,5 +230,6 @@ public class PlayScreen implements Screen {
         skillPanelTexture = swordGame.assets.manager.get("special/skillPanel.png", Texture.class);
 
         trapTexture = swordGame.assets.manager.get("obstacles/trap.png", Texture.class);
+        ingameTheme = swordGame.assets.manager.get("sound/IngameMainTheme.mp3", Music.class);
     }
 }

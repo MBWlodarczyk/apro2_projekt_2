@@ -38,7 +38,7 @@ public class LoadScreen implements Screen {
     private TextField passwordField;
     private int WIDTH = 200;
     private int HEIGHT = 80;
-    public static Music music = Gdx.audio.newMusic(Gdx.files.internal("sound/Induktancja1.mp3"));
+    private Music theme;
 
 
     /**
@@ -50,9 +50,6 @@ public class LoadScreen implements Screen {
         this.swordGame = swordGame;
         stage = new Stage();  //initialize stage
         loadData(); //load all textures using AssetManager
-        music.setVolume(0.6f);
-        music.setLooping(true);
-        music.play();
         Gdx.input.setInputProcessor(stage);  //set stage as a input processor
         init();
     }
@@ -69,6 +66,7 @@ public class LoadScreen implements Screen {
         //buttons
         nextScreenButton();
         reconnectButton();
+        addMusic();
     }
 
     private void texturesToArrays() {
@@ -104,7 +102,11 @@ public class LoadScreen implements Screen {
         background.setPosition(0, 0);
         stage.addActor(background);
     }
-
+    private void addMusic(){
+        theme.setVolume(0.6f);
+        theme.setLooping(true);
+        theme.play();
+    }
     private void ipInput(int x, int y) {
         ipField = new TextField("", swordGame.skin);
         ipField.setMessageText("IP");
@@ -204,7 +206,7 @@ public class LoadScreen implements Screen {
                     swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                     if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                         swordGame.setScreen(new WaitScreen(swordGame, true));
-                        music.dispose();
+                        theme.dispose();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -234,7 +236,7 @@ public class LoadScreen implements Screen {
                 if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
                     try {
                         swordGame.setScreen(new WaitScreen(swordGame, false));
-                        music.dispose();
+                        theme.dispose();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -301,5 +303,6 @@ public class LoadScreen implements Screen {
         wizardTexture_dark = swordGame.assets.manager.get("heroes/wizard_nygga.png", Texture.class);
 
         background = swordGame.assets.manager.get("special/background.png", Texture.class);
+        theme = swordGame.assets.manager.get("sound/Induktancja1.mp3", Music.class);
     }
 }

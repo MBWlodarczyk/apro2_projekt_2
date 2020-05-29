@@ -1,6 +1,7 @@
 package client.view.utility;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
@@ -73,8 +74,9 @@ public class Assets implements Disposable {
      * load sound
      */
     private void loadSound() {
+        manager.load("sound/Induktancja1.mp3", Music.class);
+        manager.load("sound/IngameMainTheme.mp3", Music.class);
         manager.load("sound/beep-03.wav", Sound.class);
-
     }
 
 
