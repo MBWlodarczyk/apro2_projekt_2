@@ -12,12 +12,16 @@ public class Save implements Serializable {
     public final ArrayList<Turn> turns;
     public final int playerNumber;
     public final ArrayList<Player> players;
+    public int initPlayer;
+    public boolean gameInit;
 
-    public Save(Answer answer, ArrayList<Turn> turns, int playerNumber, ArrayList<Player> players) {
+    public Save(Answer answer, ArrayList<Turn> turns, int playerNumber, ArrayList<Player> players,int initPlayer,boolean gameInit) {
         this.answer = answer;
         this.turns = turns;
         this.playerNumber = playerNumber;
         this.players = players;
+        this.initPlayer = initPlayer;
+        this.gameInit=gameInit;
     }
 
 }

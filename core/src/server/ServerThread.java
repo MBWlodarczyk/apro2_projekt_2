@@ -92,7 +92,7 @@ public class ServerThread extends Thread {
     }
 
     private synchronized void checkIfAllConnected() throws IOException {
-        if (server.playerNumber == server.initPlayer) {
+        if (server.playerNumber == server.initPlayer && !server.gameInit) {
             server.init();
             server.sendToAll(false);
             server.unlock();

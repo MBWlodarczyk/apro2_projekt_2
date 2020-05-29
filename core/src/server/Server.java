@@ -197,7 +197,7 @@ public class Server {
         }
     }
     public void save(String filepath) throws IOException {
-        Save save = new Save(this.answer,this.turns,this.playerNumber,this.players);
+        Save save = new Save(this.answer,this.turns,this.playerNumber,this.players,this.initPlayer,this.gameInit);
         FileOutputStream fileOut = new FileOutputStream(filepath); //TODO zapisywanie w folderze maps
         ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
         objectOut.writeObject(save);
@@ -213,6 +213,8 @@ public class Server {
         this.turns=save.turns;
         this.playerNumber=save.playerNumber;
         this.players=save.players;
+        this.initPlayer=save.initPlayer;
+        this.gameInit=save.gameInit;
         this.sendToAll(false);
     }
 }
