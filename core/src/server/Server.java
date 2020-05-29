@@ -5,9 +5,7 @@ import client.model.Player;
 import client.model.heroes.Hero;
 import client.model.map.GameMap;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -23,8 +21,8 @@ public class Server {
 
     public final ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
     public final HashMap<ServerThread, Player> playersClients = new HashMap<>();
-    public final ArrayList<Player> players = new ArrayList<>();
-    public final Answer answer = new Answer(new GameMap(22));
+    public ArrayList<Player> players = new ArrayList<>();
+    public Answer answer = new Answer(new GameMap(22));
     public ArrayList<Turn> turns = new ArrayList<>();
     public int playerNumber;
     public int initPlayer;
@@ -38,7 +36,7 @@ public class Server {
 
         this.playerNumber = playerNumber;
         this.server = new ServerSocket(1701);
-
+        InputThread playerInput = new InputThread(this);
         run();
     }
 
@@ -197,5 +195,26 @@ public class Server {
         } catch (Exception e) {
             System.out.println("Not a valid input, try again.");
         }
+    }
+    public void save(String filepath) throws IOException {
+        Save save = new Save(this.answer,this.turns,this.playerNumber,this.players,this.initPlayer,this.gameInit);
+        FileOutputStream fileOut = new FileOutputStream(filepath); //TODO zapisywanie w folderze maps
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(save);
+        objectOut.close();
+        System.out.println("Saved game");
+    }
+    public void load(String filepath) throws IOException, ClassNotFoundException {
+        FileInputStream fileIn = new FileInputStream(filepath);
+        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+        Save save = (Save) objectIn.readObject();
+        System.out.println("Loaded game");
+        this.answer=save.answer;
+        this.turns=save.turns;
+        this.playerNumber=save.playerNumber;
+        this.players=save.players;
+        this.initPlayer=save.initPlayer;
+        this.gameInit=save.gameInit;
+        this.sendToAll(false);
     }
 }
