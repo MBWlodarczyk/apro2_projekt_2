@@ -44,6 +44,13 @@ public class InputThread extends Thread{
                         System.out.println("Can't locate the file");
                     }
                 }
+                if(line.startsWith("list"))
+                    System.out.println("Server: Printing clients:");
+                    for(ServerThread client : server.clients){
+                        System.out.println(client.player.getNick());
+                        System.out.println(client.sock.getRemoteSocketAddress().toString());
+                        System.out.println();
+                }
             }
         }
     }

@@ -18,14 +18,22 @@ public class WaitScreen implements Screen {
     private Client client;
     private Animation<TextureRegion> animation;
     private float elapsed;
+    public boolean connected;
 
     public WaitScreen(SwordGame swordGame, boolean init) throws Exception {
         this.swordGame = swordGame;
         try {
             this.client = new Client(swordGame, init);
+            connected = true;
             animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
         } catch (ConnectException e){
-            System.out.println("can't connect"); //TODO change screen to loadscreen here - problem with update
+            swordGame.setScreen(new LoadScreen(swordGame));
+            System.out.println("can't connect");
+            swordGame.ip="";//todo popup cant coonnected
+            swordGame.nick="";
+            swordGame.password=null;
+            swordGame.port="";
+            connected = false;
         }
 
     }

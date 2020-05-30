@@ -205,8 +205,11 @@ public class LoadScreen implements Screen {
                     MessageDigest md = MessageDigest.getInstance("SHA-512");
                     swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                     if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
-                        swordGame.setScreen(new WaitScreen(swordGame, true));
-                        theme.dispose();
+                        WaitScreen ws = new WaitScreen(swordGame,true);
+                        if(ws.connected) {
+                            swordGame.setScreen(ws);
+                            theme.dispose();
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
