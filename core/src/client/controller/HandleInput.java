@@ -71,8 +71,8 @@ public class HandleInput implements InputProcessor {
                 return true;
             }
             //anyHeroChosen = false;
-            if ((currentState == IDLE) && (field.getHero() != null)) anyHeroChosen = true;
-            else anyHeroChosen = false; //anyHeroChosen = true;
+            //anyHeroChosen = true;
+            anyHeroChosen = (currentState == IDLE) && (field.getHero() != null);
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {

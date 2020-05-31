@@ -63,7 +63,6 @@ public class GameEngine {
         // check if hero has moved yet.
         for (Move m : moves) {
             if (!m.equals(move) && m.getWho().equals(move.getWho())) {
-                ;
                 System.out.println("This hero has made a move already");
                 return true;
             }

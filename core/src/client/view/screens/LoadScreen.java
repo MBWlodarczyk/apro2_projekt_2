@@ -149,15 +149,15 @@ public class LoadScreen implements Screen {
         int y = 400;        //y param of all heroes
         int x = 10;         //start x of heroes positions (then add 170 to all)
         int size = 150;     //size of a texture
-        addHeroe(archerTexture_dark, x, y, size);
-        addHeroe(necromancerTexture_dark, x += 170, y, size);
-        addHeroe(paladinTexture_dark, x += 170, y, size);
-        addHeroe(priestTexture_dark, x += 170, y, size);
-        addHeroe(warriorTexture_dark, x += 170, y, size);
-        addHeroe(wizardTexture_dark, x += 170, y, size);
+        addHero(archerTexture_dark, x, y, size);
+        addHero(necromancerTexture_dark, x += 170, y, size);
+        addHero(paladinTexture_dark, x += 170, y, size);
+        addHero(priestTexture_dark, x += 170, y, size);
+        addHero(warriorTexture_dark, x += 170, y, size);
+        addHero(wizardTexture_dark, x += 170, y, size);
     }
 
-    private void addHeroe(final Texture texture, int x, int y, int size) {
+    private void addHero(final Texture texture, int x, int y, int size) {
         TextureRegion textureRegion = new TextureRegion(texture);
         final Image background = new Image(textureRegion);
         background.setSize(size, size);

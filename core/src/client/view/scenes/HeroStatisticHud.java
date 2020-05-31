@@ -25,7 +25,7 @@ public class HeroStatisticHud implements Drawable, Updatable {
     public HeroStatisticHud(SpriteBatch spriteBatch, Skin skin) {
         viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch); //do organizaji widgetów (label)
-         s = "";
+        s = "";
         statistic = new Label(s, skin);
 
         skin.get("health", ProgressBarStyle.class).knobBefore = skin.getTiledDrawable("progress-bar-health-knob");
@@ -37,15 +37,6 @@ public class HeroStatisticHud implements Drawable, Updatable {
         dialog.setSize(288, 192);
         dialog.setPosition(Constants.HEIGHT, Constants.TEXTURE_SIZE);
         dialog.setFillParent(false);
-
-
-//        ProgressBar progressBar = new ProgressBar(0, 100, 1, false, skin, "health");
-//        progressBar.setValue(100);
-//        dialog.getContentTable().add(progressBar).left().size(200,50);
-
-
-//        dialog.getContentTable().add(progressBar);
-
 
         statistic.setFontScale(0.9f);
         statistic.setAlignment(Align.center);

@@ -33,7 +33,6 @@ public class Server {
 
     public Server(int playerNumber) throws IOException {
         //initServer();
-
         this.playerNumber = playerNumber;
         this.server = new ServerSocket(1701);
         InputThread playerInput = new InputThread(this);

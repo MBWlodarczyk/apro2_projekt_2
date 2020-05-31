@@ -3,13 +3,13 @@ package client.view.screens;
 import client.controller.*;
 import client.model.heroes.*;
 import client.model.map.Field;
-import client.model.obstacles.Obstacle;
 import client.model.obstacles.Trap;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.view.SwordGame;
 import client.view.scenes.HeroStatisticHud;
 import client.view.scenes.QueueStateHud;
+import client.view.scenes.SendRemoveButtonHud;
 import client.view.scenes.SkillOptionsHud;
 import client.view.sprites.*;
 import client.view.utility.Constants;
@@ -44,14 +44,11 @@ public class PlayScreen implements Screen {
     private ArrayList<ObstacleSprite> wallSprite,trapSprite;
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
-    private ArrayList<TextField> textFields;
-    private TextField removeMove;
-    private TextField sendTurn;
-
     private HandleInput handleInput;
     private HeroStatisticHud heroStatisticHud;
     private SkillOptionsHud skillOptionsHud;
     private QueueStateHud queueStateHud;
+    private SendRemoveButtonHud sendRemoveButtonHud;
 
 
     public PlayScreen(SwordGame swordGame, Client client) {
@@ -60,9 +57,11 @@ public class PlayScreen implements Screen {
         this.map = client.getReceived().getMap().getFieldsArray();
         this.gameCam = new OrthographicCamera();
         this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
+        this.handleInput = new HandleInput(this);
         this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
         this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
+        this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch,swordGame.skin,handleInput);
         loadData();
         addMusic();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
@@ -73,9 +72,7 @@ public class PlayScreen implements Screen {
         trapSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
         heroesSprites = new ArrayList<>();
-        textFields = new ArrayList<>();
         rewriteMap();
-        handleInput = new HandleInput(this);
         Gdx.input.setInputProcessor(handleInput);
     }
 
@@ -137,34 +134,16 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private void sendTurnTextField() {
-        sendTurn = new TextField("Send", swordGame.skin);
-        sendTurn.setSize(128, 32);
-        sendTurn.setPosition(Constants.HEIGHT, 13 * Constants.TEXTURE_SIZE);
-        handleInput.addSendTurnRectangle(Constants.HEIGHT, Constants.HEIGHT - (13 + 1) * Constants.TEXTURE_SIZE, 128, 32);
-    }
-
-    private void removeMoveTextField() {
-        removeMove = new TextField("Remove", swordGame.skin);
-        removeMove.setSize(128, 32);
-        removeMove.setPosition(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, 13 * Constants.TEXTURE_SIZE);
-        handleInput.addRemoveMoveRectangle(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, Constants.HEIGHT - (13 + 1) * Constants.TEXTURE_SIZE, 128, 32);
-    }
-
     private void update(float delta) {
         gameCam.update();
         this.map = client.getReceived().getMap().getFieldsArray();
         rewriteMap();
         distanceMove();
-        textFields.clear();
         handleInput.getRectangles().clear();
         queueStateHud.updateText(client.getSend().toString());
         skillOptionsHud.update(delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
-
-        sendTurnTextField();
-        removeMoveTextField();
     }
 
     @Override
@@ -181,24 +160,21 @@ public class PlayScreen implements Screen {
         moveDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
         mouseSprite.draw(swordGame.batch);  //draw mouse
 
-        sendTurn.draw(swordGame.batch, 1);
-        removeMove.draw(swordGame.batch, 1);
-
         swordGame.batch.end();
 
-        //hud display TODO add abstract HUD
+        sendRemoveButtonHud.draw(swordGame.batch,delta);
         skillOptionsHud.draw(swordGame.batch, delta);
-        queueStateHud.updateText(client.getSend().toString());
         queueStateHud.draw(swordGame.batch, delta);
+
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || Inputs.anyHeroChosen) {
             String s = map[tab[0]][tab[1]].getHero().description();
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);
         }
 
-        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined); //Combined all cameras TODO changing size by scroll
-        swordGame.batch.setProjectionMatrix(skillOptionsHud.stage.getCamera().combined);
-        swordGame.batch.setProjectionMatrix(queueStateHud.stage.getCamera().combined);
+//        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined); //Combined all cameras TODO changing size by scroll
+//        swordGame.batch.setProjectionMatrix(skillOptionsHud.stage.getCamera().combined);
+//        swordGame.batch.setProjectionMatrix(queueStateHud.stage.getCamera().combined);
     }
 
     @Override
