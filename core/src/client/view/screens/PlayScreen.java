@@ -10,6 +10,7 @@ import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.view.SwordGame;
 import client.view.scenes.HeroStatisticHud;
+import client.view.scenes.QueueStateHud;
 import client.view.scenes.SkillOptionsHud;
 import client.view.sprites.*;
 import client.view.utility.Constants;
@@ -19,7 +20,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -35,7 +35,7 @@ public class PlayScreen implements Screen {
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
             moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture;
-
+    private Music ingameTheme;
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
     private MoveDistanceSprite moveDistanceSprite;
@@ -43,13 +43,14 @@ public class PlayScreen implements Screen {
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
     private ArrayList<TextField> textFields;
+    private TextField removeMove;
+    private TextField sendTurn;
 
     private HandleInput handleInput;
     private HeroStatisticHud heroStatisticHud;
     private SkillOptionsHud skillOptionsHud;
+    private QueueStateHud queueStateHud;
 
-    private BitmapFont bitmapFont;
-    private Music ingameTheme;
 
     public PlayScreen(SwordGame swordGame, Client client) {
         this.swordGame = swordGame;
@@ -58,27 +59,27 @@ public class PlayScreen implements Screen {
         this.gameCam = new OrthographicCamera();
         this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
         this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
-        this.skillOptionsHud = new SkillOptionsHud(swordGame.batch,swordGame.skin);
+        this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
+        this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
         loadData();
         addMusic();
-
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-
         mouseSprite = new MouseSprite(edgeTexture);
         skillPanelSprite = new SkillPanelSprite(skillPanelTexture);
         moveDistanceSprite = new MoveDistanceSprite(moveTexture);
-
         wallSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
         heroesSprites = new ArrayList<>();
         textFields = new ArrayList<>();
-
-        bitmapFont = new BitmapFont();
-
         rewriteMap();
-
         handleInput = new HandleInput(this);
         Gdx.input.setInputProcessor(handleInput);
+    }
+
+    private void addMusic() {
+        ingameTheme.setVolume(0.25f);
+        ingameTheme.setLooping(true);
+        ingameTheme.play();
     }
 
     private void rewriteMap() {
@@ -100,11 +101,7 @@ public class PlayScreen implements Screen {
             }
         }
     }
-    private void addMusic(){
-        ingameTheme.setVolume(0.25f);
-        ingameTheme.setLooping(true);
-        ingameTheme.play();
-    }
+
     private Texture checkHero(int i, int j) {
         if (map[i][j].getHero() instanceof Paladin)
             return paladinTexture;
@@ -134,6 +131,19 @@ public class PlayScreen implements Screen {
         }
     }
 
+    private void sendTurnTextField(){
+        sendTurn = new TextField("Send",swordGame.skin);
+        sendTurn.setSize(128,32);
+        sendTurn.setPosition(Constants.HEIGHT,13*Constants.TEXTURE_SIZE);
+        handleInput.addSendTurnRectangle(Constants.HEIGHT,Constants.HEIGHT - (13+1)*Constants.TEXTURE_SIZE,128,32);
+    }
+
+    private void removeMoveTextField(){
+        removeMove = new TextField("Remove",swordGame.skin);
+        removeMove.setSize(128,32);
+        removeMove.setPosition(Constants.HEIGHT+5*Constants.TEXTURE_SIZE,13*Constants.TEXTURE_SIZE);
+        handleInput.addRemoveMoveRectangle(Constants.HEIGHT+5*Constants.TEXTURE_SIZE,Constants.HEIGHT - (13+1)*Constants.TEXTURE_SIZE,128,32);
+    }
 
     private void update(float delta) {
         gameCam.update();
@@ -141,12 +151,14 @@ public class PlayScreen implements Screen {
         rewriteMap();
         distanceMove();
         textFields.clear();
-
         handleInput.getRectangles().clear();
-
+        queueStateHud.updateText(client.getSend().toString());
         skillOptionsHud.update(delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
+
+        sendTurnTextField();
+        removeMoveTextField();
     }
 
     @Override
@@ -162,21 +174,24 @@ public class PlayScreen implements Screen {
         moveDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
         mouseSprite.draw(swordGame.batch);  //draw mouse
 
-        bitmapFont.draw(swordGame.batch, client.getSend().toString(), Constants.HEIGHT - 20, 300); //draw queue od moves
+        sendTurn.draw(swordGame.batch,1);
+        removeMove.draw(swordGame.batch,1);
 
         swordGame.batch.end();
 
-
+        //hud display TODO add abstract HUD
+        skillOptionsHud.draw(swordGame.batch, delta);
+        queueStateHud.updateText(client.getSend().toString());
+        queueStateHud.draw(swordGame.batch, delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || handleInput.anyHeroChosen) {
             String s = map[handleInput.getTab()[0]][handleInput.getTab()[1]].getHero().description();
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);
         }
 
-        skillOptionsHud.draw(swordGame.batch,delta);
-
-        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined);
+        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined); //Combined all cameras TODO changing size by scroll
         swordGame.batch.setProjectionMatrix(skillOptionsHud.stage.getCamera().combined);
+        swordGame.batch.setProjectionMatrix(queueStateHud.stage.getCamera().combined);
     }
 
     @Override

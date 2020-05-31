@@ -102,11 +102,13 @@ public class LoadScreen implements Screen {
         background.setPosition(0, 0);
         stage.addActor(background);
     }
-    private void addMusic(){
+
+    private void addMusic() {
         theme.setVolume(0.6f);
         theme.setLooping(true);
         theme.play();
     }
+
     private void ipInput(int x, int y) {
         ipField = new TextField("", swordGame.skin);
         ipField.setMessageText("IP");
@@ -205,8 +207,8 @@ public class LoadScreen implements Screen {
                     MessageDigest md = MessageDigest.getInstance("SHA-512");
                     swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
                     if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
-                        WaitScreen ws = new WaitScreen(swordGame,true);
-                        if(ws.connected) {
+                        WaitScreen ws = new WaitScreen(swordGame, true);
+                        if (ws.connected) {
                             swordGame.setScreen(ws);
                             theme.dispose();
                         }

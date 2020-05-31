@@ -12,7 +12,7 @@ public class Stay extends Skill {
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;
 
-        soundPath= "";
+        soundPath = "";
     }
 
 }

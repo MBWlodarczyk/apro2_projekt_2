@@ -10,15 +10,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.net.ConnectException;
-import java.util.Objects;
 
 public class WaitScreen implements Screen {
 
+    public boolean connected;
     private SwordGame swordGame;
     private Client client;
     private Animation<TextureRegion> animation;
     private float elapsed;
-    public boolean connected;
 
     public WaitScreen(SwordGame swordGame, boolean init) throws Exception {
         this.swordGame = swordGame;
@@ -26,13 +25,13 @@ public class WaitScreen implements Screen {
             this.client = new Client(swordGame, init);
             connected = true;
             animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
-        } catch (ConnectException e){
+        } catch (ConnectException e) {
             swordGame.setScreen(new LoadScreen(swordGame));
             System.out.println("can't connect");
-            swordGame.ip="";//todo popup cant coonnected
-            swordGame.nick="";
-            swordGame.password=null;
-            swordGame.port="";
+            swordGame.ip = "";//todo popup cant coonnected
+            swordGame.nick = "";
+            swordGame.password = null;
+            swordGame.port = "";
             connected = false;
         }
 
@@ -55,13 +54,13 @@ public class WaitScreen implements Screen {
     }
 
     private void update() {
-             if (client.isReceived) {
-                swordGame.setScreen(new PlayScreen(swordGame, client));
-            }
-             if (client.wrongPass) {
-                client.dispose(); //TODO add popupwindow saying wrong pass
-                swordGame.setScreen(new LoadScreen(swordGame));
-            }
+        if (client.isReceived) {
+            swordGame.setScreen(new PlayScreen(swordGame, client));
+        }
+        if (client.wrongPass) {
+            client.dispose(); //TODO add popupwindow saying wrong pass
+            swordGame.setScreen(new LoadScreen(swordGame));
+        }
     }
 
     @Override

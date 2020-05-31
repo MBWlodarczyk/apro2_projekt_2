@@ -17,7 +17,7 @@ public class SettingTrap extends Skill {
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;
 
-        soundPath="";
+        soundPath = "";
     }
 
     public SettingTrap(int damage) {

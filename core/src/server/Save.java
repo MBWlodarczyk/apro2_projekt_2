@@ -2,7 +2,6 @@ package server;
 
 import client.controller.Turn;
 import client.model.Player;
-import client.model.map.GameMap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,13 +14,13 @@ public class Save implements Serializable {
     public int initPlayer;
     public boolean gameInit;
 
-    public Save(Answer answer, ArrayList<Turn> turns, int playerNumber, ArrayList<Player> players,int initPlayer,boolean gameInit) {
+    public Save(Answer answer, ArrayList<Turn> turns, int playerNumber, ArrayList<Player> players, int initPlayer, boolean gameInit) {
         this.answer = answer;
         this.turns = turns;
         this.playerNumber = playerNumber;
         this.players = players;
         this.initPlayer = initPlayer;
-        this.gameInit=gameInit;
+        this.gameInit = gameInit;
     }
 
 }

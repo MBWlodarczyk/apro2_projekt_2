@@ -33,7 +33,7 @@ public class SkillOptionsHud implements Drawable, Updatable {
     public void skillOptions(HandleInput handleInput, Field[][] map, Skin skin) {
         TextField text;
         String s;
-        int x = 730, y = 60, height = 60, width = 250;
+        int x = 704, y = 32, height = 32, width = 288;
         int[] tab = handleInput.getTab();
         if (map[tab[0]][tab[1]].getHero() != null) {
             int size = map[tab[0]][tab[1]].getHero().getSkills().size();
@@ -46,6 +46,7 @@ public class SkillOptionsHud implements Drawable, Updatable {
                 text.setSize(width, height);
                 text.setPosition(x, Constants.HEIGHT - y * (i + 2));
                 text.setAlignment(Align.center);
+                text.scaleBy(0.6f, 0.6f);
                 handleInput.addRectangles(x, y * (i + 1), width, height);
                 stage.addActor(text);
             }

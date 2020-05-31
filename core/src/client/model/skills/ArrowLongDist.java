@@ -15,7 +15,7 @@ public class ArrowLongDist extends Skill {
         useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.PointRange;
 
-        soundPath= "sound/strzala_long.mp3";
+        soundPath = "sound/strzala_long.mp3";
     }
 
     public void fireArrow(int yh, int xh, int yt, int xt) {

@@ -728,6 +728,7 @@ public class GifDecoder {
     private static class GifFrame {
         public DixieMap image;
         public int delay;
+
         public GifFrame(DixieMap im, int del) {
             image = im;
             delay = del;

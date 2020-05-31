@@ -20,12 +20,13 @@ public class HeroStatisticHud implements Drawable, Updatable {
     public Stage stage;
     private Viewport viewport;
     private Label statistic;
-    private String s;
+    private String s = "";
 
     public HeroStatisticHud(SpriteBatch spriteBatch, Skin skin) {
         viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch); //do organizaji widgetów (label)
-        statistic = new Label("", skin);
+         s = "";
+        statistic = new Label(s, skin);
 
         skin.get("health", ProgressBarStyle.class).knobBefore = skin.getTiledDrawable("progress-bar-health-knob");
         skin.get("health", ProgressBarStyle.class).knobBefore.setMinHeight(50);

@@ -196,25 +196,27 @@ public class Server {
             System.out.println("Not a valid input, try again.");
         }
     }
+
     public void save(String filepath) throws IOException {
-        Save save = new Save(this.answer,this.turns,this.playerNumber,this.players,this.initPlayer,this.gameInit);
+        Save save = new Save(this.answer, this.turns, this.playerNumber, this.players, this.initPlayer, this.gameInit);
         FileOutputStream fileOut = new FileOutputStream(filepath); //TODO zapisywanie w folderze maps
         ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
         objectOut.writeObject(save);
         objectOut.close();
         System.out.println("Saved game");
     }
+
     public void load(String filepath) throws IOException, ClassNotFoundException {
         FileInputStream fileIn = new FileInputStream(filepath);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
         Save save = (Save) objectIn.readObject();
         System.out.println("Loaded game");
-        this.answer=save.answer;
-        this.turns=save.turns;
-        this.playerNumber=save.playerNumber;
-        this.players=save.players;
-        this.initPlayer=save.initPlayer;
-        this.gameInit=save.gameInit;
+        this.answer = save.answer;
+        this.turns = save.turns;
+        this.playerNumber = save.playerNumber;
+        this.players = save.players;
+        this.initPlayer = save.initPlayer;
+        this.gameInit = save.gameInit;
         this.sendToAll(false);
     }
 }

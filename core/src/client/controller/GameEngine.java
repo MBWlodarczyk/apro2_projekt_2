@@ -4,9 +4,6 @@ import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.Skill;
 
-import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -65,7 +62,8 @@ public class GameEngine {
         }
         // check if hero has moved yet.
         for (Move m : moves) {
-            if (!m.equals(move) && m.getWho().equals(move.getWho())) { ;
+            if (!m.equals(move) && m.getWho().equals(move.getWho())) {
+                ;
                 System.out.println("This hero has made a move already");
                 return true;
             }
@@ -127,5 +125,4 @@ public class GameEngine {
     private static boolean fieldValid(GameMap map, int y, int x) {
         return y < map.getFieldsArray().length && y >= 0 && x >= 0 && x < map.getFieldsArray()[0].length && (map.getFieldsArray()[y][x].getObstacle() == null || map.getFieldsArray()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
     }
-
 }

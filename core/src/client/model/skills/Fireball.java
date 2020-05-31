@@ -14,7 +14,7 @@ public class Fireball extends Skill {
         useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.FloodRange;
 
-        soundPath= "sound/fireball.mp3";
+        soundPath = "sound/fireball.mp3";
     }
 
     public void throwFireball(int yh, int xh, int yt, int xt) {

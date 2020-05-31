@@ -8,6 +8,7 @@ public class Answer implements Serializable {
     private GameMap map = new GameMap(22);
     private boolean hasSendMove = false; //reconnect variable
     private boolean WrongNickPassword = false; //reconnect flag if true then server refused connection wrong nick
+
     public Answer(GameMap map) {
         this.map = map;
     }

@@ -31,9 +31,20 @@ public class Turn implements Serializable {
     }
 
     public void rmMove() {
-
         moves.remove();
     }
+
+    public void removeLast(){
+        if(moves.isEmpty())
+            return;
+        Queue<Move> moves1 = new LinkedList<>();
+        while(moves.size() > 1){
+            moves1.add(moves.remove());
+        }
+        this.moves = moves1;
+    }
+
+
 
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package client.controller;
 
 import client.model.map.Field;
+import client.model.skills.Stay;
 import client.view.screens.PlayScreen;
 import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
@@ -25,6 +26,7 @@ public class HandleInput implements InputProcessor {
     private int[] tab = new int[2];
     private Field field;
     private ArrayList<Rectangle> rectangles;
+    private Rectangle sendTurnRec, removeMoveRec;
 
     public HandleInput(PlayScreen playScreen) {
         this.currentState = IDLE;
@@ -60,8 +62,28 @@ public class HandleInput implements InputProcessor {
         return rectangles;
     }
 
+    public void addSendTurnRectangle(float x, float y, float width, float height){
+        sendTurnRec = new Rectangle(x, y, width, height);
+    }
+
+    public void addRemoveMoveRectangle(float x, float y, float width, float height){
+        removeMoveRec = new Rectangle(x, y, width, height);
+    }
+
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if(sendTurnRec != null && sendTurnRec.contains(screenX,screenY) && playScreen.client.getSend().getMoves().size() == 4){
+            System.out.println("send turn");
+            Inputs.sendTurn = true;
+        }
+        if(removeMoveRec != null && removeMoveRec.contains(screenX,screenY)){
+            System.out.println("remove move");
+            playScreen.client.getSend().removeLast();
+//            Inputs.removeMove = true;
+        }
+
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
             field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
@@ -81,10 +103,15 @@ public class HandleInput implements InputProcessor {
                 if (rectangles.get(i).contains(screenX, screenY)) {
                     skillChosen = i;
                     currentState = PERFORM_SKILL;
+                    if (playScreen.client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(skillChosen) instanceof Stay) {
+                        performSkill(skillChosen);
+                        currentState = IDLE;
+                    }
                     if (skillChosen == rectangles.size() - 1) { // if the last rectangle is chosen (exit) then and go to idle
                         currentState = IDLE;
                         return true;
                     }
+
                     return true;
                 }
             }
@@ -105,11 +132,11 @@ public class HandleInput implements InputProcessor {
             if (!GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
                 playScreen.client.getSend().addMove(move);
                 System.out.println("Adding move...");
-                if(!move.getWhat().getSoundPath().equals("")) {
+                if (!move.getWhat().getSoundPath().equals("")) {
                     Sound sound = Gdx.audio.newSound(Gdx.files.internal(move.getWhat().getSoundPath()));
                     sound.play(0.6f);
                 }
-            }else {
+            } else {
                 Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/bruh.wav"));
                 sound.play(0.6f);
             }
