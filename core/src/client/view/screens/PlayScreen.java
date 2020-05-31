@@ -19,7 +19,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -40,7 +39,7 @@ public class PlayScreen implements Screen {
     private Music inGameTheme;
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
-    private MoveDistanceSprite moveDistanceSprite;
+    private MoveDistanceSprite skillDistanceSprite;
     private ArrayList<ObstacleSprite> wallSprite,trapSprite;
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
@@ -67,7 +66,7 @@ public class PlayScreen implements Screen {
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         mouseSprite = new MouseSprite(edgeTexture);
         skillPanelSprite = new SkillPanelSprite(skillPanelTexture);
-        moveDistanceSprite = new MoveDistanceSprite(moveTexture);
+        skillDistanceSprite = new MoveDistanceSprite(moveTexture);
         wallSprite = new ArrayList<>();
         trapSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
@@ -83,11 +82,6 @@ public class PlayScreen implements Screen {
     }
 
     private void rewriteMap() {
-        this.map = client.getReceived().getMap().getFieldsArray(); //Update map every time
-        wallSprite.clear();
-        trapSprite.clear();
-        grassSprites.clear();
-        heroesSprites.clear();
         for (int i = 0; i < Constants.GAME_SIZE; i++) {
             for (int j = 0; j < Constants.GAME_SIZE; j++) {
                 if (map[i][j].getObstacle() instanceof Wall) {
@@ -123,33 +117,40 @@ public class PlayScreen implements Screen {
     }
 
     private void distanceMove() {
-        if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL) {
-            int x = Inputs.x;
-            int y = Inputs.y;
-            Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
-            boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
-            moveDistanceSprite.setSprites(marked);
-        } else {
-            moveDistanceSprite.clear();
-        }
+        int x = Inputs.x;
+        int y = Inputs.y;
+        Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
+        boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
+        skillDistanceSprite.setSprites(marked);
     }
 
     private void update(float delta) {
-        gameCam.update();
         this.map = client.getReceived().getMap().getFieldsArray();
+        clear();
+        gameCam.update();
         rewriteMap();
-        distanceMove();
-        handleInput.getRectangles().clear();
+        if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL)
+            distanceMove();
         queueStateHud.updateText(client.getSend().toString());
         skillOptionsHud.update(delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
     }
 
+    private void clear(){
+        skillDistanceSprite.clear();
+        wallSprite.clear();
+        trapSprite.clear();
+        grassSprites.clear();
+        heroesSprites.clear();
+        handleInput.getRectangles().clear();
+    }
+
     @Override
     public void render(float delta) {
         update(delta);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         swordGame.batch.begin();
 
         skillPanelSprite.draw(swordGame.batch); //draw skill panel
@@ -157,7 +158,7 @@ public class PlayScreen implements Screen {
         wallSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw walls
         trapSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw traps
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw heroes
-        moveDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
+        skillDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
         mouseSprite.draw(swordGame.batch);  //draw mouse
 
         swordGame.batch.end();

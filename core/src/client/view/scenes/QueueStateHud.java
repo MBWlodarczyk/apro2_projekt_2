@@ -13,26 +13,23 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class QueueStateHud implements Drawable, Updatable {
+public class QueueStateHud extends Hud{
 
-    public Stage stage;
-    private Viewport viewport;
-    private Label queueStatus;
+
     private String s;
 
     public QueueStateHud(SpriteBatch spriteBatch, Skin skin) {
-        viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport, spriteBatch);
-        queueStatus = new Label("", skin);
+        super(spriteBatch,skin);
+        label = new Label("", skin);
 
         Dialog dialog = new Dialog("", skin);
         dialog.setSize(288, 128);
         dialog.setPosition(Constants.HEIGHT, 8 * Constants.TEXTURE_SIZE);
         dialog.setFillParent(false);
 
-        queueStatus.setFontScale(0.5f);
-        queueStatus.setAlignment(Align.center);
-        dialog.getContentTable().add(queueStatus).left().size(288, 128);
+        label.setFontScale(0.5f);
+        label.setAlignment(Align.center);
+        dialog.getContentTable().add(label).left().size(288, 128);
         stage.addActor(dialog);
     }
 
@@ -46,7 +43,7 @@ public class QueueStateHud implements Drawable, Updatable {
 
     @Override
     public void update(float delta) {
-        queueStatus.setText(s);
+        label.setText(s);
     }
 
     public void updateText(String s) {

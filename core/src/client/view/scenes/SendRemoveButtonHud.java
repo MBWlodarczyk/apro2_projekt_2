@@ -2,22 +2,18 @@ package client.view.scenes;
 
 import client.controller.HandleInput;
 import client.view.utility.Constants;
-import client.view.utility.Drawable;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class SendRemoveButtonHud implements Drawable {
+public class SendRemoveButtonHud extends Hud {
 
-    public Stage stage;
-    private Viewport viewport;
 
     public SendRemoveButtonHud(SpriteBatch spriteBatch, Skin skin, HandleInput handleInput) {
-//        super(spriteBatch);
+        super(spriteBatch,skin);
         viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch);
         sendTurnTextField(skin, handleInput);
@@ -43,5 +39,10 @@ public class SendRemoveButtonHud implements Drawable {
     @Override
     public void draw(SpriteBatch batch, float delta) {
         stage.draw();
+    }
+
+    @Override
+    public void update(float delta) {
+
     }
 }
