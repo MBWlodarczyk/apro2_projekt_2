@@ -58,8 +58,7 @@ public class Client {
             while (!exit) { //TODO stop this while from running whole time
                 synchronized (lock) {
                     try {
-                        if (send != null && !isSend &&  Inputs.sendTurn ) {
-                            Inputs.sendTurn = false;
+                        if (send != null && !isSend && send.getMoves().size() == 4) {
                             send();
                             isReceived = false;
                         }

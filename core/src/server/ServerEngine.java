@@ -3,6 +3,7 @@ package server;
 import client.controller.GameEngine;
 import client.controller.Move;
 import client.controller.Turn;
+import client.model.Player;
 import client.model.heroes.Hero;
 import client.model.map.Field;
 import client.model.map.GameMap;
@@ -109,5 +110,27 @@ public class ServerEngine {
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
         }
+    }
+
+    private static Player checkWin(GameMap gameMap){
+        Field[][] map = gameMap.getFieldsArray();
+        Player winner = null;
+        for(int i=0;i<map.length;i++){
+            for(int j=0;j<map[0].length;j++){
+                if(map[i][j].getHero()!=null){
+                    winner = map[i][j].getHero().getOwner();
+                    break;
+                }
+            }
+        }
+        for(int i=0;i<map.length;i++){
+            for(int j=0;j<map[0].length;j++){
+                if(map[i][j].getHero()!=null){
+                    if(map[i][j].getHero().getOwner()!=winner)
+                        return null;
+                }
+            }
+        }
+        return winner;
     }
 }
