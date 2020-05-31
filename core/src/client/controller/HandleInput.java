@@ -51,15 +51,8 @@ public class HandleInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-        if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && playScreen.client.getSend().getMoves().size() == 4) {
-            sendTurn = true;
+        if(buttonsTouch(screenX,screenY))
             return true;
-        }
-        if (removeMoveRec != null && removeMoveRec.contains(screenX, screenY)) {
-            playScreen.client.getSend().removeLast();
-            return true;
-        }
 
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
@@ -70,9 +63,8 @@ public class HandleInput implements InputProcessor {
                 x = tab[1];
                 return true;
             }
-            //anyHeroChosen = false;
-            //anyHeroChosen = true;
-            anyHeroChosen = (currentState == IDLE) && (field.getHero() != null);
+            if ((currentState == IDLE) && (field.getHero() != null)) anyHeroChosen = true;
+            else anyHeroChosen = false;
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {
@@ -98,6 +90,18 @@ public class HandleInput implements InputProcessor {
             return true;
         }
         return true;
+    }
+
+    private boolean buttonsTouch(int screenX, int screenY){
+        if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && playScreen.client.getSend().getMoves().size() == 4) {
+            sendTurn = true;
+            return true;
+        }
+        if (removeMoveRec != null && removeMoveRec.contains(screenX, screenY)) {
+            playScreen.client.getSend().removeLast();
+            return true;
+        }
+        return false;
     }
 
     private void performSkill(int index) {

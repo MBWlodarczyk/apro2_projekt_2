@@ -116,6 +116,7 @@ public abstract class Hero extends Entity {
     public String description() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName() + '\n');
+        sb.append("Owned: "+ owner.getNick() + '\n');
         sb.append("Speed: " + speed + '\n');
         sb.append("Weight: " + weight + '\n');
         sb.append("Max health: " + health + '\n');

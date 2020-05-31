@@ -26,6 +26,7 @@ public class Client {
     private Answer received;
     private boolean isSend = false;
     public boolean wrongPass;
+    public Player player;
 
     public Client(SwordGame game, final boolean init) throws Exception {
 
@@ -33,7 +34,7 @@ public class Client {
         sock = s;
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
-        Player player = new Player(game.nick, game.password);
+        player = new Player(game.nick, game.password);
         game.player = player;
 
         send = new Turn(player);

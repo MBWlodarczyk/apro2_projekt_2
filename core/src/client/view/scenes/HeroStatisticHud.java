@@ -22,7 +22,7 @@ public class HeroStatisticHud extends Hud {
         dialog.setPosition(Constants.HEIGHT, Constants.TEXTURE_SIZE);
         dialog.setFillParent(false);
 
-        label.setFontScale(0.9f);
+        label.setFontScale(0.8f);
         label.setAlignment(Align.center);
 
         dialog.getContentTable().add(label).left().size(288, 40);

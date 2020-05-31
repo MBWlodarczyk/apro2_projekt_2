@@ -35,7 +35,7 @@ public class PlayScreen implements Screen {
     private Viewport gamePort;
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture;
+            moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture, heroOwnershipTexture;
     private Music inGameTheme;
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
@@ -94,10 +94,14 @@ public class PlayScreen implements Screen {
                     trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), trapTexture));
                 }
                 if (map[i][j].getHero() != null) {
-                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j)));
+                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j),heroOwnershipTexture, heroOwnership(i,j)));
                 }
             }
         }
+    }
+
+    private boolean heroOwnership(int i, int j){
+        return map[i][j].getHero().getOwner().equals(client.player);
     }
 
     private Texture checkHero(int i, int j) {
@@ -227,6 +231,7 @@ public class PlayScreen implements Screen {
         edgeTexture = swordGame.assets.manager.get("special/edge.png", Texture.class);
         healthTexture = swordGame.assets.manager.get("special/health.png", Texture.class);
         skillPanelTexture = swordGame.assets.manager.get("special/skillPanel.png", Texture.class);
+        heroOwnershipTexture = swordGame.assets.manager.get("special/heroOwnership.png", Texture.class);
 
         trapTexture = swordGame.assets.manager.get("obstacles/trap.png", Texture.class);
         inGameTheme = swordGame.assets.manager.get("sound/IngameMainTheme.mp3", Music.class);
