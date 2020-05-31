@@ -1,11 +1,10 @@
 package client.view.screens;
 
-import client.controller.Client;
-import client.controller.GameEngine;
-import client.controller.HandleInput;
-import client.controller.Move;
+import client.controller.*;
 import client.model.heroes.*;
 import client.model.map.Field;
+import client.model.obstacles.Obstacle;
+import client.model.obstacles.Trap;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.view.SwordGame;
@@ -26,6 +25,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
+import static client.controller.Inputs.tab;
+
+
 public class PlayScreen implements Screen {
     public Client client;
     public SwordGame swordGame;
@@ -35,11 +37,11 @@ public class PlayScreen implements Screen {
     private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
             moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture;
-    private Music ingameTheme;
+    private Music inGameTheme;
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
     private MoveDistanceSprite moveDistanceSprite;
-    private ArrayList<ObstacleSprite> wallSprite;
+    private ArrayList<ObstacleSprite> wallSprite,trapSprite;
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
     private ArrayList<TextField> textFields;
@@ -68,6 +70,7 @@ public class PlayScreen implements Screen {
         skillPanelSprite = new SkillPanelSprite(skillPanelTexture);
         moveDistanceSprite = new MoveDistanceSprite(moveTexture);
         wallSprite = new ArrayList<>();
+        trapSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
         heroesSprites = new ArrayList<>();
         textFields = new ArrayList<>();
@@ -77,14 +80,15 @@ public class PlayScreen implements Screen {
     }
 
     private void addMusic() {
-        ingameTheme.setVolume(0.25f);
-        ingameTheme.setLooping(true);
-        ingameTheme.play();
+        inGameTheme.setVolume(0.25f);
+        inGameTheme.setLooping(true);
+        inGameTheme.play();
     }
 
     private void rewriteMap() {
         this.map = client.getReceived().getMap().getFieldsArray(); //Update map every time
         wallSprite.clear();
+        trapSprite.clear();
         grassSprites.clear();
         heroesSprites.clear();
         for (int i = 0; i < Constants.GAME_SIZE; i++) {
@@ -94,6 +98,9 @@ public class PlayScreen implements Screen {
                 }
                 if (map[i][j].getTerrain() instanceof Grass) {
                     grassSprites.add(new TerrainSprite(map[i][j].getTerrain(), grassTexture));
+                }
+                if (map[i][j].getObstacle() instanceof Trap) {
+                    trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), trapTexture));
                 }
                 if (map[i][j].getHero() != null) {
                     heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j)));
@@ -120,10 +127,9 @@ public class PlayScreen implements Screen {
 
     private void distanceMove() {
         if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL) {
-            int[] tab = handleInput.getTab();
-            int x = handleInput.getX();
-            int y = handleInput.getY();
-            Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(handleInput.getSkillChosen()));
+            int x = Inputs.x;
+            int y = Inputs.y;
+            Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
             boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
             moveDistanceSprite.setSprites(marked);
         } else {
@@ -131,18 +137,18 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private void sendTurnTextField(){
-        sendTurn = new TextField("Send",swordGame.skin);
-        sendTurn.setSize(128,32);
-        sendTurn.setPosition(Constants.HEIGHT,13*Constants.TEXTURE_SIZE);
-        handleInput.addSendTurnRectangle(Constants.HEIGHT,Constants.HEIGHT - (13+1)*Constants.TEXTURE_SIZE,128,32);
+    private void sendTurnTextField() {
+        sendTurn = new TextField("Send", swordGame.skin);
+        sendTurn.setSize(128, 32);
+        sendTurn.setPosition(Constants.HEIGHT, 13 * Constants.TEXTURE_SIZE);
+        handleInput.addSendTurnRectangle(Constants.HEIGHT, Constants.HEIGHT - (13 + 1) * Constants.TEXTURE_SIZE, 128, 32);
     }
 
-    private void removeMoveTextField(){
-        removeMove = new TextField("Remove",swordGame.skin);
-        removeMove.setSize(128,32);
-        removeMove.setPosition(Constants.HEIGHT+5*Constants.TEXTURE_SIZE,13*Constants.TEXTURE_SIZE);
-        handleInput.addRemoveMoveRectangle(Constants.HEIGHT+5*Constants.TEXTURE_SIZE,Constants.HEIGHT - (13+1)*Constants.TEXTURE_SIZE,128,32);
+    private void removeMoveTextField() {
+        removeMove = new TextField("Remove", swordGame.skin);
+        removeMove.setSize(128, 32);
+        removeMove.setPosition(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, 13 * Constants.TEXTURE_SIZE);
+        handleInput.addRemoveMoveRectangle(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, Constants.HEIGHT - (13 + 1) * Constants.TEXTURE_SIZE, 128, 32);
     }
 
     private void update(float delta) {
@@ -170,12 +176,13 @@ public class PlayScreen implements Screen {
         skillPanelSprite.draw(swordGame.batch); //draw skill panel
         grassSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw grass
         wallSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw walls
+        trapSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw traps
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw heroes
         moveDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
         mouseSprite.draw(swordGame.batch);  //draw mouse
 
-        sendTurn.draw(swordGame.batch,1);
-        removeMove.draw(swordGame.batch,1);
+        sendTurn.draw(swordGame.batch, 1);
+        removeMove.draw(swordGame.batch, 1);
 
         swordGame.batch.end();
 
@@ -183,8 +190,8 @@ public class PlayScreen implements Screen {
         skillOptionsHud.draw(swordGame.batch, delta);
         queueStateHud.updateText(client.getSend().toString());
         queueStateHud.draw(swordGame.batch, delta);
-        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || handleInput.anyHeroChosen) {
-            String s = map[handleInput.getTab()[0]][handleInput.getTab()[1]].getHero().description();
+        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || Inputs.anyHeroChosen) {
+            String s = map[tab[0]][tab[1]].getHero().description();
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);
         }
@@ -245,6 +252,6 @@ public class PlayScreen implements Screen {
         skillPanelTexture = swordGame.assets.manager.get("special/skillPanel.png", Texture.class);
 
         trapTexture = swordGame.assets.manager.get("obstacles/trap.png", Texture.class);
-        ingameTheme = swordGame.assets.manager.get("sound/IngameMainTheme.mp3", Music.class);
+        inGameTheme = swordGame.assets.manager.get("sound/IngameMainTheme.mp3", Music.class);
     }
 }

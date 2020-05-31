@@ -12,18 +12,15 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 
 import static client.controller.HandleInput.ControllerState.*;
+import static client.controller.Inputs.*;
 
 /**
  * Class to handle all input from user
  */
 public class HandleInput implements InputProcessor {
 
-    public boolean anyHeroChosen;
     public ControllerState currentState;
-    private int skillChosen;
     private PlayScreen playScreen;
-    private int x, y;
-    private int[] tab = new int[2];
     private Field field;
     private ArrayList<Rectangle> rectangles;
     private Rectangle sendTurnRec, removeMoveRec;
@@ -34,25 +31,6 @@ public class HandleInput implements InputProcessor {
         this.rectangles = new ArrayList<>();
     }
 
-    public int[] getTab() {
-        return tab;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getSkillChosen() {
-        return skillChosen;
-    }
-
-    public void setSkillChosen(int skillChosen) {
-        this.skillChosen = skillChosen;
-    }
 
     public void addRectangles(float x, float y, float width, float height) {
         this.rectangles.add(new Rectangle(x, y, width, height));
@@ -62,11 +40,11 @@ public class HandleInput implements InputProcessor {
         return rectangles;
     }
 
-    public void addSendTurnRectangle(float x, float y, float width, float height){
+    public void addSendTurnRectangle(float x, float y, float width, float height) {
         sendTurnRec = new Rectangle(x, y, width, height);
     }
 
-    public void addRemoveMoveRectangle(float x, float y, float width, float height){
+    public void addRemoveMoveRectangle(float x, float y, float width, float height) {
         removeMoveRec = new Rectangle(x, y, width, height);
     }
 
@@ -74,14 +52,13 @@ public class HandleInput implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-        if(sendTurnRec != null && sendTurnRec.contains(screenX,screenY) && playScreen.client.getSend().getMoves().size() == 4){
-            System.out.println("send turn");
-            Inputs.sendTurn = true;
+        if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && playScreen.client.getSend().getMoves().size() == 4) {
+            sendTurn = true;
+            return true;
         }
-        if(removeMoveRec != null && removeMoveRec.contains(screenX,screenY)){
-            System.out.println("remove move");
+        if (removeMoveRec != null && removeMoveRec.contains(screenX, screenY)) {
             playScreen.client.getSend().removeLast();
-//            Inputs.removeMove = true;
+            return true;
         }
 
         if (screenX < Constants.HEIGHT) {
@@ -89,14 +66,13 @@ public class HandleInput implements InputProcessor {
             field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
             if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().getNick().equals(playScreen.swordGame.player.getNick())) {
                 currentState = HERO_CHOSEN;
-                this.y = tab[0];
-                this.x = tab[1];
+                y = tab[0];
+                x = tab[1];
                 return true;
             }
-            if (currentState == IDLE && field.getHero() != null)
-                anyHeroChosen = true;
-            else
-                anyHeroChosen = false;
+            //anyHeroChosen = false;
+            if ((currentState == IDLE) && (field.getHero() != null)) anyHeroChosen = true;
+            else anyHeroChosen = false; //anyHeroChosen = true;
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {
@@ -127,7 +103,8 @@ public class HandleInput implements InputProcessor {
     private void performSkill(int index) {
         System.out.println("performed skill: " + index);
         Field[][] fieldsArray = playScreen.client.getReceived().getMap().getFieldsArray();
-        Move move = new Move(fieldsArray[y][x].getHero(), field, fieldsArray[y][x], fieldsArray[y][x].getHero().getSkills().get(index));
+        Field field = fieldsArray[y][x];
+        Move move = new Move(field.getHero(), this.field, field, field.getHero().getSkills().get(index));
         if (GameEngine.isValid(playScreen.client.getReceived().getMap(), move)) {
             if (!GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
                 playScreen.client.getSend().addMove(move);

@@ -1,6 +1,7 @@
 package client.view.scenes;
 
 import client.controller.HandleInput;
+import client.controller.Inputs;
 import client.model.map.Field;
 import client.view.utility.Constants;
 import client.view.utility.Drawable;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import static client.controller.Inputs.*;
 
 public class SkillOptionsHud implements Drawable, Updatable {
 
@@ -34,7 +37,6 @@ public class SkillOptionsHud implements Drawable, Updatable {
         TextField text;
         String s;
         int x = 704, y = 32, height = 32, width = 288;
-        int[] tab = handleInput.getTab();
         if (map[tab[0]][tab[1]].getHero() != null) {
             int size = map[tab[0]][tab[1]].getHero().getSkills().size();
             for (int i = 0; i < size + 1; i++) { //adding one in order to add exit
