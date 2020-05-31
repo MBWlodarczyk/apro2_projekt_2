@@ -58,7 +58,7 @@ public class Client {
             while (!exit) { //TODO stop this while from running whole time
                 synchronized (lock) {
                     try {
-                        if (send != null && !isSend && send.getMoves().size() == 4) {
+                        if (send != null && !isSend && send.getMoves().size() == 4 ) {
                             send();
                             isReceived = false;
                         }
@@ -67,8 +67,6 @@ public class Client {
                             isReceived = true;
                             isSend = false;
                             send.clearMoves();
-
-
                         }
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
