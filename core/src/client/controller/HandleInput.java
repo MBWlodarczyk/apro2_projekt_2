@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.model.heroes.Hero;
 import client.model.map.Field;
 import client.model.skills.Stay;
 import client.view.screens.PlayScreen;
@@ -57,7 +58,7 @@ public class HandleInput implements InputProcessor {
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
             field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
-            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().getNick().equals(playScreen.swordGame.player.getNick())) {
+            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().equals(playScreen.swordGame.player)) {
                 currentState = HERO_CHOSEN;
                 y = tab[0];
                 x = tab[1];
@@ -65,21 +66,26 @@ public class HandleInput implements InputProcessor {
             }
             if ((currentState == IDLE) && (field.getHero() != null)) anyHeroChosen = true;
             else anyHeroChosen = false;
+
+            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)){
+                anyHeroChosen = true;
+                currentState = IDLE;
+                return true;
+            }
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {
                 if (rectangles.get(i).contains(screenX, screenY)) {
                     skillChosen = i;
                     currentState = PERFORM_SKILL;
-                    if (playScreen.client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(skillChosen) instanceof Stay) {
-                        performSkill(skillChosen);
-                        currentState = IDLE;
-                    }
                     if (skillChosen == rectangles.size() - 1) { // if the last rectangle is chosen (exit) then and go to idle
                         currentState = IDLE;
                         return true;
                     }
-
+                    if (playScreen.client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(skillChosen) instanceof Stay) {
+                        performSkill(skillChosen);
+                        currentState = IDLE;
+                    }
                     return true;
                 }
             }
@@ -169,10 +175,26 @@ public class HandleInput implements InputProcessor {
     }
 
     public enum ControllerState {
-        IDLE(0),
-        HERO_CHOSEN(1),
-        PERFORM_SKILL(2),
+        IDLE(0){
+            @Override
+            public String toString() {
+                return super.toString();
+            }
+        },
+        HERO_CHOSEN(1){
+            @Override
+            public String toString() {
+                return super.toString();
+            }
+        },
+        PERFORM_SKILL(2){
+            @Override
+            public String toString() {
+                return super.toString();
+            }
+        },
         ;
+
 
         ControllerState(int index) {
         }
