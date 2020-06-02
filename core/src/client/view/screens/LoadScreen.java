@@ -23,13 +23,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
-public class LoadScreen implements Screen {
+public class LoadScreen extends AbstractScreen {
 
-    private SwordGame swordGame;
     private Stage stage;
-    private Texture paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            paladinTexture_dark, warriorTexture_dark, archerTexture_dark, necromancerTexture_dark, priestTexture_dark, wizardTexture_dark,
-            background;
     private ArrayList<Texture> textures_white;
     private ArrayList<Texture> textures_dark;
     private TextField ipField;
@@ -38,7 +34,6 @@ public class LoadScreen implements Screen {
     private TextField passwordField;
     private int WIDTH = 200;
     private int HEIGHT = 80;
-    private Music theme;
 
 
     /**
@@ -47,11 +42,16 @@ public class LoadScreen implements Screen {
      * @param swordGame instance of swordgame
      */
     public LoadScreen(SwordGame swordGame) {
+        super(swordGame);
         this.swordGame = swordGame;
         stage = new Stage();  //initialize stage
-        loadData(); //load all textures using AssetManager
         Gdx.input.setInputProcessor(stage);  //set stage as a input processor
         init();
+    }
+
+    @Override
+    public void update(float delta) {
+
     }
 
     /**
@@ -71,20 +71,20 @@ public class LoadScreen implements Screen {
 
     private void texturesToArrays() {
         textures_white = new ArrayList<>();
-        textures_white.add(archerTexture);
-        textures_white.add(necromancerTexture);
-        textures_white.add(paladinTexture);
-        textures_white.add(priestTexture);
-        textures_white.add(warriorTexture);
-        textures_white.add(wizardTexture);
+        textures_white.add(swordGame.archerTexture);
+        textures_white.add(swordGame.necromancerTexture);
+        textures_white.add(swordGame.paladinTexture);
+        textures_white.add(swordGame.priestTexture);
+        textures_white.add(swordGame.warriorTexture);
+        textures_white.add(swordGame.wizardTexture);
 
         textures_dark = new ArrayList<>();
-        textures_dark.add(archerTexture_dark);
-        textures_dark.add(necromancerTexture_dark);
-        textures_dark.add(paladinTexture_dark);
-        textures_dark.add(priestTexture_dark);
-        textures_dark.add(warriorTexture_dark);
-        textures_dark.add(wizardTexture_dark);
+        textures_dark.add(swordGame.archerTexture_dark);
+        textures_dark.add(swordGame.necromancerTexture_dark);
+        textures_dark.add(swordGame.paladinTexture_dark);
+        textures_dark.add(swordGame.priestTexture_dark);
+        textures_dark.add(swordGame.warriorTexture_dark);
+        textures_dark.add(swordGame.wizardTexture_dark);
     }
 
     private void inputFields() {
@@ -96,7 +96,7 @@ public class LoadScreen implements Screen {
     }
 
     private void addBackground() {
-        TextureRegion textureRegion = new TextureRegion(background);
+        TextureRegion textureRegion = new TextureRegion(swordGame.background);
         final Image background = new Image(textureRegion);
         background.setSize(Constants.WIDTH, Constants.HEIGHT);
         background.setPosition(0, 0);
@@ -104,9 +104,9 @@ public class LoadScreen implements Screen {
     }
 
     private void addMusic() {
-        theme.setVolume(0.6f);
-        theme.setLooping(true);
-        theme.play();
+        swordGame.theme.setVolume(0.6f);
+        swordGame.theme.setLooping(true);
+        swordGame.theme.play();
     }
 
     private void ipInput(int x, int y) {
@@ -149,12 +149,12 @@ public class LoadScreen implements Screen {
         int y = 400;        //y param of all heroes
         int x = 10;         //start x of heroes positions (then add 170 to all)
         int size = 150;     //size of a texture
-        addHero(archerTexture_dark, x, y, size);
-        addHero(necromancerTexture_dark, x += 170, y, size);
-        addHero(paladinTexture_dark, x += 170, y, size);
-        addHero(priestTexture_dark, x += 170, y, size);
-        addHero(warriorTexture_dark, x += 170, y, size);
-        addHero(wizardTexture_dark, x += 170, y, size);
+        addHero(swordGame.archerTexture_dark, x, y, size);
+        addHero(swordGame.necromancerTexture_dark, x += 170, y, size);
+        addHero(swordGame.paladinTexture_dark, x += 170, y, size);
+        addHero(swordGame.priestTexture_dark, x += 170, y, size);
+        addHero(swordGame.warriorTexture_dark, x += 170, y, size);
+        addHero(swordGame.wizardTexture_dark, x += 170, y, size);
     }
 
     private void addHero(final Texture texture, int x, int y, int size) {
@@ -210,7 +210,13 @@ public class LoadScreen implements Screen {
                         WaitScreen ws = new WaitScreen(swordGame, true);
                         if (ws.connected) {
                             swordGame.setScreen(ws);
-                            theme.dispose();
+                            swordGame.theme.dispose();
+                        }
+                        else{
+                            for(int i = 0 ; i < swordGame.chosen.length;i++){
+                                swordGame.chosen[i] = false;
+                            }
+                            swordGame.setScreen(new MessageScreen(swordGame,"Can not connect!",new LoadScreen(swordGame)));
                         }
                     }
                 } catch (Exception e) {
@@ -234,17 +240,22 @@ public class LoadScreen implements Screen {
                 MessageDigest md = null;
                 try {
                     md = MessageDigest.getInstance("SHA-512");
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-                swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
-                if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
-                    try {
-                        swordGame.setScreen(new WaitScreen(swordGame, false));
-                        theme.dispose();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
+                    if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
+                        WaitScreen ws = new WaitScreen(swordGame, false);
+                        if (ws.connected) {
+                            swordGame.setScreen(ws);
+                            swordGame.theme.dispose();
+                        }
+                        else{
+                            for(int i = 0 ; i < swordGame.chosen.length;i++){
+                                swordGame.chosen[i] = false;
+                            }
+                            swordGame.setScreen(new MessageScreen(swordGame,"Can not connect!",new LoadScreen(swordGame)));
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -254,8 +265,7 @@ public class LoadScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
 
         swordGame.batch.begin();
         stage.draw();
@@ -290,24 +300,5 @@ public class LoadScreen implements Screen {
     @Override
     public void show() {
 
-    }
-
-    private void loadData() {
-        paladinTexture = swordGame.assets.manager.get("heroes/paladin.png", Texture.class);
-        warriorTexture = swordGame.assets.manager.get("heroes/warrior.png", Texture.class);
-        archerTexture = swordGame.assets.manager.get("heroes/archer.png", Texture.class);
-        necromancerTexture = swordGame.assets.manager.get("heroes/necromancer.png", Texture.class);
-        wizardTexture = swordGame.assets.manager.get("heroes/wizard.png", Texture.class);
-        priestTexture = swordGame.assets.manager.get("heroes/priest.png", Texture.class);
-
-        paladinTexture_dark = swordGame.assets.manager.get("heroes/paladin_nygga.png", Texture.class);
-        warriorTexture_dark = swordGame.assets.manager.get("heroes/warrior_nygga.png", Texture.class);
-        archerTexture_dark = swordGame.assets.manager.get("heroes/archer_nygga.png", Texture.class);
-        necromancerTexture_dark = swordGame.assets.manager.get("heroes/necromancer_nygga.png", Texture.class);
-        priestTexture_dark = swordGame.assets.manager.get("heroes/priest_nygga.png", Texture.class);
-        wizardTexture_dark = swordGame.assets.manager.get("heroes/wizard_nygga.png", Texture.class);
-
-        background = swordGame.assets.manager.get("special/background.png", Texture.class);
-        theme = swordGame.assets.manager.get("sound/Induktancja1.mp3", Music.class);
     }
 }

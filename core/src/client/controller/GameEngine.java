@@ -18,7 +18,6 @@ public class GameEngine {
      * @return boolean array of field where can be applied and where cannot.
      */
     public static boolean[][] getValid(GameMap map, Move move) {
-
         boolean[][] marked = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
         dfs(map, marked, move.getFrom().getY(), move.getFrom().getX(), move.getWhat().getDistance());
         return marked;

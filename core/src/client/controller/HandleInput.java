@@ -99,7 +99,7 @@ public class HandleInput implements InputProcessor {
     }
 
     private boolean buttonsTouch(int screenX, int screenY){
-        if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && playScreen.client.getSend().getMoves().size() == 4) {
+        if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && !playScreen.client.isSend()) {
             sendTurn = true;
             return true;
         }

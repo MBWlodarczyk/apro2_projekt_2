@@ -11,16 +11,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.net.ConnectException;
 
-public class WaitScreen implements Screen {
+public class WaitScreen extends AbstractScreen {
 
     public boolean connected;
-    private SwordGame swordGame;
     private Client client;
     private Animation<TextureRegion> animation;
     private float elapsed;
 
     public WaitScreen(SwordGame swordGame, boolean init) throws Exception {
-        this.swordGame = swordGame;
+        super(swordGame);
         try {
             this.client = new Client(swordGame, init);
             connected = true;
@@ -43,17 +42,7 @@ public class WaitScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
-        update();
-        elapsed += Gdx.graphics.getDeltaTime();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        swordGame.batch.begin();
-        swordGame.batch.draw(animation.getKeyFrame(elapsed), 272.0f, 112.0f);
-        swordGame.batch.end();
-    }
-
-    private void update() {
+    public void update(float delta) {
         if (client.isReceived) {
             swordGame.setScreen(new PlayScreen(swordGame, client));
         }
@@ -62,6 +51,19 @@ public class WaitScreen implements Screen {
             swordGame.setScreen(new LoadScreen(swordGame));
         }
     }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+
+        elapsed += Gdx.graphics.getDeltaTime();
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        swordGame.batch.begin();
+        swordGame.batch.draw(animation.getKeyFrame(elapsed), 272.0f, 112.0f);
+        swordGame.batch.end();
+    }
+
 
     @Override
     public void resize(int width, int height) {

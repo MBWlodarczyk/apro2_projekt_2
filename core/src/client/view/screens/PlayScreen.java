@@ -27,16 +27,11 @@ import java.util.ArrayList;
 import static client.controller.Inputs.tab;
 
 
-public class PlayScreen implements Screen {
+public class PlayScreen extends AbstractScreen {
     public Client client;
-    public SwordGame swordGame;
     private Field[][] map;
     private OrthographicCamera gameCam;
     private Viewport gamePort;
-    private Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
-            paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
-            moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture, heroOwnershipTexture;
-    private Music inGameTheme;
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
     private MoveDistanceSprite skillDistanceSprite;
@@ -51,7 +46,7 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(SwordGame swordGame, Client client) {
-        this.swordGame = swordGame;
+        super(swordGame);
         this.client = client;
         this.map = client.getReceived().getMap().getFieldsArray();
         this.gameCam = new OrthographicCamera();
@@ -61,12 +56,11 @@ public class PlayScreen implements Screen {
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
         this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
         this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch,swordGame.skin,handleInput);
-        loadData();
         addMusic();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-        mouseSprite = new MouseSprite(edgeTexture);
-        skillPanelSprite = new SkillPanelSprite(skillPanelTexture);
-        skillDistanceSprite = new MoveDistanceSprite(moveTexture);
+        mouseSprite = new MouseSprite(swordGame.edgeTexture);
+        skillPanelSprite = new SkillPanelSprite(swordGame.skillPanelTexture);
+        skillDistanceSprite = new MoveDistanceSprite(swordGame.moveTexture);
         wallSprite = new ArrayList<>();
         trapSprite = new ArrayList<>();
         grassSprites = new ArrayList<>();
@@ -76,25 +70,25 @@ public class PlayScreen implements Screen {
     }
 
     private void addMusic() {
-        inGameTheme.setVolume(0.25f);
-        inGameTheme.setLooping(true);
-        inGameTheme.play();
+        swordGame.inGameTheme.setVolume(0.25f);
+        swordGame.inGameTheme.setLooping(true);
+        swordGame.inGameTheme.play();
     }
 
     private void rewriteMap() {
         for (int i = 0; i < Constants.GAME_SIZE; i++) {
             for (int j = 0; j < Constants.GAME_SIZE; j++) {
                 if (map[i][j].getObstacle() instanceof Wall) {
-                    wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), wallTexture));
+                    wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.wallTexture));
                 }
                 if (map[i][j].getTerrain() instanceof Grass) {
-                    grassSprites.add(new TerrainSprite(map[i][j].getTerrain(), grassTexture));
+                    grassSprites.add(new TerrainSprite(map[i][j].getTerrain(), swordGame.grassTexture));
                 }
                 if (map[i][j].getObstacle() instanceof Trap) {
-                    trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), trapTexture));
+                    trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.trapTexture));
                 }
                 if (map[i][j].getHero() != null) {
-                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j),heroOwnershipTexture, heroOwnership(i,j)));
+                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j),swordGame.heroOwnershipTexture, heroOwnership(i,j)));
                 }
             }
         }
@@ -106,17 +100,17 @@ public class PlayScreen implements Screen {
 
     private Texture checkHero(int i, int j) {
         if (map[i][j].getHero() instanceof Paladin)
-            return paladinTexture;
+            return swordGame.paladinTexture;
         if (map[i][j].getHero() instanceof Warrior)
-            return warriorTexture;
+            return swordGame.warriorTexture;
         if (map[i][j].getHero() instanceof Archer)
-            return archerTexture;
+            return swordGame.archerTexture;
         if (map[i][j].getHero() instanceof Necromancer)
-            return necromancerTexture;
+            return swordGame.necromancerTexture;
         if (map[i][j].getHero() instanceof Wizard)
-            return wizardTexture;
+            return swordGame.wizardTexture;
         if (map[i][j].getHero() instanceof Priest)
-            return priestTexture;
+            return swordGame.priestTexture;
         return null;
     }
 
@@ -126,26 +120,6 @@ public class PlayScreen implements Screen {
         Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
         boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
         skillDistanceSprite.setSprites(marked);
-    }
-
-    private void update(float delta) {
-        this.map = client.getReceived().getMap().getFieldsArray();
-        clear();
-        gameCam.update();
-        rewriteMap();
-        if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL)
-            distanceMove();
-        queueStateHud.updateText(client.getSend().toString());
-        skillOptionsHud.update(delta);
-        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
-            skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
-        if (client.getReceived().getWinner()!=null){
-            swordGame.setScreen(new LoadScreen(swordGame));
-            inGameTheme.dispose();
-            client.dispose();
-            this.dispose();
-        }
-            //todo popup who won
     }
 
     private void clear(){
@@ -158,9 +132,29 @@ public class PlayScreen implements Screen {
     }
 
     @Override
+    public void update(float delta) {
+        this.map = client.getReceived().getMap().getFieldsArray();
+        clear();
+        gameCam.update();
+        rewriteMap();
+        if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL)
+            distanceMove();
+        queueStateHud.updateText(client.getSend().toString());
+        skillOptionsHud.update(delta);
+        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
+            skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
+        if (client.getReceived().getWinner()!=null){
+            String winner = client.getReceived().getWinner().getNick();
+            swordGame.setScreen(new MessageScreen(swordGame,"Player "+winner +"won!",new LoadScreen(swordGame)));
+            swordGame.inGameTheme.dispose();
+            client.dispose();
+            this.dispose();
+        }
+    }
+
+    @Override
     public void render(float delta) {
-        update(delta);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.render(delta);
 
         swordGame.batch.begin();
 
@@ -183,9 +177,6 @@ public class PlayScreen implements Screen {
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);
         }
-//        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined); //Combined all cameras TODO changing size by scroll
-//        swordGame.batch.setProjectionMatrix(skillOptionsHud.stage.getCamera().combined);
-//        swordGame.batch.setProjectionMatrix(queueStateHud.stage.getCamera().combined);
     }
 
     @Override
@@ -216,30 +207,5 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
 
-    }
-
-    private void loadData() {
-        grassTexture = swordGame.assets.manager.get("field/grass.png", Texture.class);
-        waterTexture = swordGame.assets.manager.get("field/water.png", Texture.class);
-        forestTexture = swordGame.assets.manager.get("field/forest.png", Texture.class);
-        wallTexture = swordGame.assets.manager.get("field/wall.png", Texture.class);
-        bushTexture = swordGame.assets.manager.get("field/bush.png", Texture.class);
-        rockTexture = swordGame.assets.manager.get("field/rock.png", Texture.class);
-
-        paladinTexture = swordGame.assets.manager.get("heroes/paladin.png", Texture.class);
-        warriorTexture = swordGame.assets.manager.get("heroes/warrior.png", Texture.class);
-        archerTexture = swordGame.assets.manager.get("heroes/archer.png", Texture.class);
-        necromancerTexture = swordGame.assets.manager.get("heroes/necromancer.png", Texture.class);
-        wizardTexture = swordGame.assets.manager.get("heroes/wizard.png", Texture.class);
-        priestTexture = swordGame.assets.manager.get("heroes/priest.png", Texture.class);
-
-        moveTexture = swordGame.assets.manager.get("special/move.png", Texture.class);
-        edgeTexture = swordGame.assets.manager.get("special/edge.png", Texture.class);
-        healthTexture = swordGame.assets.manager.get("special/health.png", Texture.class);
-        skillPanelTexture = swordGame.assets.manager.get("special/skillPanel.png", Texture.class);
-        heroOwnershipTexture = swordGame.assets.manager.get("special/heroOwnership.png", Texture.class);
-
-        trapTexture = swordGame.assets.manager.get("obstacles/trap.png", Texture.class);
-        inGameTheme = swordGame.assets.manager.get("sound/IngameMainTheme.mp3", Music.class);
     }
 }

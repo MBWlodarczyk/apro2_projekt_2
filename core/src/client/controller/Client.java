@@ -124,7 +124,6 @@ public class Client {
             turn.addMove((new Move(hero, new Field(6, 6), new Field(6, 6), new Walk(5))));
             turn.getOwner().addHero(hero);
         }
-
     }
 
     public void dispose() {
