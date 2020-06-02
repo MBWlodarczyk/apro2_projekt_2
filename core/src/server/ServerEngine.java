@@ -112,7 +112,7 @@ public class ServerEngine {
         }
     }
 
-    private static Player checkWin(GameMap gameMap){
+    public static Player checkWin(GameMap gameMap){
         Field[][] map = gameMap.getFieldsArray();
         Player winner = null;
         for(int i=0;i<map.length;i++){

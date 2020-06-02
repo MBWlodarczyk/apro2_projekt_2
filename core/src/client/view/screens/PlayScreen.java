@@ -139,6 +139,13 @@ public class PlayScreen implements Screen {
         skillOptionsHud.update(delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
+        if (client.getReceived().getWinner()!=null){
+            swordGame.setScreen(new LoadScreen(swordGame));
+            inGameTheme.dispose();
+            client.dispose();
+            this.dispose();
+        }
+            //todo popup who won
     }
 
     private void clear(){
@@ -176,7 +183,6 @@ public class PlayScreen implements Screen {
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);
         }
-
 //        swordGame.batch.setProjectionMatrix(heroStatisticHud.stage.getCamera().combined); //Combined all cameras TODO changing size by scroll
 //        swordGame.batch.setProjectionMatrix(skillOptionsHud.stage.getCamera().combined);
 //        swordGame.batch.setProjectionMatrix(queueStateHud.stage.getCamera().combined);
