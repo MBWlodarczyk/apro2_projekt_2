@@ -9,17 +9,30 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class WaitScreen implements Screen {
+import java.net.ConnectException;
 
-    private SwordGame swordGame;
+public class WaitScreen extends AbstractScreen {
+
+    public boolean connected;
     private Client client;
     private Animation<TextureRegion> animation;
     private float elapsed;
 
     public WaitScreen(SwordGame swordGame, boolean init) throws Exception {
-        this.swordGame = swordGame;
-        this.client = new Client(swordGame, init);
-        animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
+        super(swordGame);
+        try {
+            this.client = new Client(swordGame, init);
+            connected = true;
+            animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
+        } catch (ConnectException e) {
+            swordGame.setScreen(new LoadScreen(swordGame));
+            System.out.println("can't connect");
+            swordGame.ip = "";//todo popup cant coonnected
+            swordGame.nick = "";
+            swordGame.password = null;
+            swordGame.port = "";
+            connected = false;
+        }
 
     }
 
@@ -29,26 +42,28 @@ public class WaitScreen implements Screen {
     }
 
     @Override
+    public void update(float delta) {
+        if (client.isReceived) {
+            swordGame.setScreen(new PlayScreen(swordGame, client));
+        }
+        if (client.wrongPass) {
+            client.dispose(); //TODO add popupwindow saying wrong pass
+            swordGame.setScreen(new LoadScreen(swordGame));
+        }
+    }
+
+    @Override
     public void render(float delta) {
-        update();
+        super.render(delta);
+
         elapsed += Gdx.graphics.getDeltaTime();
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         swordGame.batch.begin();
-
         swordGame.batch.draw(animation.getKeyFrame(elapsed), 272.0f, 112.0f);
-
         swordGame.batch.end();
     }
 
-    private void update() {
-        if (client.isReceived)
-            swordGame.setScreen(new PlayScreen(swordGame, client));
-        if (client.wrongPass){
-            client.dispose();
-            swordGame.setScreen(new LoadScreen(swordGame));
-        }
-    }
 
     @Override
     public void resize(int width, int height) {

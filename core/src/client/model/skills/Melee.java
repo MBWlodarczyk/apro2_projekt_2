@@ -9,10 +9,10 @@ public class Melee extends Skill {
         value = -10;
         range = 0;
 
-        afterAttack=SkillProperty.GoToTarget;
-        useDistance=SkillProperty.Flood;
-        rangeType=SkillProperty.PointRange;
+        afterAttack = SkillProperty.GoToTarget;
+        useDistance = SkillProperty.Flood;
+        rangeType = SkillProperty.PointRange;
 
-        soundPath= "sound/miecz.mp3";
+        soundPath = "sound/miecz.mp3";
     }
 }

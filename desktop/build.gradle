@@ -6,7 +6,13 @@ sourceSets.main.resources.srcDirs = ["../core/assets"]
 
 project.ext.mainClassName = "com.mygdx.game.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
+repositories {
+    mavenCentral()
+}
 
+dependencies {
+
+}
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath

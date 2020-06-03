@@ -4,10 +4,12 @@ import client.controller.Turn;
 import client.model.Player;
 import client.model.heroes.Hero;
 import client.model.map.GameMap;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -21,10 +23,10 @@ import java.util.Scanner;
  */
 public class Server {
 
-    public final ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
-    public final HashMap<ServerThread, Player> playersClients = new HashMap<>();
-    public final ArrayList<Player> players = new ArrayList<>();
-    public final Answer answer = new Answer(new GameMap(22));
+    public ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
+    public HashMap<ServerThread, Player> playersClients = new HashMap<>();
+    public ArrayList<Player> players = new ArrayList<>();
+    public Answer answer = new Answer(new GameMap(22));
     public ArrayList<Turn> turns = new ArrayList<>();
     public int playerNumber;
     public int initPlayer;
@@ -33,17 +35,26 @@ public class Server {
     private boolean exit = false;
     private int port;
 
-    public Server(int playerNumber) throws IOException {
-        //initServer();
-
-        this.playerNumber = playerNumber;
-        this.server = new ServerSocket(1701);
-
+    public Server() throws IOException {
+        loadConfig();
+        this.server = new ServerSocket(this.port);
+        InputThread playerInput = new InputThread(this);
         run();
     }
 
+    private void loadConfig() throws IOException {
+        JsonReader file = new JsonReader();
+        JsonValue configJson = file.parse(new FileHandle("config.json"));
+        JsonValue playerNumber = configJson.get("playerNumber");
+        this.playerNumber = playerNumber.asInt();
+        JsonValue port = configJson.get("ServerPort");
+        this.port = port.asInt();
+        System.out.println(this.playerNumber);
+        System.out.println(this.port);
+    }
+
     public static void main(String[] args) throws IOException {
-        new Server(2);
+        new Server();
     }
 
     private void run() throws IOException {
@@ -111,6 +122,14 @@ public class Server {
                 ServerEngine.move(answer.getMap(), turn.getMoves().poll());
             }
             turns.clear();
+            if(ServerEngine.checkWin(answer.getMap())!=null){
+                answer.setGameWon(true);
+                answer.setWinner(ServerEngine.checkWin(answer.getMap()));
+                System.out.println("Game won by "+ answer.getWinner().getNick());
+            }else{
+                answer.setGameWon(false);
+                answer.setWinner(null);
+            }
         }
 
         ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
@@ -133,6 +152,7 @@ public class Server {
             }
 
         }
+        if(answer.isGameWon()) newGame();
     }
 
     public synchronized void removeClient(ServerThread client) {
@@ -197,5 +217,41 @@ public class Server {
         } catch (Exception e) {
             System.out.println("Not a valid input, try again.");
         }
+    }
+
+    public void save(String filepath) throws IOException {
+        Save save = new Save(this.answer, this.turns, this.playerNumber, this.players, this.initPlayer, this.gameInit);
+        FileOutputStream fileOut = new FileOutputStream(filepath); //TODO zapisywanie w folderze maps
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(save);
+        objectOut.close();
+        System.out.println("Saved game");
+    }
+
+    public void load(String filepath) throws IOException, ClassNotFoundException {
+        FileInputStream fileIn = new FileInputStream(filepath);
+        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+        Save save = (Save) objectIn.readObject();
+        System.out.println("Loaded game");
+        this.answer = save.answer;
+        this.turns = save.turns;
+        this.playerNumber = save.playerNumber;
+        this.players = save.players;
+        this.initPlayer = save.initPlayer;
+        this.gameInit = save.gameInit;
+        this.sendToAll(false);
+    }
+    public void newGame(){
+        this.answer.setMap(new GameMap(22));
+        this.answer.setWinner(null);
+        this.answer.setGameWon(false);
+        this.answer.setWrongNickPassword(false);
+        this.answer.setHasSendMove(false);
+        this.initPlayer=0;
+        this.gameInit=false;
+        this.players=new ArrayList<>();
+        this.turns = new ArrayList<>();
+        this.clients = new ArrayList<>();
+        this.playersClients = new HashMap<>();
     }
 }

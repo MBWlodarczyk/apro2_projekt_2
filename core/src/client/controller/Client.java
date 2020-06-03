@@ -26,6 +26,7 @@ public class Client {
     private Answer received;
     private boolean isSend = false;
     public boolean wrongPass;
+    public Player player;
 
     public Client(SwordGame game, final boolean init) throws Exception {
 
@@ -33,7 +34,7 @@ public class Client {
         sock = s;
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
-        Player player = new Player(game.nick, game.password);
+        player = new Player(game.nick, game.password);
         game.player = player;
 
         send = new Turn(player);
@@ -58,7 +59,8 @@ public class Client {
             while (!exit) { //TODO stop this while from running whole time
                 synchronized (lock) {
                     try {
-                        if (send != null && !isSend && send.getMoves().size() == 4) {
+                        if (send != null && !isSend && Inputs.sendTurn) {
+                            Inputs.sendTurn = false;
                             send();
                             isReceived = false;
                         }
@@ -122,7 +124,6 @@ public class Client {
             turn.addMove((new Move(hero, new Field(6, 6), new Field(6, 6), new Walk(5))));
             turn.getOwner().addHero(hero);
         }
-
     }
 
     public void dispose() {

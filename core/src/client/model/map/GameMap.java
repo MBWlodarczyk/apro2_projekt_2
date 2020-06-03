@@ -40,10 +40,7 @@ public class GameMap implements Serializable {
             map[map.length - 1][i].setObstacle(new Wall());
             map[i][map.length - 1].setObstacle(new Wall());
         }
-//        byte[] hash = new byte[2];
-//        map[2][3].setHero(new Archer(new Player("ktos",hash),2,3));
-//        map[10][5].setHero(new Archer(new Player("ktos",hash),10,5));
-//        map[3][7].setHero(new Archer(new Player("ktos",hash),3,7));
+
         map[10][3].setObstacle(new Wall());
         map[11][3].setObstacle(new Wall());
 

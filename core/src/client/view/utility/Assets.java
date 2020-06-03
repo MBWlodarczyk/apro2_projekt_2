@@ -1,6 +1,7 @@
 package client.view.utility;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
@@ -60,7 +61,7 @@ public class Assets implements Disposable {
         manager.load("special/background.png", Texture.class);
         manager.load("special/move.png", Texture.class);
         manager.load("special/skillPanel.png", Texture.class);
-        manager.load("special/name.png", Texture.class);
+        manager.load("special/heroOwnership.png", Texture.class);
     }
 
     /**
@@ -74,20 +75,9 @@ public class Assets implements Disposable {
      * load sound
      */
     private void loadSound() {
+        manager.load("sound/Induktancja1.mp3", Music.class);
+        manager.load("sound/IngameMainTheme.mp3", Music.class);
         manager.load("sound/beep-03.wav", Sound.class);
-        manager.load("sound/bruh.wav", Sound.class);
-        manager.load("sound/fireball.mp3", Sound.class);
-        manager.load("sound/Induktancja1.mp3", Sound.class);
-        manager.load("sound/IngameMainTheme.mp3", Sound.class);
-        manager.load("sound/miecz.mp3", Sound.class);
-        manager.load("sound/necromancy.mp3", Sound.class);
-        manager.load("sound/ruch.mp3", Sound.class);
-        manager.load("sound/skok.mp3", Sound.class);
-        manager.load("sound/stomp.mp3", Sound.class);
-        manager.load("sound/strzala_long.mp3", Sound.class);
-        manager.load("sound/strzala_short.mp3", Sound.class);
-        manager.load("sound/teleport.mp3", Sound.class);
-        manager.load("sound/uzdrowienie.mp3", Sound.class);
     }
 
 
