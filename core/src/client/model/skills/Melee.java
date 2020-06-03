@@ -5,7 +5,7 @@ package client.model.skills;
  */
 public class Melee extends Skill {
     public Melee() {
-        distance = 1;
+        distance = 2;
         value = -10;
         range = 0;
 

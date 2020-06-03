@@ -6,6 +6,7 @@ import client.model.skills.Skill;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class GameEngine {
     //Public methods section
@@ -117,10 +118,72 @@ public class GameEngine {
         }
     }
 
+    //new dfs build on stack
+//    private static void dfs(GameMap map, boolean[][] marked, int y, int x, int distance) {
+//        boolean[][] isOnStack = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];  //do zapamietania co juz jest na stosie
+//        int[][] steps = new int[map.getFieldsArray().length][map.getFieldsArray()[0].length]; //do przechowywania jak daleko jest dane pole
+//        Stack<Integer> stackY = new Stack<>();
+//        Stack<Integer> stackX = new Stack<>();
+//        stackY.push(y); //dodanie pierwszego elementu
+//        stackX.push(x);
+//        steps[y][x] = 0; //dodanie liczby krokow do pierwszego elementu
+//
+//        while (!stackY.empty()&&!stackX.empty()){
+//            int tempY = stackY.pop();
+//            int tempX = stackX.pop();
+//            marked[tempY][tempX] = true;
+//            int tempSteps = steps[tempY][tempX];
+//            //cos tutsj z liczeniem w którym "kroku" jestesmy - analogicznie do odejmowania
+//            int i =1;
+//            if (checkField(map, tempY, tempX - i, marked, isOnStack, tempSteps, distance)) {
+//                        pushField(tempY, tempX-i, tempSteps,stackY,stackX,isOnStack,steps);
+////                        stackY.push(tempY);
+////                        stackX.push(tempX - i);
+////                        isOnStack[tempY][tempX - i] = true; //isOnStack przechowuje pola dodane do stosu
+////                        steps[tempY][tempX - i] = tempSteps+1;
+//            }
+//            if (checkField(map, tempY, tempX + i, marked, isOnStack, tempSteps, distance)) { //marked sprawdza czy byly odwiedzone
+//                pushField(tempY, tempX+i, tempSteps,stackY,stackX,isOnStack,steps);
+////                stackY.push(tempY);
+////                        stackX.push(tempX + i);
+////                        isOnStack[tempY][tempX + i] = true;
+////                        steps[tempY][tempX + i] = tempSteps+1;
+//            }
+//            if (checkField(map, tempY - i, x, marked, isOnStack, tempSteps, distance)) {
+//                pushField(tempY-i, tempX, tempSteps,stackY,stackX,isOnStack,steps);
+////                        stackY.push(tempY - i);
+////                        stackX.push(tempX);
+////                        isOnStack[tempY - i][tempX] = true;
+////                        steps[tempY - i][tempX] = tempSteps+1;
+//            }
+//            if (checkField(map, tempY + i, tempX, marked, isOnStack, tempSteps, distance)) {
+//                pushField(tempY+i, tempX, tempSteps,stackY,stackX,isOnStack,steps);
+////                stackY.push(tempY + i);
+////                        stackX.push(tempX);
+////                        isOnStack[tempY + i][tempX] = true;
+////                       steps[tempY - i][tempX] = tempSteps+1;
+//            }
+//        }
+//    }
+
     /**
      * Method to help dfs validate if the field is not null or wall.
      */
     private static boolean fieldValid(GameMap map, int y, int x) {
         return y < map.getFieldsArray().length && y >= 0 && x >= 0 && x < map.getFieldsArray()[0].length && (map.getFieldsArray()[y][x].getObstacle() == null || map.getFieldsArray()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
+    }
+
+    /**
+     * Method to help dfs validate if the field is valid, already marked or already on the stack
+     */
+    private  static boolean checkField(GameMap map, int y, int x, boolean[][] marked, boolean[][] isOnStack, int steps, int distance) {
+        return fieldValid(map, y, x) && !isOnStack[y][x] && !marked[y][x] && steps+1<distance;
+    }
+
+    private static void pushField(int y, int x, int tempSteps, Stack<Integer> stackY, Stack<Integer> stackX, boolean[][] isOnStack, int[][] steps){
+        stackY.push(y);
+        stackX.push(x);
+        isOnStack[y][x] = true; //isOnStack przechowuje pola dodane do stosu
+        steps[y][x] = tempSteps+1;
     }
 }
