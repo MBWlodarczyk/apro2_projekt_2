@@ -105,7 +105,7 @@ public class Server {
         return answer.getMap();
     }
 
-    //TODO reformat sendToAll when we have engine
+
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
