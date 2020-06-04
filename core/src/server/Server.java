@@ -109,18 +109,7 @@ public class Server {
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
-            for (Turn turn : turns) {
-                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
-            }
-            for (Turn turn : turns) {
-                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
-            }
-            for (Turn turn : turns) {
-                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
-            }
-            for (Turn turn : turns) {
-                ServerEngine.move(answer.getMap(), turn.getMoves().poll());
-            }
+            ServerEngine.Calculate(turns,answer.getMap());
             turns.clear();
             if(ServerEngine.checkWin(answer.getMap())!=null){
                 answer.setGameWon(true);

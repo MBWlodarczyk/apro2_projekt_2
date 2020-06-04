@@ -8,28 +8,28 @@ import client.model.heroes.Hero;
 import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.SkillProperty;
+import client.model.skills.Walk;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 public class ServerEngine {
     /**
      * static method for making sendable answer
      *
-     * @param players
      * @param map
      * @return
      */
-    public static Answer Calculate(Turn[] players, GameMap map) {
-        Answer answer = new Answer(map);
-        Queue<Move> player0 = players[0].getMoves();
-        Queue<Move> player1 = players[1].getMoves();
-        Queue<Move> player2 = players[2].getMoves();
-        Queue<Move> player3 = players[3].getMoves();
+    public static void Calculate(ArrayList<Turn> turns, GameMap map) {
         for (int i = 0; i < 4; i++) {
-            move(map, player0.poll());
+            for (Turn turn : turns) {
+                if(turn.getMoves().isEmpty()) continue;
+                ServerEngine.move(map, turn.getMoves().poll());
+            }
         }
-
-        return answer;
     }
 
     /**
@@ -44,6 +44,7 @@ public class ServerEngine {
         if (move.getWhat().getUseDistance() == SkillProperty.NoLob) {
             if (GameEngine.isWallOnWay(gameMap, move)) return;
         }
+
         //movement section
         if (move.getWhat().getAfterAttack() == SkillProperty.GoToTarget) {
             moveHero(gameMap, move);
@@ -87,6 +88,8 @@ public class ServerEngine {
     }
 
     private static void moveHero(GameMap gameMap, Move move) {
+        if(move.getWhat().toString().equals("Stay")) return;
+        if(move.getWhere()==move.getFrom())return;
         if (gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null) {
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
@@ -97,15 +100,31 @@ public class ServerEngine {
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
         } else {
-            if (move.getWho().getWeight() < move.getWhere().getHero().getWeight()) return;
-            Move next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[move.getWhere().getY() + 1][move.getWhere().getX() + 1]
-                    , move.getWhere(), move.getWhat()); //moving next hero - move.where is now from, new where is +[1,1]
+            if (move.getWhere().getHero()== null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight()) return;
+            Move next = null;
+            int k=1;
+            do{
+                boolean[][] possibilities = GameEngine.getValid(gameMap,move.getWhere(),new Walk(k));
+                Queue<Point> pos = new LinkedList<>();
+                for (int i = 0; i< possibilities.length;i++) {
+                    for (int j = 0; j < possibilities[i].length; j++) {
+                        if(i==move.getWhere().getX() && j==move.getWhere().getY()) continue;
+                        if(possibilities[i][j]) pos.add(new Point(i,j));
+                    }
+                }
+                if(pos.isEmpty()){
+                    k++;
+                    continue;
+                }
+                Point temp = pos.poll();
+                next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()]
+                        , move.getWhere(), new Walk(k));
+            }while (next == null || !GameEngine.isValid(gameMap, next));
             moveHero(gameMap, next);
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
             gameMap.getFieldsArray()[y][x].setHero(null);
-
             x = move.getWhere().getX();
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
