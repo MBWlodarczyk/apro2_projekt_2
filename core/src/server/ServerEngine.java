@@ -106,11 +106,11 @@ public class ServerEngine {
                 next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()]
                         , move.getWhere(), new Walk(k));
             }while (next == null || !GameEngine.isValid(gameMap, next));
-            moveHero(gameMap, next);
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
             gameMap.getFieldsArray()[y][x].setHero(null);
+            moveHero(gameMap, next);
             x = move.getWhere().getX();
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
