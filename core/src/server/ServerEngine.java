@@ -17,20 +17,6 @@ import java.util.Queue;
 import java.util.Random;
 
 public class ServerEngine {
-    /**
-     * static method for making sendable answer
-     *
-     * @param map
-     * @return
-     */
-    public static void Calculate(ArrayList<Turn> turns, GameMap map) {
-        for (int i = 0; i < 4; i++) {
-            for (Turn turn : turns) {
-                if(turn.getMoves().isEmpty()) continue;
-                ServerEngine.move(map, turn.getMoves().poll());
-            }
-        }
-    }
 
     /**
      * static method for handling skills
