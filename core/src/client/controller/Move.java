@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * Class representing single move
  */
-public class Move implements Serializable {
+public class Move implements Serializable,Comparable<Move> {
     private Player whose;
     private Hero who;
     private Field from;
@@ -49,5 +49,11 @@ public class Move implements Serializable {
     @Override
     public String toString() {
         return getWho().toString() + " on  [" + getFrom().getY() + ", " + getFrom().getX() + "] used " + getWhat().toString() + " on [" + getWhere().getY() + ", " + getWhere().getX() + "]";
+    }
+
+
+    @Override
+    public int compareTo(Move move) {
+        return Integer.compare(this.getWho().getSpeed(), move.getWho().getSpeed());
     }
 }

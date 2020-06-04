@@ -27,7 +27,7 @@ public class WaitScreen extends AbstractScreen {
         } catch (ConnectException e) {
             swordGame.setScreen(new LoadScreen(swordGame));
             System.out.println("can't connect");
-            swordGame.ip = "";//todo popup cant coonnected
+            swordGame.ip = "";
             swordGame.nick = "";
             swordGame.password = null;
             swordGame.port = "";
@@ -47,7 +47,7 @@ public class WaitScreen extends AbstractScreen {
             swordGame.setScreen(new PlayScreen(swordGame, client));
         }
         if (client.wrongPass) {
-            client.dispose(); //TODO add popupwindow saying wrong pass
+            client.dispose();
             swordGame.setScreen(new LoadScreen(swordGame));
         }
     }

@@ -124,4 +124,8 @@ public abstract class Hero extends Entity {
         sb.append("Percent health: " + 100 * healthStatus + "%" + '\n');
         return sb.toString();
     }
+
+    public int getSpeed() {
+        return speed;
+    }
 }

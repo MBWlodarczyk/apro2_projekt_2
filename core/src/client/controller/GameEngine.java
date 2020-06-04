@@ -13,12 +13,13 @@ public class GameEngine {
      * Class to get all possible field to apply move.
      *
      * @param map  Map to check.
-     * @param move Move to check.
+     * @param position
+     * @param skill
      * @return boolean array of field where can be applied and where cannot.
      */
-    public static boolean[][] getValid(GameMap map, Move move) {
+    public static boolean[][] getValid(GameMap map, Field position, Skill skill) {
         boolean[][] marked = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
-        bfs(map, marked, move.getFrom().getY(), move.getFrom().getX(),move.getWhat().getDistance());
+        bfs(map, marked, position.getY(), position.getX(), skill.getDistance());
         return marked;
     }
 
@@ -30,18 +31,33 @@ public class GameEngine {
      * @return true if possible, false otherwise.
      */
     public static boolean isValid(GameMap map, Move move) {
-        boolean[][] marked = getValid(map, move);
+        boolean[][] marked = getValid(map, move.getFrom(), move.getWhat());
         return marked[move.getWhere().getY()][move.getWhere().getX()];
     }
 
     /**
-     * method to check if there is a wall on way of skill
+     * method to check if there is a wall on way of skill firx X then Y
      *
-     * @param map
+     * @param gameMap
      * @param move
      * @return
      */
-    public static boolean isWallOnWay(GameMap map, Move move) {
+    public static boolean isWallOnWay(GameMap gameMap, Move move) {
+        //if -1 you have to subtract, if 1 you add
+        int Xdir = (int) Math.signum(move.getWhere().getX() - move.getFrom().getX());
+        int Ydir = (int) Math.signum(move.getWhere().getY() - move.getFrom().getY());
+        int x = move.getFrom().getX();
+        int y = move.getFrom().getY();
+        while (x != move.getWhere().getX()) {
+            x += Xdir;
+            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+                return true;
+        }
+        while (y != move.getWhere().getY()) {
+            y += Ydir;
+            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+                return true;
+        }
         return false;
     }
 
@@ -86,10 +102,14 @@ public class GameEngine {
         int y = position.getY();
         while (x != destination.getX()) {
             x += Xdir;
+            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+                return result; //skill stops on wall
             result.add(gameMap.getFieldsArray()[y][x]);
         }
         while (y != destination.getY()) {
             y += Ydir;
+            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+                return result; //skill stops on wall
             result.add(gameMap.getFieldsArray()[y][x]);
         }
         return result;

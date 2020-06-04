@@ -118,7 +118,7 @@ public class PlayScreen extends AbstractScreen {
         int x = Inputs.x;
         int y = Inputs.y;
         Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
-        boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move);
+        boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move.getWhere(),move.getWhat());
         skillDistanceSprite.setSprites(marked);
     }
 
