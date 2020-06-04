@@ -4,9 +4,7 @@ import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.Skill;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class GameEngine {
     //Public methods section
@@ -20,7 +18,7 @@ public class GameEngine {
      */
     public static boolean[][] getValid(GameMap map, Move move) {
         boolean[][] marked = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
-        dfs(map, marked, move.getFrom().getY(), move.getFrom().getX(), move.getWhat().getDistance());
+        bfs(map, marked, move.getFrom().getY(), move.getFrom().getX(),move.getWhat().getDistance());
         return marked;
     }
 
@@ -100,55 +98,35 @@ public class GameEngine {
     //Private methods section
 
     /**
-     * DFS method to look for valid fields
+     * BFS method to look for valid fields
      */
-//    private static void dfs(GameMap map, boolean[][] marked, int y, int x, int distance) {
-//        marked[y][x] = true;
-//        if (fieldValid(map, y, x - 1) && distance > 0) {
-//            dfs(map, marked, y, x - 1, distance - 1);
-//        }
-//        if (fieldValid(map, y, x + 1) && distance > 0) {
-//            dfs(map, marked, y, x + 1, distance - 1);
-//        }
-//        if (fieldValid(map, y - 1, x) && distance > 0) {
-//            dfs(map, marked, y - 1, x, distance - 1);
-//        }
-//        if (fieldValid(map, y + 1, x) && distance > 0) {
-//            dfs(map, marked, y + 1, x, distance - 1);
-//        }
-//    }
-
-    //new dfs build on stack
-    private static void dfs(GameMap map, boolean[][] marked, int y, int x, int distance) {
+    //bfs build on queue
+    private static void bfs(GameMap map, boolean[][] marked, int y, int x, int distance) {
         //do zapamietania co juz jest na stosie
         boolean[][] isOnStack = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
         //do przechowywania jak daleko jest dane pole
         int[][] steps = new int[map.getFieldsArray().length][map.getFieldsArray()[0].length];
-        Stack<Integer> stackY = new Stack<>();
-        Stack<Integer> stackX = new Stack<>();
-        stackY.push(y); //dodanie pierwszego elementu
-        stackX.push(x);
+        LinkedList<Integer> listY = new LinkedList<>();
+        LinkedList<Integer> listX = new LinkedList<>();
+        listY.add(y); //dodanie pierwszego elementu
+        listX.add(x);
         steps[y][x] = 0; //dodanie liczby krokow do pierwszego elementu
 
-        while (!stackY.empty()&&!stackX.empty()){
-            int tempY = stackY.pop();
-            int tempX = stackX.pop();
+        int[] yNbr = new int[]{0,-1,0,1}; //4 sąsiedzi pola
+        int[] xNbr = new int[]{1,0,-1,0};
+
+        while (!listY.isEmpty()&&!listX.isEmpty()){
+            int tempY = listY.poll();
+            int tempX = listX.poll();
             marked[tempY][tempX] = true;
-            int tempSteps = steps[tempY][tempX];
-            //cos tutsj z liczeniem w którym "kroku" jestesmy - analogicznie do odejmowania
-            int i =1;
-            if(tempSteps<distance) {
-                if (checkField(map, tempY, tempX - i, marked, isOnStack)) {
-                    pushField(tempY, tempX - i, tempSteps, stackY, stackX, isOnStack, steps);
-                }
-                if (checkField(map, tempY, tempX + i, marked, isOnStack)) { //marked sprawdza czy byly odwiedzone
-                    pushField(tempY, tempX + i, tempSteps, stackY, stackX, isOnStack, steps);
-                }
-                if (checkField(map, tempY - i, x, marked, isOnStack)) {
-                    pushField(tempY - i, tempX, tempSteps, stackY, stackX, isOnStack, steps);
-                }
-                if (checkField(map, tempY + i, tempX, marked, isOnStack)) {
-                    pushField(tempY + i, tempX, tempSteps, stackY, stackX, isOnStack, steps);
+            int tempSteps = steps[tempY][tempX]; //cos tutsj z liczeniem w którym "kroku" jestesmy - analogicznie do odejmowania
+
+            for(int k=0;k<4;k++){
+                if(tempSteps<distance && checkField(map, tempY+yNbr[k], tempX+xNbr[k], isOnStack)) {
+                    listY.add(tempY + yNbr[k]);
+                    listX.add(tempX + xNbr[k]);
+                    isOnStack[tempY + yNbr[k]][tempX + xNbr[k]] = true; //isOnStack przechowuje pola dodane do stosu
+                    steps[tempY + yNbr[k]][tempX + xNbr[k]] = tempSteps+1; //zmienia liczbe krokow w ktorych mozna dojsc do pola
                 }
             }
         }
@@ -158,24 +136,15 @@ public class GameEngine {
      * Method to help dfs validate if the field is not null or wall.
      */
     private static boolean fieldValid(GameMap map, int y, int x) {
-        return y < map.getFieldsArray().length && y >= 0 && x >= 0 && x < map.getFieldsArray()[0].length && (map.getFieldsArray()[y][x].getObstacle() == null || map.getFieldsArray()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
+        return y < map.getFieldsArray().length && y >= 0 && x >= 0 &&
+                x < map.getFieldsArray()[0].length &&
+                (map.getFieldsArray()[y][x].getObstacle() == null || map.getFieldsArray()[y][x].getObstacle().isCrossable());//Typy ktore nie moga byc przekroczone tutaj dodawac
     }
 
     /**
      * Method to help dfs validate if the field is valid, already marked or already on the stack
      */
-    private  static boolean checkField(GameMap map, int y, int x, boolean[][] marked, boolean[][] isOnStack) {
-        return fieldValid(map, y, x) && !isOnStack[y][x] && !marked[y][x];
-    }
-
-    /**
-     * Method to
-     */
-    private static void pushField(int y, int x, int tempSteps, Stack<Integer> stackY, Stack<Integer> stackX, boolean[][] isOnStack, int[][] steps){
-        stackY.push(y);
-        stackX.push(x);
-        isOnStack[y][x] = true; //isOnStack przechowuje pola dodane do stosu
-        if(steps[y][x] == 0 || tempSteps+1 < steps[y][x])
-            steps[y][x] = tempSteps+1;
+    private  static boolean checkField(GameMap map, int y, int x, boolean[][] isOnStack) {
+        return fieldValid(map, y, x) && !isOnStack[y][x];
     }
 }
