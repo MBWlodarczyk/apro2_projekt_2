@@ -11,13 +11,24 @@ import client.model.skills.SkillProperty;
 import client.model.skills.Walk;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 public class ServerEngine {
-
+    /**
+    * method to perform turns when server recieves them
+     */
+    public static void performTurns(GameMap gameMap,ArrayList<Turn> turns){
+        PriorityQueue<Move> result = new PriorityQueue<>(4);
+        for(int i=0;i<4;i++){
+            for(int j=0;j<turns.size();j++) {
+                    if(turns.get(j).getMoves().isEmpty()) continue;
+                    result.add(turns.get(j).getMoves().poll());
+                }
+            for(int k=0;k<result.size();k++){
+                move(gameMap,result.poll());
+            }
+            }
+        }
     /**
      * static method for handling skills
      *
