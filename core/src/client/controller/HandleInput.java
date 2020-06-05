@@ -68,11 +68,11 @@ public class HandleInput implements InputProcessor {
             }
             else anyHeroChosen = false;
 
-            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
-                anyHeroChosen = true;
-                currentState = IDLE;
-                return true;
-            }
+//            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
+//                anyHeroChosen = true;
+//                currentState = IDLE;
+//                return true;
+//            }
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {
@@ -91,11 +91,11 @@ public class HandleInput implements InputProcessor {
                 }
             }
         }
-//        if (currentState == PERFORM_SKILL) {
-//            performSkill(skillChosen);
-//            currentState = IDLE;
-//            return true;
-//        }
+        if (currentState == PERFORM_SKILL) {
+            performSkill(skillChosen);
+            currentState = IDLE;
+            return true;
+        }
         return true;
     }
 
