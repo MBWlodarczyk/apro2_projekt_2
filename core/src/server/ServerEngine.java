@@ -46,12 +46,6 @@ public class ServerEngine {
         if (move.getWhat().getUseDistance() == SkillProperty.NoLob) {
             if (GameEngine.isWallOnWay(gameMap, move)) return;
         }
-
-        //movement section
-        if (move.getWhat().getAfterAttack() == SkillProperty.GoToTarget) {
-            moveHero(gameMap, move);
-        }
-        if (move.getWhat() instanceof Walk || move.getWhat() instanceof Stay) return;
         //damage dealing section
         int health;
         if (move.getWhat().getRangeType() == SkillProperty.FloodRange) {
@@ -79,6 +73,10 @@ public class ServerEngine {
                 target.getHero().setHealth(health);
                 System.out.println(move.getWhere().getHero().toString() + " is at: " + health + "HP");
             }
+        }
+        //movement section
+        if (move.getWhat().getAfterAttack() == SkillProperty.GoToTarget) {
+            moveHero(gameMap, move);
         }
     }
 
