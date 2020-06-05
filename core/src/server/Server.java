@@ -131,7 +131,7 @@ public class Server {
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
-            ServerEngine.performTurns(answer.getMap(), turns);
+            answer = ServerEngine.performTurns(answer.getMap(), turns);
             turns.clear();
             if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
                 answer.setGameWon(true);

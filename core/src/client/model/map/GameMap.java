@@ -5,6 +5,7 @@ import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.model.terrain.Water;
 
+import javax.swing.plaf.PanelUI;
 import java.io.*;
 import java.util.Scanner;
 
@@ -18,6 +19,9 @@ public class GameMap implements Serializable {
      */
     private Field[][] map;
 
+    public GameMap(GameMap copy){
+        this.map = copy.map;
+    }
     public GameMap(int size,int mapNumber) {
         this.map = new Field[size][size];
         try {

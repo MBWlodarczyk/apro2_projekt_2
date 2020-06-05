@@ -11,6 +11,7 @@ import client.model.obstacles.Obstacle;
 import client.model.obstacles.Trap;
 import client.model.obstacles.Wall;
 import client.model.skills.*;
+import com.badlogic.gdx.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ public class ServerEngine {
     /**
      * method to perform turns when server recieves them
      */
-    public static void performTurns(GameMap gameMap, ArrayList<Turn> turns) {
+    public static Answer performTurns(GameMap gameMap, ArrayList<Turn> turns) {
+        GameMap local = new GameMap(gameMap);
         PriorityQueue<Move> result = new PriorityQueue<>(4);
         for (int i = 0; i < 4; i++) {
             for (Turn turn : turns) {
@@ -30,10 +32,11 @@ public class ServerEngine {
                 result.add(turn.getMoves().poll());
             }
             for (int k = 0; k < result.size(); k++) {
-                move(gameMap, result.poll());
+                move(local, result.poll());
             }
         }
-        replenishMana(gameMap);
+        replenishMana(local);
+        return new Answer(local);
     }
 
     /**
