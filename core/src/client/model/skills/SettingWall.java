@@ -10,17 +10,18 @@ public class SettingWall extends Skill { //temporary: unbreakable wall
 
     public SettingWall() {
         distance = 7;
-        value = -10;
+        value = 0;
         range = 1;
 
         afterAttack = SkillProperty.StayOnSpot;
-        useDistance = SkillProperty.Flood;
+        useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.PointRange;
 
         soundPath = "";
     }
 
     public void buildWall(GameMap gameMap, int x, int y) {
+        if(gameMap.getFieldsArray()[x][y].getHero()==null)
         gameMap.getFieldsArray()[x][y].setObstacle(new Wall());
     }
 }

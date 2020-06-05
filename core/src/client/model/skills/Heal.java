@@ -7,7 +7,7 @@ public class Heal extends Skill {
     public Heal(boolean Strong) {
         if (Strong) {
             distance = 5;
-            value = +10;
+            value = +20;
             range = 1;
 
             afterAttack = SkillProperty.GoToTarget;

@@ -2,6 +2,7 @@ package client.view.screens;
 
 import client.view.SwordGame;
 import client.view.utility.Constants;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -100,9 +101,9 @@ public class LoadScreen extends AbstractScreen {
     }
 
     private void addMusic() {
-        swordGame.theme.setVolume(0.6f);
+        swordGame.theme.setVolume(0.7f);
         swordGame.theme.setLooping(true);
-        swordGame.theme.play();
+        //swordGame.theme.play();
     }
 
     private void ipInput(int x, int y) {
