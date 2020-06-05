@@ -122,31 +122,31 @@ public class GameEngine {
      */
     //bfs build on queue
     private static void bfs(GameMap map, boolean[][] marked, int y, int x, int distance) {
-        //do zapamietania co juz jest na stosie
-        boolean[][] isOnStack = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
-        //do przechowywania jak daleko jest dane pole
+        //remembers fields already added to list
+        boolean[][] isOnList = new boolean[map.getFieldsArray().length][map.getFieldsArray()[0].length];
+        //counts how far field is from hero
         int[][] steps = new int[map.getFieldsArray().length][map.getFieldsArray()[0].length];
         LinkedList<Integer> listY = new LinkedList<>();
         LinkedList<Integer> listX = new LinkedList<>();
-        listY.add(y); //dodanie pierwszego elementu
+        listY.add(y); //add first field to list
         listX.add(x);
-        steps[y][x] = 0; //dodanie liczby krokow do pierwszego elementu
+        steps[y][x] = 0; //add steps for first field
 
-        int[] yNbr = new int[]{0,-1,0,1}; //4 sąsiedzi pola
+        int[] yNbr = new int[]{0,-1,0,1}; //4 neighbours of field
         int[] xNbr = new int[]{1,0,-1,0};
 
         while (!listY.isEmpty()&&!listX.isEmpty()){
             int tempY = listY.poll();
             int tempX = listX.poll();
             marked[tempY][tempX] = true;
-            int tempSteps = steps[tempY][tempX]; //cos tutsj z liczeniem w którym "kroku" jestesmy - analogicznie do odejmowania
+            int tempSteps = steps[tempY][tempX];
 
             for(int k=0;k<4;k++){
-                if(tempSteps<distance && checkField(map, tempY+yNbr[k], tempX+xNbr[k], isOnStack)) {
+                if(tempSteps<distance && checkField(map, tempY+yNbr[k], tempX+xNbr[k], isOnList)) {
                     listY.add(tempY + yNbr[k]);
                     listX.add(tempX + xNbr[k]);
-                    isOnStack[tempY + yNbr[k]][tempX + xNbr[k]] = true; //isOnStack przechowuje pola dodane do stosu
-                    steps[tempY + yNbr[k]][tempX + xNbr[k]] = tempSteps+1; //zmienia liczbe krokow w ktorych mozna dojsc do pola
+                    isOnList[tempY + yNbr[k]][tempX + xNbr[k]] = true; //marks that field is on list
+                    steps[tempY + yNbr[k]][tempX + xNbr[k]] = tempSteps+1; //adds steps for field
                 }
             }
         }
