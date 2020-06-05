@@ -3,6 +3,9 @@ package server;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Thread to communicate with the server
+ */
 public class InputThread extends Thread {
 
     public Server server;

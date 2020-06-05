@@ -6,6 +6,9 @@ import client.model.Player;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Class to represent save of the game - contains all field that need to be saved.
+ */
 public class Save implements Serializable {
     public final Answer answer;
     public final ArrayList<Turn> turns;

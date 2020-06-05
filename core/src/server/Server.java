@@ -22,7 +22,8 @@ import java.util.Scanner;
  */
 public class Server {
 
-    public ArrayList<ServerThread> clients = new ArrayList<ServerThread>();
+    public ArrayList<ServerThread> clients = new ArrayList<>();
+    public InputThread playerInput;
     public HashMap<ServerThread, Player> playersClients = new HashMap<>();
     public ArrayList<Player> players = new ArrayList<>();
     public Answer answer = new Answer(new GameMap(22));
@@ -34,18 +35,22 @@ public class Server {
     private boolean exit = false;
     private int port;
 
-    public Server() throws IOException {
-        loadConfig();
-        this.server = new ServerSocket(this.port);
-        InputThread playerInput = new InputThread(this);
-        run();
-    }
-
     public static void main(String[] args) throws IOException {
         new Server();
     }
 
-    private void loadConfig() throws IOException {
+    public Server() throws IOException {
+        loadConfig();
+        this.server = new ServerSocket(this.port);
+        this.playerInput = new InputThread(this);
+        run();
+    }
+
+
+    /**
+     * Method loading config from config.json
+     */
+    private void loadConfig() {
         JsonReader file = new JsonReader();
         JsonValue configJson = file.parse(new FileHandle("config.json"));
         JsonValue playerNumber = configJson.get("playerNumber");
@@ -56,6 +61,9 @@ public class Server {
         System.out.println(this.port);
     }
 
+    /**
+     * Main loop of the server
+     */
     private void run() throws IOException {
         System.out.println("Server: Waiting for players");
         int number = 1;
@@ -66,6 +74,11 @@ public class Server {
         }
     }
 
+    /**
+     * Method accepting and handling single connection
+     * @param i local client number
+     * @param s socket to add
+     */
     private void acceptConnection(int i, Socket s) throws IOException {
         String name = "client " + i;
         ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
@@ -78,6 +91,10 @@ public class Server {
         exit = true;
     }
 
+    /**
+     * Method to check if all players inited and send turns. When true it calls sendToAll
+     * @return true if all send, false otherwise
+     */
     public synchronized boolean check() throws IOException {
         boolean marker;
         marker = turns.size() == playerNumber;
@@ -91,6 +108,9 @@ public class Server {
         return marker;
     }
 
+    /**
+     * Method unlocking all clients
+     */
     public synchronized void unlock() {
         for (ServerThread client : clients) {
             synchronized (client.lock) {
@@ -104,13 +124,16 @@ public class Server {
         return answer.getMap();
     }
 
-
+    /**
+     * Method to compute moves and send map to all
+     * @param moves true if you want to perform moves
+     */
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
             ServerEngine.performTurns(answer.getMap(), turns);
             turns.clear();
-            if (ServerEngine.checkWin(answer.getMap()) != null) {
+            if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
                 answer.setGameWon(true);
                 answer.setWinner(ServerEngine.checkWin(answer.getMap()));
                 System.out.println("Game won by " + answer.getWinner().getNick());
@@ -121,13 +144,14 @@ public class Server {
         }
 
         ArrayList<ServerThread> temp = (ArrayList<ServerThread>) clients.clone();
-        while (temp.size() != 0) {
-
+        while (temp.size() != 0) { // this part is pretty ugly
+            //it send map to all and if map is send removes them from arraylist till array list isn't empty.
+            // this solves the problem with socketexception as its the only way to detect losing connection
             System.out.println("Server: sending to all");
             if (!temp.get(0).sock.isOutputShutdown()) {
                 try {
                     temp.get(0).os.reset();
-                    temp.get(0).os.writeObject(answer);// sending object
+                    temp.get(0).os.writeObject(answer);
                     temp.get(0).os.flush();
                     temp.remove(temp.get(0));
                 } catch (SocketException e) {
@@ -140,13 +164,16 @@ public class Server {
             }
 
         }
-        if (answer.isGameWon()) newGame();
+        if (answer.isGameWon()) newGame(); //starts new game is the last is won
     }
 
     public synchronized void removeClient(ServerThread client) {
         clients.remove(client);
     }
 
+    /**
+     * Inits the players on map
+     */
     public synchronized void init() {
         switch (initPlayer) {
             case 4:
@@ -161,11 +188,17 @@ public class Server {
         gameInit = true;
     }
 
+    /**
+     * @return true if player exists in server, false otherwise
+     */
     public synchronized boolean checkIfPlayerExists(Player player) {
 
         return players.stream().anyMatch(player1 -> player1.equals(player));
     }
 
+    /**
+     * @return the player if he exists in server else returns null
+     */
     public synchronized Player getPlayer(Player player) {
         return players.stream()
                 .filter(player1 -> player1.equals(player))
@@ -177,14 +210,24 @@ public class Server {
         turns = new ArrayList<>();
     }
 
+    /**
+     * Method to check if player has already send turn
+     * @param player player to check
+     * @return true if sent
+     */
     public synchronized boolean hasSendTurn(Player player) {
         return turns.stream().anyMatch(turn -> turn.getOwner().equals(player));
     }
 
-    //ugly method don't look
+    /**
+     * Method initing one player
+     * @param playerNumber which player it is starting from 0
+     * @param CornerX x corner of init place
+     * @param CornerY y corner of init place
+     */
     private synchronized void initPlayer(int playerNumber, int CornerX, int CornerY) {
-        Turn turn = clients.get(playerNumber).recieved;
-        clients.get(playerNumber).player = clients.get(playerNumber).recieved.getOwner();
+        Turn turn = clients.get(playerNumber).received;
+        clients.get(playerNumber).player = clients.get(playerNumber).received.getOwner();
         Hero hero1 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
         Hero hero2 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
         Hero hero3 = Objects.requireNonNull(turn.getMoves().poll()).getWho();
@@ -194,19 +237,9 @@ public class Server {
         answer.getMap().getFieldsArray()[CornerX + 1][CornerY].setHero(hero3);
         answer.getMap().getFieldsArray()[CornerX + 1][CornerY + 1].setHero(hero4);
     }
-
-    private synchronized void initServer() {
-        Scanner sc = new Scanner(System.in);
-        try {
-            System.out.println("Specify the port:");
-            this.port = sc.nextInt();
-            System.out.println("Specify player number:");
-            this.playerNumber = sc.nextInt();
-        } catch (Exception e) {
-            System.out.println("Not a valid input, try again.");
-        }
-    }
-
+    /**
+     * Method to save the game to file
+     */
     public void save(String filepath) throws IOException {
         Save save = new Save(this.answer, this.turns, this.playerNumber, this.players, this.initPlayer, this.gameInit);
         FileOutputStream fileOut = new FileOutputStream(filepath); //TODO zapisywanie w folderze maps
@@ -215,7 +248,9 @@ public class Server {
         objectOut.close();
         System.out.println("Saved game");
     }
-
+    /**
+     * Method to load the game from file
+     */
     public void load(String filepath) throws IOException, ClassNotFoundException {
         FileInputStream fileIn = new FileInputStream(filepath);
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
@@ -230,6 +265,9 @@ public class Server {
         this.sendToAll(false);
     }
 
+    /**
+     * Method to restart the game
+     */
     public void newGame() {
         this.answer.setMap(new GameMap(22));
         this.answer.setWinner(null);

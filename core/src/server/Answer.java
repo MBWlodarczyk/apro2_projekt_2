@@ -5,6 +5,9 @@ import client.model.map.GameMap;
 
 import java.io.Serializable;
 
+/**
+ * Class to represent server answer contains map and flags for communication
+ */
 public class Answer implements Serializable {
     private GameMap map = new GameMap(22);
     private boolean hasSendMove = false; //reconnect variable

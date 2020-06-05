@@ -13,16 +13,24 @@ import java.net.Socket;
  */
 public class ServerThread extends Thread {
     public final Object lock = new Object();
+    Socket sock;
     public ObjectOutputStream os;
-    public String name;
-    public Turn recieved;
     public ObjectInputStream is;
+    public String name;
+    private Server server;
+    public Turn received;
     public boolean init;
     public Player player;
-    Socket sock;
     boolean exit;
-    private Server server;
 
+    /**
+     * Public constructor
+     * @param sock of connection
+     * @param is input stream from socket
+     * @param os output stream from socket
+     * @param name of client
+     * @param server server reference
+     */
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name, Server server) {
         System.out.println("Server: Creating thread for " + name);
         this.is = is;
@@ -42,14 +50,14 @@ public class ServerThread extends Thread {
 
                 send(); //sending starting map
                 receive(); //receiving initial vector of heroes
-                recordPlayer(recieved.getOwner()); // recording player in server
+                recordPlayer(received.getOwner()); // recording player in server
                 checkIfAllConnected(); // checking if game can be started
 
             } else { // reconnect
 
                 send();
                 receive(); //receiving initial player info
-                recordPlayerIfExisting(recieved.getOwner());
+                recordPlayerIfExisting(received.getOwner());
                 sendWithTurnInfo(); //send map again //
             }
 
@@ -70,17 +78,27 @@ public class ServerThread extends Thread {
         exit = true;
     }
 
+    /**
+     * Method to send map to player
+     */
     public synchronized void send() throws IOException {
         os.reset();
         os.writeObject(server.answer);// sending object
         os.flush();
     }
 
+    /**
+     * Method to recieve turn from player
+     */
     public synchronized void receive() throws IOException, ClassNotFoundException {
-        this.recieved = (Turn) is.readObject();
+        this.received = (Turn) is.readObject();
         System.out.println("Server: received object from " + name);
     }
 
+    /**
+     * Method to record player (used during init)
+     * @param player player to record
+     */
     private synchronized void recordPlayer(Player player) {
         if (player != null) {
             this.player = player;
@@ -91,6 +109,9 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * Checks if all players connected and then inits the game (used only during init)
+     */
     private synchronized void checkIfAllConnected() throws IOException {
         if (server.playerNumber == server.initPlayer && !server.gameInit) {
             server.init();
@@ -98,7 +119,9 @@ public class ServerThread extends Thread {
             server.unlock();
         }
     }
-
+    /**
+     * Records the reconnecting player if he is in server players.
+     */
     private synchronized void recordPlayerIfExisting(Player player) throws IOException {
         if (player != null && server.checkIfPlayerExists(player)) {
 
@@ -115,25 +138,34 @@ public class ServerThread extends Thread {
             this.dispose();
         }
     }
-
+    /**
+     * Checks if player didn't send turn already and receives it.
+     */
     private synchronized void receiveIfTurnNotSend() throws IOException, ClassNotFoundException {
         if (!server.hasSendTurn(player)) {
             System.out.println("Server: Waiting for turn from " + name);
             receive();
-            if(server.gameInit & checkTurn(recieved)){
-
-            server.turns.add(recieved);
+            if(server.gameInit & checkTurn(received)){
+            server.turns.add(received);
             }
 
         }
     }
 
+    /**
+     * Check if the turn came for the good player
+     * @param turn turn to check
+     * @return true if the turn is valid
+     */
     private synchronized boolean checkTurn(Turn turn){
-        return recieved.getOwner().equals(player) &
+        return received.getOwner().equals(player) &
                 turn.getMoves().stream()
                         .allMatch(move -> move.getWho().getOwner().equals(player));
     }
 
+    /**
+     * Checks if all players send turns, if not then locks the thread
+     */
     private synchronized void checkIfAllSend() throws IOException, InterruptedException {
         synchronized (lock) {
             {
@@ -145,6 +177,9 @@ public class ServerThread extends Thread {
         }
     }
 
+    /**
+     * Sends answer with initial info then reconnecting
+     */
     private synchronized void sendWithTurnInfo() throws IOException {
         if (server.hasSendTurn(player)) {
             server.answer.setHasSendMove(true);
