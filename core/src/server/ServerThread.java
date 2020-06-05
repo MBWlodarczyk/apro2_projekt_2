@@ -120,7 +120,11 @@ public class ServerThread extends Thread {
         if (!server.hasSendTurn(player)) {
             System.out.println("Server: Waiting for turn from " + name);
             receive();
+            if(server.gameInit & recieved.getOwner().equals(player)){
+
             server.turns.add(recieved);
+            }
+
         }
     }
 
