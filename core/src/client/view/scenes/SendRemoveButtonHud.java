@@ -23,16 +23,16 @@ public class SendRemoveButtonHud extends Hud {
     private void sendTurnTextField(Skin skin, HandleInput handleInput) {
         TextField sendTurn = new TextField("Send", skin);
         sendTurn.setSize(128, 32);
-        sendTurn.setPosition(Constants.HEIGHT, 13 * Constants.TEXTURE_SIZE);
-        handleInput.addSendTurnRectangle(Constants.HEIGHT, Constants.HEIGHT - (13 + 1) * Constants.TEXTURE_SIZE, 128, 32);
+        sendTurn.setPosition(Constants.HEIGHT, 14 * Constants.TEXTURE_SIZE);
+        handleInput.addSendTurnRectangle(Constants.HEIGHT, Constants.HEIGHT - (14 + 1) * Constants.TEXTURE_SIZE, 128, 32);
         stage.addActor(sendTurn);
     }
 
     private void removeMoveTextField(Skin skin, HandleInput handleInput) {
         TextField removeMove = new TextField("Remove", skin);
         removeMove.setSize(128, 32);
-        removeMove.setPosition(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, 13 * Constants.TEXTURE_SIZE);
-        handleInput.addRemoveMoveRectangle(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, Constants.HEIGHT - (13 + 1) * Constants.TEXTURE_SIZE, 128, 32);
+        removeMove.setPosition(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, 14 * Constants.TEXTURE_SIZE);
+        handleInput.addRemoveMoveRectangle(Constants.HEIGHT + 5 * Constants.TEXTURE_SIZE, Constants.HEIGHT - (14 + 1) * Constants.TEXTURE_SIZE, 128, 32);
         stage.addActor(removeMove);
     }
 

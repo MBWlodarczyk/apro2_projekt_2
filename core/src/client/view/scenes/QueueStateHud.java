@@ -18,9 +18,8 @@ public class QueueStateHud extends Hud {
 
         Dialog dialog = new Dialog("", skin);
         dialog.setSize(288, 128);
-        dialog.setPosition(Constants.HEIGHT, 8 * Constants.TEXTURE_SIZE);
+        dialog.setPosition(Constants.HEIGHT, 9 * Constants.TEXTURE_SIZE);
         dialog.setFillParent(false);
-
         label.setFontScale(0.5f);
         label.setAlignment(Align.center);
         dialog.getContentTable().add(label).left().size(288, 128);

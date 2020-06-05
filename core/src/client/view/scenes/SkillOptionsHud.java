@@ -38,11 +38,8 @@ public class SkillOptionsHud implements Drawable, Updatable {
         int x = 704, y = 32, height = 32, width = 288;
         if (map[tab[0]][tab[1]].getHero() != null) {
             int size = map[tab[0]][tab[1]].getHero().getSkills().size();
-            for (int i = 0; i < size + 1; i++) { //adding one in order to add exit
-                if (i < size)
-                    s = map[tab[0]][tab[1]].getHero().getSkills().get(i).toString();
-                else
-                    s = "Exit";
+            for (int i = 0; i < size; i++) {
+                s = map[tab[0]][tab[1]].getHero().getSkills().get(i).toString();
                 text = new TextField(s, skin);
                 text.setSize(width, height);
                 text.setPosition(x, Constants.HEIGHT - y * (i + 2));

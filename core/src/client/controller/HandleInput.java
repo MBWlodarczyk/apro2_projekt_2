@@ -31,58 +31,37 @@ public class HandleInput implements InputProcessor {
         this.rectangles = new ArrayList<>();
     }
 
-
-    public void addRectangles(float x, float y, float width, float height) {
-        this.rectangles.add(new Rectangle(x, y, width, height));
-    }
-
-    public ArrayList<Rectangle> getRectangles() {
-        return rectangles;
-    }
-
-    public void addSendTurnRectangle(float x, float y, float width, float height) {
-        sendTurnRec = new Rectangle(x, y, width, height);
-    }
-
-    public void addRemoveMoveRectangle(float x, float y, float width, float height) {
-        removeMoveRec = new Rectangle(x, y, width, height);
-    }
-
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (buttonsTouch(screenX, screenY))
+        anyHeroChosen = false; //set anyHeroChosen at start always as false
+        if (buttonsTouch(screenX, screenY)) //check if the sendTurn or removeMove buttons were clicked (if jes return true)
             return true;
 
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
             field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
-            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().equals(playScreen.swordGame.player)) {
+            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().equals(playScreen.swordGame.player)) { //next state HEROCHOSEN and set anyHero as true
                 currentState = HERO_CHOSEN;
+                anyHeroChosen = true;
                 y = tab[0];
                 x = tab[1];
-                return true;
             }
+            //hero statistic
             if ((currentState == IDLE) && (field.getHero() != null)) {
                 anyHeroChosen = true;
+                return true;
             }
-            else anyHeroChosen = false;
-
-//            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
-//                anyHeroChosen = true;
-//                currentState = IDLE;
-//                return true;
-//            }
         }
         if (currentState == HERO_CHOSEN) {
+            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
+                anyHeroChosen = true;
+                currentState = IDLE;
+            }
             for (int i = 0; i < rectangles.size(); i++) {
                 if (rectangles.get(i).contains(screenX, screenY)) {
                     skillChosen = i;
                     currentState = PERFORM_SKILL;
-                    if (skillChosen == rectangles.size() - 1) { // if the last rectangle is chosen (exit) then and go to idle
-                        currentState = IDLE;
-                        return true;
-                    }
+                    //if chosen skill is STAY then perform that skill, and go to IDLE
                     if (playScreen.client.getReceived().getMap().getFieldsArray()[y][x].getHero().getSkills().get(skillChosen) instanceof Stay) {
                         performSkill(skillChosen);
                         currentState = IDLE;
@@ -99,6 +78,13 @@ public class HandleInput implements InputProcessor {
         return true;
     }
 
+    /**
+     * Check if the buttons sendTurn and removeMove were clicked
+     *
+     * @param screenX x position of mouse
+     * @param screenY y position of mouse
+     * @return return true of the buttons were clicked
+     */
     private boolean buttonsTouch(int screenX, int screenY) {
         if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && !playScreen.client.isSend()) {
             sendTurn = true;
@@ -111,6 +97,11 @@ public class HandleInput implements InputProcessor {
         return false;
     }
 
+    /**
+     * Perform skill
+     *
+     * @param index index of skill in hero arrayList of skills
+     */
     private void performSkill(int index) {
         System.out.println("performed skill: " + index);
         Field[][] fieldsArray = playScreen.client.getReceived().getMap().getFieldsArray();
@@ -132,12 +123,33 @@ public class HandleInput implements InputProcessor {
         }
     }
 
-
+    /**
+     * Get cord of field
+     *
+     * @param screenX x position of mouse
+     * @param screenY y position of mouse
+     */
     public void getCord(int screenX, int screenY) {
         if (screenX < Constants.HEIGHT) {
             tab[0] = (screenX - screenX % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
             tab[1] = (screenY - screenY % Constants.TEXTURE_SIZE) / Constants.TEXTURE_SIZE;
         }
+    }
+
+    public ArrayList<Rectangle> getRectangles() {
+        return rectangles;
+    }
+
+    public void addRectangles(float x, float y, float width, float height) {
+        this.rectangles.add(new Rectangle(x, y, width, height));
+    }
+
+    public void addSendTurnRectangle(float x, float y, float width, float height) {
+        sendTurnRec = new Rectangle(x, y, width, height);
+    }
+
+    public void addRemoveMoveRectangle(float x, float y, float width, float height) {
+        removeMoveRec = new Rectangle(x, y, width, height);
     }
 
     @Override
@@ -176,26 +188,9 @@ public class HandleInput implements InputProcessor {
     }
 
     public enum ControllerState {
-        IDLE(0) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        },
-        HERO_CHOSEN(1) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        },
-        PERFORM_SKILL(2) {
-            @Override
-            public String toString() {
-                return super.toString();
-            }
-        },
-        ;
-
+        IDLE(0),
+        HERO_CHOSEN(1),
+        PERFORM_SKILL(2);
 
         ControllerState(int index) {
         }

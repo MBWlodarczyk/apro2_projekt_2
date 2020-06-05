@@ -12,12 +12,12 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
-public abstract class Hud implements Updatable, Drawable {
-    protected Stage stage;
-    protected Viewport viewport;
-    protected Label label;
+abstract class Hud implements Updatable, Drawable {
+    Stage stage;
+    Viewport viewport;
+    Label label;
 
-    public Hud(SpriteBatch spriteBatch, Skin skin) {
+    Hud(SpriteBatch spriteBatch, Skin skin) {
         viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch);
     }

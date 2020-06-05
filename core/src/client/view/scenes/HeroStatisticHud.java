@@ -10,23 +10,19 @@ import com.badlogic.gdx.utils.Align;
 public class HeroStatisticHud extends Hud {
 
 
-    private String s = "";
+    private String s;
 
     public HeroStatisticHud(SpriteBatch spriteBatch, Skin skin) {
         super(spriteBatch, skin);
-        s = "";
-        label = new Label(s, skin);
-
         Dialog dialog = new Dialog("", skin);
-        dialog.setSize(288, 192);
+        dialog.setSize(288, 224);
         dialog.setPosition(Constants.HEIGHT, Constants.TEXTURE_SIZE);
         dialog.setFillParent(false);
-
-        label.setFontScale(0.8f);
-        label.setAlignment(Align.center);
-
-        dialog.getContentTable().add(label).left().size(288, 40);
-
+        s = "";
+        label = new Label(s, skin);
+        label.setFontScale(0.8f); //scale font
+        label.setAlignment(Align.center); //set at center
+        dialog.getContentTable().add(label).left().size(288, 224);
         stage.addActor(dialog);
     }
 
@@ -36,7 +32,6 @@ public class HeroStatisticHud extends Hud {
             update(delta);
             stage.draw();
         }
-
     }
 
     @Override
@@ -44,6 +39,10 @@ public class HeroStatisticHud extends Hud {
         label.setText(s);
     }
 
+    /**
+     * Update text
+     * @param s
+     */
     public void updateText(String s) {
         this.s = s;
     }

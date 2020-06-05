@@ -53,7 +53,7 @@ public class PlayScreen extends AbstractScreen {
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
         this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
         this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch, swordGame.skin, handleInput);
-        addMusic();
+        //addMusic();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         mouseSprite = new MouseSprite(swordGame.edgeTexture);
         skillPanelSprite = new SkillPanelSprite(swordGame.skillPanelTexture);
@@ -138,8 +138,10 @@ public class PlayScreen extends AbstractScreen {
             distanceMove();
         queueStateHud.updateText(client.getSend().toString());
         skillOptionsHud.update(delta);
+
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
+
         if (client.getReceived().getWinner() != null) {
             String winner = client.getReceived().getWinner().getNick();
             swordGame.setScreen(new MessageScreen(swordGame, "Player " + winner + "won!", new LoadScreen(swordGame)));
@@ -169,9 +171,10 @@ public class PlayScreen extends AbstractScreen {
         skillOptionsHud.draw(swordGame.batch, delta);
         queueStateHud.draw(swordGame.batch, delta);
 
-        if ((handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || Inputs.anyHeroChosen) && map[tab[0]][tab[1]].getHero() != null) {
+        if (Inputs.anyHeroChosen) {
             String s = map[tab[0]][tab[1]].getHero().description();
             heroStatisticHud.updateText(s);
+            System.out.println("wowluje sie");
             heroStatisticHud.draw(swordGame.batch, delta);
         }
     }

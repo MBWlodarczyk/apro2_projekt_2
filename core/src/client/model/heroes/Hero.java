@@ -32,13 +32,13 @@ public abstract class Hero extends Entity {
      * Health of hero
      */
     private int health;
-    private float healthStatus;
+//    private float healthStatus;
     private int x;
     private int y;
 
     private int mana;
     private final int maxMana;
-    private double manaStatus;
+//    private double manaStatus;
 
     public Hero(Player owner, int weight, int startHealth, int health, int speed, int y, int x) {
         this.owner = owner;
@@ -46,10 +46,10 @@ public abstract class Hero extends Entity {
         this.weight = weight;
         this.health = health;
         this.maxHealth = startHealth;
-        this.healthStatus = (float) health / startHealth;
+//        this.healthStatus = (float) health / startHealth;
         this.mana = health;
         this.maxMana = startHealth;
-        this.manaStatus = (float) health / startHealth;
+//        this.manaStatus = (float) mana/maxHealth;
         this.skills = new ArrayList<>();
         this.x = x;
         this.y = y;
@@ -119,9 +119,9 @@ public abstract class Hero extends Entity {
         this.health = health;
     }
 
-    public float getHealthStatus() {
-        return healthStatus;
-    }
+//    public float getHealthStatus() {
+//        return healthStatus;
+//    }
 
     public String description() {
         StringBuilder sb = new StringBuilder();
@@ -129,12 +129,12 @@ public abstract class Hero extends Entity {
         sb.append("Owned: " + owner.getNick() + '\n');
         sb.append("Speed: " + speed + '\n');
         sb.append("Weight: " + weight + '\n');
-        sb.append("Max health: " + health + '\n');
-        sb.append("Current health: " + health * healthStatus + '\n');
-        sb.append("Percent health: " + 100 * healthStatus + "%" + '\n');
-        sb.append("Max mana: " + mana + '\n');
-        sb.append("Current mana: " + mana * manaStatus + '\n');
-        sb.append("Percent mana: " + 100 * mana + "%" + '\n');
+        sb.append("Max health: " + maxHealth + '\n');
+        sb.append("Current health: " + health + '\n');
+//        sb.append("Percent health: " + 100 * healthStatus + "%" + '\n');
+        sb.append("Max mana: " + maxMana + '\n');
+        sb.append("Current mana: " + mana + '\n');
+//        sb.append("Percent mana: " + 100 * mana + "%" + '\n');
         return sb.toString();
     }
 
