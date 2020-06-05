@@ -174,7 +174,6 @@ public class PlayScreen extends AbstractScreen {
         if (Inputs.anyHeroChosen) {
             String s = map[tab[0]][tab[1]].getHero().description();
             heroStatisticHud.updateText(s);
-            System.out.println("wowluje sie");
             heroStatisticHud.draw(swordGame.batch, delta);
         }
     }
