@@ -120,12 +120,18 @@ public class ServerThread extends Thread {
         if (!server.hasSendTurn(player)) {
             System.out.println("Server: Waiting for turn from " + name);
             receive();
-            if(server.gameInit & recieved.getOwner().equals(player)){
+            if(server.gameInit & checkTurn(recieved)){
 
             server.turns.add(recieved);
             }
 
         }
+    }
+
+    private synchronized boolean checkTurn(Turn turn){
+        return recieved.getOwner().equals(player) &
+                turn.getMoves().stream()
+                        .allMatch(move -> move.getWho().getOwner().equals(player));
     }
 
     private synchronized void checkIfAllSend() throws IOException, InterruptedException {
