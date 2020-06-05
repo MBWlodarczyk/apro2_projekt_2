@@ -32,6 +32,7 @@ public class ServerEngine {
                 move(gameMap, result.poll());
             }
         }
+        replenishMana(gameMap);
     }
 
     /**
@@ -80,7 +81,16 @@ public class ServerEngine {
             moveHero(gameMap, move);
         }
     }
-
+    private static void replenishMana(GameMap gameMap){
+        Field[][] map = gameMap.getFieldsArray();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j].getHero() != null) {
+                    map[i][j].getHero().replenishMana();
+                }
+            }
+        }
+    }
     private static void moveHero(GameMap gameMap, Move move) {
         if(move.getWhat() instanceof Stay) return;
         if(move.getWhere()==move.getFrom())return;
