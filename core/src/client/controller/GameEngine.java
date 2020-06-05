@@ -132,7 +132,7 @@ public class GameEngine {
         listX.add(x);
         steps[y][x] = 0; //add steps for first field
 
-        int[] yNbr = new int[]{0,-1,0,1}; //4 neighbours of field
+        int[] yNbr = new int[]{0,-1,0,1}; //4 neighbours of field to visit
         int[] xNbr = new int[]{1,0,-1,0};
 
         while (!listY.isEmpty()&&!listX.isEmpty()){
@@ -153,7 +153,7 @@ public class GameEngine {
     }
 
     /**
-     * Method to help dfs validate if the field is not null or wall.
+     * Method to help bfs validate if the field is not null or wall.
      */
     private static boolean fieldValid(GameMap map, int y, int x) {
         return y < map.getFieldsArray().length && y >= 0 && x >= 0 &&
@@ -162,9 +162,9 @@ public class GameEngine {
     }
 
     /**
-     * Method to help dfs validate if the field is valid, already marked or already on the stack
+     * Method to help bfs validate if the field is valid, already marked or already on the list
      */
-    private  static boolean checkField(GameMap map, int y, int x, boolean[][] isOnStack) {
-        return fieldValid(map, y, x) && !isOnStack[y][x];
+    private  static boolean checkField(GameMap map, int y, int x, boolean[][] isOnList) {
+        return fieldValid(map, y, x) && !isOnList[y][x];
     }
 }
