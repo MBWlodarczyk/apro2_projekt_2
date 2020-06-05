@@ -14,7 +14,7 @@ public class SettingTrap extends Skill {
         range = 1;
 
         afterAttack = SkillProperty.StayOnSpot;
-        useDistance = SkillProperty.Flood;
+        useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.PointRange;
 
         soundPath = "";
@@ -31,6 +31,7 @@ public class SettingTrap extends Skill {
     }
 
     public void buildTrap(GameMap gameMap, int x, int y) {
+        if(gameMap.getFieldsArray()[x][y].getHero()==null)
         gameMap.getFieldsArray()[x][y].setObstacle(new Trap(value));
     }
 }

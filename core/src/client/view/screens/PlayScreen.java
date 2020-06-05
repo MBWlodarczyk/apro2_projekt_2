@@ -53,7 +53,6 @@ public class PlayScreen extends AbstractScreen {
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
         this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
         this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch, swordGame.skin, handleInput);
-        //addMusic();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         mouseSprite = new MouseSprite(swordGame.edgeTexture);
         skillPanelSprite = new SkillPanelSprite(swordGame.skillPanelTexture);
@@ -69,7 +68,7 @@ public class PlayScreen extends AbstractScreen {
     private void addMusic() {
         swordGame.inGameTheme.setVolume(0.25f);
         swordGame.inGameTheme.setLooping(true);
-        swordGame.inGameTheme.play();
+        //swordGame.inGameTheme.play();
     }
 
     private void rewriteMap() {

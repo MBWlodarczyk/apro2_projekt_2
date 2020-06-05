@@ -49,7 +49,7 @@ public class ServerEngine {
         }
         //damage dealing section
         int health;
-        if (move.getWhat().getRangeType() == SkillProperty.FloodRange) {
+        if (move.getWhat().getRangeType() == SkillProperty.FloodRange && !(move.getWhat() instanceof Walk)) {
             for (Field f : GameEngine.findPath(gameMap, move.getFrom(), move.getWhere(), move.getWhat())) {
                 if(f.getHero() == null) continue;
                 health = f.getHero().getHealth() + move.getWhat().getValue();

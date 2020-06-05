@@ -6,7 +6,7 @@ package client.model.skills;
 public class Melee extends Skill {
     public Melee() {
         distance = 2;
-        value = -10;
+        value = -20;
         range = 0;
 
         afterAttack = SkillProperty.GoToTarget;
