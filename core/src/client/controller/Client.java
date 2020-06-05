@@ -49,20 +49,22 @@ public class Client {
 
         Thread t = new Thread(() -> {
             try {
-                receive();
+                receive();// init message saying everything is ok
                 isReceived = true;
                 isSend = received.hasSendMove();
                 wrongPass = received.isWrongNickPassword();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            while (!exit) { //TODO stop this while from running whole time
+            while (!exit) {
                 synchronized (lock) {
                     try {
                         if (send != null && !isSend && Inputs.sendTurn) {
                             Inputs.sendTurn = false;
                             send();
                             isReceived = false;
+                        } else {
+                            lock.wait(500); //optimalization - while not running whole time
                         }
                         if (isSend) {
                             receive();
@@ -72,7 +74,7 @@ public class Client {
 
 
                         }
-                    } catch (IOException | ClassNotFoundException e) {
+                    } catch (IOException | ClassNotFoundException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -93,6 +95,11 @@ public class Client {
         return this.received;
     }
 
+    /**
+     * Method initing turn with chosen hero info (used during init)
+     * @param turn Turn to init
+     * @param game game object
+     */
     private void createTurn(Turn turn, SwordGame game) {
         if (game.chosen[0]) {
             Archer hero = new Archer(turn.getOwner(), 5, 5);
