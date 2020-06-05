@@ -26,7 +26,7 @@ public class SwordGame extends Game {
             moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture, heroOwnershipTexture,
             paladinTexture_dark, warriorTexture_dark, archerTexture_dark, necromancerTexture_dark, priestTexture_dark, wizardTexture_dark,
             background;
-    public Music inGameTheme,theme;
+    public Music inGameTheme, theme;
 
     @Override
     public void create() {
@@ -51,7 +51,7 @@ public class SwordGame extends Game {
         batch.dispose();
     }
 
-    private void load(){
+    private void load() {
         grassTexture = assets.manager.get("field/grass.png", Texture.class);
         waterTexture = assets.manager.get("field/water.png", Texture.class);
         forestTexture = assets.manager.get("field/forest.png", Texture.class);

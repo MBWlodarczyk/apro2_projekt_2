@@ -11,24 +11,28 @@ import client.model.skills.SkillProperty;
 import client.model.skills.Walk;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ServerEngine {
     /**
-    * method to perform turns when server recieves them
+     * method to perform turns when server recieves them
      */
-    public static void performTurns(GameMap gameMap,ArrayList<Turn> turns){
+    public static void performTurns(GameMap gameMap, ArrayList<Turn> turns) {
         PriorityQueue<Move> result = new PriorityQueue<>(4);
-        for(int i=0;i<4;i++){
-            for(int j=0;j<turns.size();j++) {
-                    if(turns.get(j).getMoves().isEmpty()) continue;
-                    result.add(turns.get(j).getMoves().poll());
-                }
-            for(int k=0;k<result.size();k++){
-                move(gameMap,result.poll());
+        for (int i = 0; i < 4; i++) {
+            for (Turn turn : turns) {
+                if (turn.getMoves().isEmpty()) continue;
+                result.add(turn.getMoves().poll());
             }
+            for (int k = 0; k < result.size(); k++) {
+                move(gameMap, result.poll());
             }
         }
+    }
+
     /**
      * static method for handling skills
      *
@@ -46,7 +50,7 @@ public class ServerEngine {
         if (move.getWhat().getAfterAttack() == SkillProperty.GoToTarget) {
             moveHero(gameMap, move);
         }
-        if (move.getWhat().toString().equals("Walk") || move.getWhat().toString().equals("Stay")) return;
+        if (move.getWhat() instanceof Walk || move.getWhat().toString().equals("Stay")) return;
         //damage dealing section
         int health;
         if (move.getWhat().getRangeType() == SkillProperty.FloodRange) {
@@ -55,7 +59,7 @@ public class ServerEngine {
                     health = f.getHero().getHealth() + move.getWhat().getValue();
                     f.getHero().setHealth(health);
                     System.out.println(f.getHero().toString() + " is at: " + health + "HP");
-                } catch (NullPointerException ignored) {
+                } catch (NullPointerException ignored) { //MARCIN NIE LADNIE //FIXME remove NULLPOINTER
                 }
             }
         }
@@ -85,8 +89,8 @@ public class ServerEngine {
     }
 
     private static void moveHero(GameMap gameMap, Move move) {
-        if(move.getWhat().toString().equals("Stay")) return;
-        if(move.getWhere()==move.getFrom())return;
+        if (move.getWhat().toString().equals("Stay")) return;
+        if (move.getWhere() == move.getFrom()) return;
         if (gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null) {
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
@@ -97,26 +101,27 @@ public class ServerEngine {
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
         } else {
-            if (move.getWhere().getHero()== null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight()) return;
+            if (move.getWhere().getHero() == null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight())
+                return;
             Move next = null;
-            int k=1;
-            do{
-                boolean[][] possibilities = GameEngine.getValid(gameMap,move.getWhere(),new Walk(k));
+            int k = 1;
+            do {
+                boolean[][] possibilities = GameEngine.getValid(gameMap, move.getWhere(), new Walk(k));
                 Queue<Point> pos = new LinkedList<>();
-                for (int i = 0; i< possibilities.length;i++) {
+                for (int i = 0; i < possibilities.length; i++) {
                     for (int j = 0; j < possibilities[i].length; j++) {
-                        if(i==move.getWhere().getX() && j==move.getWhere().getY()) continue;
-                        if(possibilities[i][j]) pos.add(new Point(i,j));
+                        if (i == move.getWhere().getX() && j == move.getWhere().getY()) continue;
+                        if (possibilities[i][j]) pos.add(new Point(i, j));
                     }
                 }
-                if(pos.isEmpty()){
+                if (pos.isEmpty()) {
                     k++;
                     continue;
                 }
                 Point temp = pos.poll();
-                next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()]
+                next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int) temp.getY()][(int) temp.getX()]
                         , move.getWhere(), new Walk(k));
-            }while (next == null || !GameEngine.isValid(gameMap, next));
+            } while (next == null || !GameEngine.isValid(gameMap, next));
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
@@ -128,21 +133,21 @@ public class ServerEngine {
         }
     }
 
-    public static Player checkWin(GameMap gameMap){
+    public static Player checkWin(GameMap gameMap) {
         Field[][] map = gameMap.getFieldsArray();
         Player winner = null;
-        for(int i=0;i<map.length;i++){
-            for(int j=0;j<map[0].length;j++){
-                if(map[i][j].getHero()!=null){
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j].getHero() != null) {
                     winner = map[i][j].getHero().getOwner();
                     break;
                 }
             }
         }
-        for(int i=0;i<map.length;i++){
-            for(int j=0;j<map[0].length;j++){
-                if(map[i][j].getHero()!=null){
-                    if(map[i][j].getHero().getOwner()!=winner)
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j].getHero() != null) {
+                    if (map[i][j].getHero().getOwner() != winner)
                         return null;
                 }
             }

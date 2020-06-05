@@ -31,7 +31,7 @@ public class HelloScreen implements Screen {
      */
     private void init() {
         addBackground();
-        addName(name, 50,150, 100);
+        addName(name, 50, 150, 100);
     }
 
     private void addBackground() {
@@ -88,7 +88,9 @@ public class HelloScreen implements Screen {
     }
 
     @Override
-    public void dispose() { stage.dispose();  }
+    public void dispose() {
+        stage.dispose();
+    }
 
     private void loadData() {
         background = swordGame.assets.manager.get("special/background.png", Texture.class);
@@ -96,6 +98,6 @@ public class HelloScreen implements Screen {
     }
 
     private void update() {
-            swordGame.setScreen(new LoadScreen(swordGame));
+        swordGame.setScreen(new LoadScreen(swordGame));
     }
 }

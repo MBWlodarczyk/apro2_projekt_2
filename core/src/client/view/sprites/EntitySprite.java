@@ -1,7 +1,6 @@
 package client.view.sprites;
 
 import client.model.Entity;
-import client.model.heroes.Hero;
 import client.view.utility.Constants;
 import client.view.utility.Drawable;
 import client.view.utility.Updatable;
