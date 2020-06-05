@@ -17,11 +17,11 @@ public class SettingWall extends Skill { //temporary: unbreakable wall
         useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.PointRange;
 
-        soundPath = "";
+        soundPath = "sound/block.mp3";
     }
 
-    public void buildWall(GameMap gameMap, int x, int y) {
-        if(gameMap.getFieldsArray()[x][y].getHero()==null)
-        gameMap.getFieldsArray()[x][y].setObstacle(new Wall());
+    public void buildWall(GameMap gameMap, int y, int x) {
+        if(gameMap.getFieldsArray()[y][x].getHero()==null)
+        gameMap.getFieldsArray()[y][x].setObstacle(new Wall());
     }
 }

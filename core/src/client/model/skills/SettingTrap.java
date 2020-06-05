@@ -1,8 +1,5 @@
 package client.model.skills;
 
-import client.model.map.GameMap;
-import client.model.obstacles.Trap;
-
 /**
  * Class to represent skill of setting up a trap.
  */
@@ -17,7 +14,7 @@ public class SettingTrap extends Skill {
         useDistance = SkillProperty.NoLob;
         rangeType = SkillProperty.PointRange;
 
-        soundPath = "";
+        soundPath = "sound/trap_wire.mp3";
     }
 
     public SettingTrap(int damage) {
@@ -30,8 +27,5 @@ public class SettingTrap extends Skill {
         rangeType = SkillProperty.PointRange;
     }
 
-    public void buildTrap(GameMap gameMap, int x, int y) {
-        if(gameMap.getFieldsArray()[x][y].getHero()==null)
-        gameMap.getFieldsArray()[x][y].setObstacle(new Trap(value));
-    }
+
 }

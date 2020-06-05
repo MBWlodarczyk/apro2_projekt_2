@@ -4,9 +4,6 @@ package client.model.obstacles;
  * Class representing single trap on map.
  */
 public class Trap extends Obstacle {
-    protected int damage;
-    private int type; // czy zadaje damage, czy może zatrzymuje gracza itd.
-    private boolean immobilize; // czy zatrzymuje gracza
 
     public Trap(int damage) {
         super();
