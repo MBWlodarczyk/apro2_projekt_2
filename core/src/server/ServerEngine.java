@@ -65,13 +65,14 @@ public class ServerEngine {
         }
         if (move.getWhat().getRangeType() == SkillProperty.AreaRange) {
             Queue<Point> inRange = fieldsInRadius(gameMap, move.getWhere(), move.getWhat().getRange());
+            inRange.add(new Point(move.getWhere().getX(),move.getWhere().getY()));
             while(!inRange.isEmpty()){
                 Point temp = inRange.poll();
                 Field target = gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()];
                 if(target.getHero() == null) continue;
                 health = target.getHero().getHealth() + move.getWhat().getValue();
                 target.getHero().setHealth(health);
-                System.out.println(move.getWhere().getHero().toString() + " is at: " + health + "HP");
+                System.out.println(target.getHero().toString() + " is at: " + health + "HP");
             }
         }
         //movement section
