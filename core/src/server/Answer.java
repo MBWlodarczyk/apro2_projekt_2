@@ -9,6 +9,12 @@ public class Answer implements Serializable {
     private GameMap map = new GameMap(22);
     private boolean hasSendMove = false; //reconnect variable
     private boolean WrongNickPassword = false; //reconnect flag if true then server refused connection wrong nick
+    private boolean gameWon = false;
+    private Player Winner = null;
+
+    public Answer(GameMap map) {
+        this.map = map;
+    }
 
     public boolean isGameWon() {
         return gameWon;
@@ -26,19 +32,12 @@ public class Answer implements Serializable {
         Winner = winner;
     }
 
-    private boolean gameWon = false;
-    private Player Winner = null;
-
-    public Answer(GameMap map) {
-        this.map = map;
-    }
-
     public GameMap getMap() {
         return map;
     }
 
     public void setMap(GameMap map) {
-        this.map=map;
+        this.map = map;
     }
 
     public boolean isWrongNickPassword() {

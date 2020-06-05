@@ -12,7 +12,14 @@ public class Config {
         this.playerNumber = playerNumber;
         this.serverPort = serverPort;
     }
+
     public Config() {
+    }
+
+    public static void main(String[] args) {
+        GameMap map = new GameMap(22);
+        Json json = new Json();
+        System.out.println(json.toJson(map.getFieldsArray()[1][1].getTerrain()));
     }
 
     public int getPlayerNumber() {
@@ -29,12 +36,5 @@ public class Config {
 
     public void setServerPort(int serverPort) {
         this.serverPort = serverPort;
-    }
-
-
-    public static void main(String[] args) {
-        GameMap map = new GameMap(22);
-        Json json = new Json();
-        System.out.println(json.toJson(map.getFieldsArray()[1][1].getTerrain()));
     }
 }

@@ -4,7 +4,8 @@ import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.Skill;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class GameEngine {
     //Public methods section
@@ -12,7 +13,7 @@ public class GameEngine {
     /**
      * Class to get all possible field to apply move.
      *
-     * @param map  Map to check.
+     * @param map      Map to check.
      * @param position
      * @param skill
      * @return boolean array of field where can be applied and where cannot.
@@ -50,12 +51,12 @@ public class GameEngine {
         int y = move.getFrom().getY();
         while (x != move.getWhere().getX()) {
             x += Xdir;
-            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+            if (gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
                 return true;
         }
         while (y != move.getWhere().getY()) {
             y += Ydir;
-            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+            if (gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
                 return true;
         }
         return false;
@@ -102,13 +103,13 @@ public class GameEngine {
         int y = position.getY();
         while (x != destination.getX()) {
             x += Xdir;
-            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+            if (gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
                 return result; //skill stops on wall
             result.add(gameMap.getFieldsArray()[y][x]);
         }
         while (y != destination.getY()) {
             y += Ydir;
-            if(gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
+            if (gameMap.getFieldsArray()[y][x].getObstacle() != null && gameMap.getFieldsArray()[y][x].getObstacle().isCrossable())
                 return result; //skill stops on wall
             result.add(gameMap.getFieldsArray()[y][x]);
         }
@@ -132,21 +133,21 @@ public class GameEngine {
         listX.add(x);
         steps[y][x] = 0; //dodanie liczby krokow do pierwszego elementu
 
-        int[] yNbr = new int[]{0,-1,0,1}; //4 sąsiedzi pola
-        int[] xNbr = new int[]{1,0,-1,0};
+        int[] yNbr = new int[]{0, -1, 0, 1}; //4 sąsiedzi pola
+        int[] xNbr = new int[]{1, 0, -1, 0};
 
-        while (!listY.isEmpty()&&!listX.isEmpty()){
+        while (!listY.isEmpty() && !listX.isEmpty()) {
             int tempY = listY.poll();
             int tempX = listX.poll();
             marked[tempY][tempX] = true;
             int tempSteps = steps[tempY][tempX]; //cos tutsj z liczeniem w którym "kroku" jestesmy - analogicznie do odejmowania
 
-            for(int k=0;k<4;k++){
-                if(tempSteps<distance && checkField(map, tempY+yNbr[k], tempX+xNbr[k], isOnStack)) {
+            for (int k = 0; k < 4; k++) {
+                if (tempSteps < distance && checkField(map, tempY + yNbr[k], tempX + xNbr[k], isOnStack)) {
                     listY.add(tempY + yNbr[k]);
                     listX.add(tempX + xNbr[k]);
                     isOnStack[tempY + yNbr[k]][tempX + xNbr[k]] = true; //isOnStack przechowuje pola dodane do stosu
-                    steps[tempY + yNbr[k]][tempX + xNbr[k]] = tempSteps+1; //zmienia liczbe krokow w ktorych mozna dojsc do pola
+                    steps[tempY + yNbr[k]][tempX + xNbr[k]] = tempSteps + 1; //zmienia liczbe krokow w ktorych mozna dojsc do pola
                 }
             }
         }
@@ -164,7 +165,7 @@ public class GameEngine {
     /**
      * Method to help dfs validate if the field is valid, already marked or already on the stack
      */
-    private  static boolean checkField(GameMap map, int y, int x, boolean[][] isOnStack) {
+    private static boolean checkField(GameMap map, int y, int x, boolean[][] isOnStack) {
         return fieldValid(map, y, x) && !isOnStack[y][x];
     }
 }

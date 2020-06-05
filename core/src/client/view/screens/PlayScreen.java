@@ -14,9 +14,6 @@ import client.view.scenes.SkillOptionsHud;
 import client.view.sprites.*;
 import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -35,7 +32,7 @@ public class PlayScreen extends AbstractScreen {
     private MouseSprite mouseSprite;
     private SkillPanelSprite skillPanelSprite;
     private MoveDistanceSprite skillDistanceSprite;
-    private ArrayList<ObstacleSprite> wallSprite,trapSprite;
+    private ArrayList<ObstacleSprite> wallSprite, trapSprite;
     private ArrayList<TerrainSprite> grassSprites;
     private ArrayList<HeroSprite> heroesSprites;
     private HandleInput handleInput;
@@ -55,7 +52,7 @@ public class PlayScreen extends AbstractScreen {
         this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
         this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
         this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
-        this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch,swordGame.skin,handleInput);
+        this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch, swordGame.skin, handleInput);
         addMusic();
         gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
         mouseSprite = new MouseSprite(swordGame.edgeTexture);
@@ -88,13 +85,13 @@ public class PlayScreen extends AbstractScreen {
                     trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.trapTexture));
                 }
                 if (map[i][j].getHero() != null) {
-                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j),swordGame.heroOwnershipTexture, heroOwnership(i,j)));
+                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j), swordGame.heroOwnershipTexture, heroOwnership(i, j)));
                 }
             }
         }
     }
 
-    private boolean heroOwnership(int i, int j){
+    private boolean heroOwnership(int i, int j) {
         return map[i][j].getHero().getOwner().equals(client.player);
     }
 
@@ -118,11 +115,11 @@ public class PlayScreen extends AbstractScreen {
         int x = Inputs.x;
         int y = Inputs.y;
         Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
-        boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move.getWhere(),move.getWhat());
+        boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move.getWhere(), move.getWhat());
         skillDistanceSprite.setSprites(marked);
     }
 
-    private void clear(){
+    private void clear() {
         skillDistanceSprite.clear();
         wallSprite.clear();
         trapSprite.clear();
@@ -143,9 +140,9 @@ public class PlayScreen extends AbstractScreen {
         skillOptionsHud.update(delta);
         if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN)
             skillOptionsHud.skillOptions(handleInput, map, swordGame.skin);
-        if (client.getReceived().getWinner()!=null){
+        if (client.getReceived().getWinner() != null) {
             String winner = client.getReceived().getWinner().getNick();
-            swordGame.setScreen(new MessageScreen(swordGame,"Player "+winner +"won!",new LoadScreen(swordGame)));
+            swordGame.setScreen(new MessageScreen(swordGame, "Player " + winner + "won!", new LoadScreen(swordGame)));
             swordGame.inGameTheme.dispose();
             client.dispose();
             this.dispose();
@@ -168,11 +165,11 @@ public class PlayScreen extends AbstractScreen {
 
         swordGame.batch.end();
 
-        sendRemoveButtonHud.draw(swordGame.batch,delta);
+        sendRemoveButtonHud.draw(swordGame.batch, delta);
         skillOptionsHud.draw(swordGame.batch, delta);
         queueStateHud.draw(swordGame.batch, delta);
 
-        if (handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || Inputs.anyHeroChosen) {
+        if ((handleInput.currentState == HandleInput.ControllerState.HERO_CHOSEN || Inputs.anyHeroChosen) && map[tab[0]][tab[1]].getHero() != null) {
             String s = map[tab[0]][tab[1]].getHero().description();
             heroStatisticHud.updateText(s);
             heroStatisticHud.draw(swordGame.batch, delta);

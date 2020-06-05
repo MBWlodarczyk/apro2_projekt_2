@@ -1,7 +1,6 @@
 package client.view.scenes;
 
 import client.controller.HandleInput;
-import client.controller.Inputs;
 import client.model.map.Field;
 import client.view.utility.Constants;
 import client.view.utility.Drawable;
@@ -16,7 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import static client.controller.Inputs.*;
+import static client.controller.Inputs.tab;
 
 public class SkillOptionsHud implements Drawable, Updatable {
 

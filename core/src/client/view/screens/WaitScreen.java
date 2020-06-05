@@ -4,7 +4,6 @@ import client.controller.Client;
 import client.view.SwordGame;
 import client.view.utility.GifDecoder;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

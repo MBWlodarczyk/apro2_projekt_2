@@ -4,7 +4,6 @@ import client.controller.Turn;
 import client.model.Player;
 import client.model.heroes.Hero;
 import client.model.map.GameMap;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -42,6 +41,10 @@ public class Server {
         run();
     }
 
+    public static void main(String[] args) throws IOException {
+        new Server();
+    }
+
     private void loadConfig() throws IOException {
         JsonReader file = new JsonReader();
         JsonValue configJson = file.parse(new FileHandle("config.json"));
@@ -51,10 +54,6 @@ public class Server {
         this.port = port.asInt();
         System.out.println(this.playerNumber);
         System.out.println(this.port);
-    }
-
-    public static void main(String[] args) throws IOException {
-        new Server();
     }
 
     private void run() throws IOException {
@@ -109,13 +108,13 @@ public class Server {
     public synchronized void sendToAll(boolean moves) throws IOException {
 
         if (moves) {
-            ServerEngine.performTurns(answer.getMap(),turns);
+            ServerEngine.performTurns(answer.getMap(), turns);
             turns.clear();
-            if(ServerEngine.checkWin(answer.getMap())!=null){
+            if (ServerEngine.checkWin(answer.getMap()) != null) {
                 answer.setGameWon(true);
                 answer.setWinner(ServerEngine.checkWin(answer.getMap()));
-                System.out.println("Game won by "+ answer.getWinner().getNick());
-            }else{
+                System.out.println("Game won by " + answer.getWinner().getNick());
+            } else {
                 answer.setGameWon(false);
                 answer.setWinner(null);
             }
@@ -141,7 +140,7 @@ public class Server {
             }
 
         }
-        if(answer.isGameWon()) newGame();
+        if (answer.isGameWon()) newGame();
     }
 
     public synchronized void removeClient(ServerThread client) {
@@ -230,15 +229,16 @@ public class Server {
         this.gameInit = save.gameInit;
         this.sendToAll(false);
     }
-    public void newGame(){
+
+    public void newGame() {
         this.answer.setMap(new GameMap(22));
         this.answer.setWinner(null);
         this.answer.setGameWon(false);
         this.answer.setWrongNickPassword(false);
         this.answer.setHasSendMove(false);
-        this.initPlayer=0;
-        this.gameInit=false;
-        this.players=new ArrayList<>();
+        this.initPlayer = 0;
+        this.gameInit = false;
+        this.players = new ArrayList<>();
         this.turns = new ArrayList<>();
         this.clients = new ArrayList<>();
         this.playersClients = new HashMap<>();

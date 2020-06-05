@@ -21,12 +21,12 @@ public class Client {
     public ObjectOutputStream os;
     public Socket sock;
     public boolean isReceived = false;
+    public boolean wrongPass;
+    public Player player;
     boolean exit = false;
     private Turn send;
     private Answer received;
     private boolean isSend = false;
-    public boolean wrongPass;
-    public Player player;
 
     public Client(SwordGame game, final boolean init) throws Exception {
 

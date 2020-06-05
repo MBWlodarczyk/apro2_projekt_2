@@ -26,7 +26,7 @@ public class MessageScreen extends AbstractScreen {
         Label label = new Label("", swordGame.skin);
         int size = 300;
         Dialog dialog = new Dialog("", swordGame.skin);
-        dialog.setPosition(Constants.WIDTH/2 - size/2,Constants.HEIGHT/2 - size/2);
+        dialog.setPosition(Constants.WIDTH / 2 - size / 2, Constants.HEIGHT / 2 - size / 2);
         dialog.setSize(size, size);
         dialog.setFillParent(false);
 
@@ -49,7 +49,7 @@ public class MessageScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         stage.draw();
-        if(Gdx.input.isTouched()){
+        if (Gdx.input.isTouched()) {
             swordGame.setScreen(nextScreen);
         }
     }
