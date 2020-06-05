@@ -8,6 +8,7 @@ import client.model.heroes.Hero;
 import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.skills.SkillProperty;
+import client.model.skills.Stay;
 import client.model.skills.Walk;
 
 import java.awt.*;
@@ -46,46 +47,39 @@ public class ServerEngine {
         if (move.getWhat().getAfterAttack() == SkillProperty.GoToTarget) {
             moveHero(gameMap, move);
         }
-        if (move.getWhat().toString().equals("Walk") || move.getWhat().toString().equals("Stay")) return;
+        if (move.getWhat() instanceof Walk || move.getWhat() instanceof Stay) return;
         //damage dealing section
         int health;
         if (move.getWhat().getRangeType() == SkillProperty.FloodRange) {
             for (Field f : GameEngine.findPath(gameMap, move.getFrom(), move.getWhere(), move.getWhat())) {
-                try {
-                    health = f.getHero().getHealth() + move.getWhat().getValue();
-                    f.getHero().setHealth(health);
-                    System.out.println(f.getHero().toString() + " is at: " + health + "HP");
-                } catch (NullPointerException ignored) {
-                }
+                if(f.getHero() == null) continue;
+                health = f.getHero().getHealth() + move.getWhat().getValue();
+                f.getHero().setHealth(health);
+                System.out.println(f.getHero().toString() + " is at: " + health + "HP");
             }
         }
         if (move.getWhat().getRangeType() == SkillProperty.PointRange) {
-            try {
+            if(move.getWhere().getHero() !=null) {
                 health = move.getWhere().getHero().getHealth() + move.getWhat().getValue();
                 move.getWhere().getHero().setHealth(health);
                 System.out.println(move.getWhere().getHero().toString() + " is at: " + health + "HP");
-            } catch (NullPointerException ignored) {
             }
         }
         if (move.getWhat().getRangeType() == SkillProperty.AreaRange) {
-            for (int i = -move.getWhat().getRange(); i < move.getWhat().getRange(); i++) {
-                for (int j = -move.getWhat().getRange(); j < move.getWhat().getRange(); j++) {
-                    try {
-                        if (gameMap.getFieldsArray()[move.getWhere().getY() + i][move.getWhere().getX() + j].getHero() != null) {
-                            health = gameMap.getFieldsArray()[move.getWhere().getY() + i][move.getWhere().getX() + j].getHero().getHealth()
-                                    + move.getWhat().getValue();
-                            gameMap.getFieldsArray()[move.getWhere().getY() + i][move.getWhere().getX() + j].getHero().setHealth(health);
-                            //System.out.println(gameMap.getFieldsArray()[move.getWhere().getY() + i][move.getWhere().getX() + j].getHero().toString()+ " is at: "+ health + "HP");
-                        }
-                    } catch (IndexOutOfBoundsException ignored) {
-                    }
-                }
+            Queue<Point> inRange = fieldsInRadius(gameMap, move.getWhere(), move.getWhat().getRange());
+            while(!inRange.isEmpty()){
+                Point temp = inRange.poll();
+                Field target = gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()];
+                if(target.getHero() == null) continue;
+                health = target.getHero().getHealth() + move.getWhat().getValue();
+                target.getHero().setHealth(health);
+                System.out.println(move.getWhere().getHero().toString() + " is at: " + health + "HP");
             }
         }
     }
 
     private static void moveHero(GameMap gameMap, Move move) {
-        if(move.getWhat().toString().equals("Stay")) return;
+        if(move.getWhat() instanceof Stay) return;
         if(move.getWhere()==move.getFrom())return;
         if (gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null) {
             Hero temp = move.getWho();
@@ -101,19 +95,12 @@ public class ServerEngine {
             Move next = null;
             int k=1;
             do{
-                boolean[][] possibilities = GameEngine.getValid(gameMap,move.getWhere(),new Walk(k));
-                Queue<Point> pos = new LinkedList<>();
-                for (int i = 0; i< possibilities.length;i++) {
-                    for (int j = 0; j < possibilities[i].length; j++) {
-                        if(i==move.getWhere().getX() && j==move.getWhere().getY()) continue;
-                        if(possibilities[i][j]) pos.add(new Point(i,j));
-                    }
-                }
-                if(pos.isEmpty()){
+                Queue<Point> possibilities = fieldsInRadius(gameMap, move.getWhere(), k);
+                if(possibilities.isEmpty()){
                     k++;
                     continue;
                 }
-                Point temp = pos.poll();
+                Point temp = possibilities.poll();
                 next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()]
                         , move.getWhere(), new Walk(k));
             }while (next == null || !GameEngine.isValid(gameMap, next));
@@ -148,5 +135,16 @@ public class ServerEngine {
             }
         }
         return winner;
+    }
+    public static Queue<Point> fieldsInRadius(GameMap gameMap, Field target, int radius){
+        boolean[][] possibilities = GameEngine.getValid(gameMap,target,new Walk(radius));
+        Queue<Point> inRange = new LinkedList<>();
+        for (int i = 0; i< possibilities.length;i++) {
+            for (int j = 0; j < possibilities[i].length; j++) {
+                if(i==target.getX() && j==target.getY()) continue;
+                if(possibilities[i][j]) inRange.add(new Point(i,j));
+            }
+        }
+        return inRange;
     }
 }
