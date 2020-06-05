@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * Class representing single move
  */
-public class Move implements Serializable,Comparable<Move> {
+public class Move implements Serializable, Comparable<Move> {
     private Player whose;
     private Hero who;
     private Field from;

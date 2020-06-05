@@ -1,6 +1,5 @@
 package client.controller;
 
-import client.model.heroes.Hero;
 import client.model.map.Field;
 import client.model.skills.Stay;
 import client.view.screens.PlayScreen;
@@ -52,7 +51,7 @@ public class HandleInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(buttonsTouch(screenX,screenY))
+        if (buttonsTouch(screenX, screenY))
             return true;
 
         if (screenX < Constants.HEIGHT) {
@@ -64,14 +63,16 @@ public class HandleInput implements InputProcessor {
                 x = tab[1];
                 return true;
             }
-            if ((currentState == IDLE) && (field.getHero() != null)) anyHeroChosen = true;
+            if ((currentState == IDLE) && (field.getHero() != null)) {
+                anyHeroChosen = true;
+            }
             else anyHeroChosen = false;
 
-            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)){
-                anyHeroChosen = true;
-                currentState = IDLE;
-                return true;
-            }
+//            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
+//                anyHeroChosen = true;
+//                currentState = IDLE;
+//                return true;
+//            }
         }
         if (currentState == HERO_CHOSEN) {
             for (int i = 0; i < rectangles.size(); i++) {
@@ -98,7 +99,7 @@ public class HandleInput implements InputProcessor {
         return true;
     }
 
-    private boolean buttonsTouch(int screenX, int screenY){
+    private boolean buttonsTouch(int screenX, int screenY) {
         if (sendTurnRec != null && sendTurnRec.contains(screenX, screenY) && !playScreen.client.isSend()) {
             sendTurn = true;
             return true;
@@ -175,19 +176,19 @@ public class HandleInput implements InputProcessor {
     }
 
     public enum ControllerState {
-        IDLE(0){
+        IDLE(0) {
             @Override
             public String toString() {
                 return super.toString();
             }
         },
-        HERO_CHOSEN(1){
+        HERO_CHOSEN(1) {
             @Override
             public String toString() {
                 return super.toString();
             }
         },
-        PERFORM_SKILL(2){
+        PERFORM_SKILL(2) {
             @Override
             public String toString() {
                 return super.toString();

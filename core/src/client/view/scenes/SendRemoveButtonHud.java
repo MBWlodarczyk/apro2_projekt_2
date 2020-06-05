@@ -13,7 +13,7 @@ public class SendRemoveButtonHud extends Hud {
 
 
     public SendRemoveButtonHud(SpriteBatch spriteBatch, Skin skin, HandleInput handleInput) {
-        super(spriteBatch,skin);
+        super(spriteBatch, skin);
         viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch);
         sendTurnTextField(skin, handleInput);

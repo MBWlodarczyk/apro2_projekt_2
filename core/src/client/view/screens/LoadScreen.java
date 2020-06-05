@@ -3,9 +3,6 @@ package client.view.screens;
 import client.view.SwordGame;
 import client.view.utility.Constants;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,7 +17,6 @@ import com.badlogic.gdx.utils.Align;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class LoadScreen extends AbstractScreen {
@@ -211,12 +207,11 @@ public class LoadScreen extends AbstractScreen {
                         if (ws.connected) {
                             swordGame.setScreen(ws);
                             swordGame.theme.dispose();
-                        }
-                        else{
-                            for(int i = 0 ; i < swordGame.chosen.length;i++){
+                        } else {
+                            for (int i = 0; i < swordGame.chosen.length; i++) {
                                 swordGame.chosen[i] = false;
                             }
-                            swordGame.setScreen(new MessageScreen(swordGame,"Can not connect!",new LoadScreen(swordGame)));
+                            swordGame.setScreen(new MessageScreen(swordGame, "Can not connect!", new LoadScreen(swordGame)));
                         }
                     }
                 } catch (Exception e) {
@@ -246,12 +241,11 @@ public class LoadScreen extends AbstractScreen {
                         if (ws.connected) {
                             swordGame.setScreen(ws);
                             swordGame.theme.dispose();
-                        }
-                        else{
-                            for(int i = 0 ; i < swordGame.chosen.length;i++){
+                        } else {
+                            for (int i = 0; i < swordGame.chosen.length; i++) {
                                 swordGame.chosen[i] = false;
                             }
-                            swordGame.setScreen(new MessageScreen(swordGame,"Can not connect!",new LoadScreen(swordGame)));
+                            swordGame.setScreen(new MessageScreen(swordGame, "Can not connect!", new LoadScreen(swordGame)));
                         }
                     }
                 } catch (Exception e) {
