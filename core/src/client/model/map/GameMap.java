@@ -3,6 +3,7 @@ package client.model.map;
 
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
+import client.model.terrain.Water;
 
 import java.io.*;
 import java.util.Scanner;
@@ -17,10 +18,10 @@ public class GameMap implements Serializable {
      */
     private Field[][] map;
 
-    public GameMap(int size) {
+    public GameMap(int size,int mapNumber) {
         this.map = new Field[size][size];
         try {
-            loadMap(readMapFromFile());
+            loadMap(readMapFromFile(mapNumber));
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -28,8 +29,10 @@ public class GameMap implements Serializable {
         }
     }
 
-    private String[][] readMapFromFile() throws IOException {
-        String mapPath = "mapTXT.txt";
+    private String[][] readMapFromFile(int mapNumber) throws IOException {
+        String mapPath;
+        if(mapNumber==1)  { mapPath = "mapTXT.txt";}
+            else mapPath = "map_maze.txt";
         Scanner scanner = new Scanner(new File(mapPath));
         String[][] mapString = new String[map.length][map.length];
         int rowNumber=0;
@@ -41,15 +44,15 @@ public class GameMap implements Serializable {
         return mapString;
     }
 
-    /**
-     * Loads map from file if file was correctly found
-     * @param mapString
-     */
+     //Loads map from file if file was correctly found
     private void loadMap(String[][] mapString){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
                 map[i][j].setTerrain(new Grass(i, j));
+                if(mapString[i][j].equals("s")){ //s from sea
+                    map[i][j].setTerrain(new Water(i,j));
+                }
                 if(mapString[i][j].equals("w")){
                     map[i][j].setObstacle(new Wall());
                 }
@@ -57,9 +60,7 @@ public class GameMap implements Serializable {
         }
     }
 
-    /**
-     * Loads map with grass if there's no file found
-     */
+    // Loads map with grass if there's no file found
     private void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {

@@ -26,7 +26,7 @@ public class Server {
     public InputThread playerInput;
     public HashMap<ServerThread, Player> playersClients = new HashMap<>();
     public ArrayList<Player> players = new ArrayList<>();
-    public Answer answer = new Answer(new GameMap(22));
+    public Answer answer = new Answer(new GameMap(22,1));
     public ArrayList<Turn> turns = new ArrayList<>();
     public int playerNumber;
     public int initPlayer;
@@ -269,7 +269,7 @@ public class Server {
      * Method to restart the game
      */
     public void newGame() {
-        this.answer.setMap(new GameMap(22));
+        this.answer.setMap(new GameMap(22,2));
         this.answer.setWinner(null);
         this.answer.setGameWon(false);
         this.answer.setWrongNickPassword(false);
