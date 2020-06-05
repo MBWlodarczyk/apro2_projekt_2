@@ -4,7 +4,8 @@ package client.model.map;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.Scanner;
 
 /**
  * Class to represent map
@@ -18,11 +19,47 @@ public class GameMap implements Serializable {
 
     public GameMap(int size) {
         this.map = new Field[size][size];
-        loadMap();
-        addWalls();
+        try {
+            loadMap(readMapFromFile());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            loadMap();
+        }
     }
 
-    // tester method
+    private String[][] readMapFromFile() throws IOException {
+        String mapPath = "mapTXT.txt";
+        Scanner scanner = new Scanner(new File(mapPath));
+        String[][] mapString = new String[map.length][map.length];
+        int rowNumber=0;
+        while(scanner.hasNextLine()) {
+            String[] row = scanner.nextLine().split(";");
+            System.arraycopy(row, 0, mapString[rowNumber], 0, row.length);
+            rowNumber++;
+        }
+        return mapString;
+    }
+
+    /**
+     * Loads map from file if file was correctly found
+     * @param mapString
+     */
+    private void loadMap(String[][] mapString){
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j] = new Field(i, j);
+                map[i][j].setTerrain(new Grass(i, j));
+                if(mapString[i][j].equals("w")){
+                    map[i][j].setObstacle(new Wall());
+                }
+            }
+        }
+    }
+
+    /**
+     * Loads map with grass if there's no file found
+     */
     private void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -30,52 +67,6 @@ public class GameMap implements Serializable {
                 map[i][j].setTerrain(new Grass(i, j));
             }
         }
-    }
-
-    // PRIMITIVE VERY PRIMITIVE //TODO find out way to read map
-    private void addWalls() {
-        for (int i = 0; i < map.length; i++) {
-            map[i][0].setObstacle(new Wall());
-            map[0][i].setObstacle(new Wall());
-            map[map.length - 1][i].setObstacle(new Wall());
-            map[i][map.length - 1].setObstacle(new Wall());
-        }
-
-        map[10][3].setObstacle(new Wall());
-        map[11][3].setObstacle(new Wall());
-
-        map[10][18].setObstacle(new Wall());
-        map[11][18].setObstacle(new Wall());
-
-        map[3][10].setObstacle(new Wall());
-        map[3][11].setObstacle(new Wall());
-
-        map[18][10].setObstacle(new Wall());
-        map[18][11].setObstacle(new Wall());
-
-        map[8][6].setObstacle(new Wall());
-        map[8][7].setObstacle(new Wall());
-        map[8][8].setObstacle(new Wall());
-        map[7][8].setObstacle(new Wall());
-        map[6][8].setObstacle(new Wall());
-
-        map[13][6].setObstacle(new Wall());
-        map[13][7].setObstacle(new Wall());
-        map[13][8].setObstacle(new Wall());
-        map[14][8].setObstacle(new Wall());
-        map[15][8].setObstacle(new Wall());
-
-        map[8][13].setObstacle(new Wall());
-        map[8][14].setObstacle(new Wall());
-        map[8][15].setObstacle(new Wall());
-        map[7][13].setObstacle(new Wall());
-        map[6][13].setObstacle(new Wall());
-
-        map[13][13].setObstacle(new Wall());
-        map[13][14].setObstacle(new Wall());
-        map[13][15].setObstacle(new Wall());
-        map[14][13].setObstacle(new Wall());
-        map[15][13].setObstacle(new Wall());
     }
 
     public Field[][] getFieldsArray() {
