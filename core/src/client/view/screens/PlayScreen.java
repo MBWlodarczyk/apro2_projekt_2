@@ -6,6 +6,7 @@ import client.model.map.Field;
 import client.model.obstacles.Trap;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
+import client.model.terrain.Water;
 import client.view.SwordGame;
 import client.view.scenes.HeroStatisticHud;
 import client.view.scenes.QueueStateHud;
@@ -33,7 +34,7 @@ public class PlayScreen extends AbstractScreen {
     private SkillPanelSprite skillPanelSprite;
     private MoveDistanceSprite skillDistanceSprite;
     private ArrayList<ObstacleSprite> wallSprite, trapSprite;
-    private ArrayList<TerrainSprite> grassSprites;
+    private ArrayList<TerrainSprite> grassSprite, waterSprite;
     private ArrayList<HeroSprite> heroesSprites;
     private HandleInput handleInput;
     private HeroStatisticHud heroStatisticHud;
@@ -59,7 +60,8 @@ public class PlayScreen extends AbstractScreen {
         skillDistanceSprite = new MoveDistanceSprite(swordGame.moveTexture);
         wallSprite = new ArrayList<>();
         trapSprite = new ArrayList<>();
-        grassSprites = new ArrayList<>();
+        grassSprite = new ArrayList<>();
+        waterSprite = new ArrayList<>();
         heroesSprites = new ArrayList<>();
         rewriteMap();
         Gdx.input.setInputProcessor(handleInput);
@@ -77,11 +79,14 @@ public class PlayScreen extends AbstractScreen {
                 if (map[i][j].getObstacle() instanceof Wall) {
                     wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.wallTexture));
                 }
-                if (map[i][j].getTerrain() instanceof Grass) {
-                    grassSprites.add(new TerrainSprite(map[i][j].getTerrain(), swordGame.grassTexture));
-                }
                 if (map[i][j].getObstacle() instanceof Trap) {
                     trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.trapTexture));
+                }
+                if (map[i][j].getTerrain() instanceof Water) {
+                    wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.waterTexture));
+                }
+                if (map[i][j].getTerrain() instanceof Grass) {
+                    grassSprite.add(new TerrainSprite(map[i][j].getTerrain(), swordGame.grassTexture));
                 }
                 if (map[i][j].getHero() != null) {
                     heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j), swordGame.heroOwnershipTexture, heroOwnership(i, j)));
@@ -122,7 +127,7 @@ public class PlayScreen extends AbstractScreen {
         skillDistanceSprite.clear();
         wallSprite.clear();
         trapSprite.clear();
-        grassSprites.clear();
+        grassSprite.clear();
         heroesSprites.clear();
         handleInput.getRectangles().clear();
     }
@@ -157,7 +162,8 @@ public class PlayScreen extends AbstractScreen {
         swordGame.batch.begin();
 
         skillPanelSprite.draw(swordGame.batch); //draw skill panel
-        grassSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw grass
+        grassSprite.forEach(n -> n.draw(swordGame.batch, delta)); //draw grass
+        waterSprite.forEach(n -> n.draw(swordGame.batch, delta)); //draw water
         wallSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw walls
         trapSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw traps
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw heroes
