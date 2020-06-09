@@ -55,12 +55,12 @@ public class ServerEngine {
         if (move.getWhat().getRangeType() == SkillProperty.FloodRange && !(move.getWhat() instanceof Walk)) {
             for (Field f : GameEngine.findPath(gameMap, move.getFrom(), move.getWhere(), move.getWhat())) {
                 if(f.getHero() == null) continue;
-                addDamage(f.getHero(), move.getWhat().getValue());
+                addDamage(gameMap,f.getY(),f.getX(), move.getWhat().getValue());
             }
         }
         if (move.getWhat().getRangeType() == SkillProperty.PointRange) {
             if(move.getWhere().getHero() !=null) {
-                addDamage(move.getWhere().getHero(),move.getWhat().getValue());
+                addDamage(gameMap,move.getWhere().getY(),move.getWhere().getX(),move.getWhat().getValue());
             }else {
                 if (move.getWhat() instanceof SettingTrap || move.getWhat() instanceof SettingWall) {
                     buildObstacle(gameMap, move);
@@ -74,7 +74,7 @@ public class ServerEngine {
                 Point temp = inRange.poll();
                 Field target = gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()];
                 if(target.getHero() == null) continue;
-                addDamage(target.getHero(),move.getWhat().getValue());
+                addDamage(gameMap,target.getY(),target.getX(),move.getWhat().getValue());
             }
         }
         //movement section
@@ -94,7 +94,7 @@ public class ServerEngine {
     }
     private static void moveHero(GameMap gameMap, Move move) {
         if(move.getWhere().getObstacle() != null){
-            addDamage(move.getWho(),move.getWhere().getObstacle().getDamage());
+            addDamage(gameMap,move.getFrom().getY(),move.getFrom().getX(),move.getWhere().getObstacle().getDamage());
         }
         if(move.getWhat() instanceof Stay) return;
         if(move.getWhere()==move.getFrom())return;
@@ -109,18 +109,17 @@ public class ServerEngine {
             gameMap.getFieldsArray()[y][x].setHero(temp);
         } else {
             if (move.getWhere().getHero()== null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight()) return;
-            Move next = null;
+            Move next;
             int k=1;
+            Queue<Point> possibilities;
             do{
-                Queue<Point> possibilities = fieldsInRadius(gameMap, move.getWhere(), k);
-                if(possibilities.isEmpty()){
-                    k++;
-                    continue;
-                }
-                Point temp = possibilities.poll();
-                next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()]
+                possibilities = fieldsInRadius(gameMap, move.getWhere(), k);
+                k++;
+                Point poss = null;
+                if (!possibilities.isEmpty()) poss = possibilities.poll();
+                next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)poss.getY()][(int)poss.getX()]
                         , move.getWhere(), new Walk(k));
-            }while (next == null || !GameEngine.isValid(gameMap, next));
+            }while (possibilities.isEmpty() || !GameEngine.isValid(gameMap,next));
             Hero temp = move.getWho();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
@@ -144,10 +143,10 @@ public class ServerEngine {
             System.out.println("Trap set on:" + x +" "+y);
         }
     }
-    private static void addDamage(Hero hero, int damage){
-        int health = hero.getHealth() + damage;
-        hero.setHealth(health);
-        System.out.println(hero.toString() + " is at: " + health + "HP");
+    private static void addDamage(GameMap map, int y, int x, int damage){
+        int health = map.getFieldsArray()[y][x].getHero().getHealth() + damage;
+        map.getFieldsArray()[y][x].getHero().setHealth(health);
+        System.out.println(map.getFieldsArray()[y][x].getHero().toString() + " is at: " + health + "HP");
     }
 
     static Player checkWin(GameMap gameMap) {

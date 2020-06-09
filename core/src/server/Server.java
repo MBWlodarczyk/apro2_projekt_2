@@ -138,7 +138,8 @@ public class Server {
         if (moves) {
             answer = ServerEngine.performTurns(answer.getMap(), turns);
             turns.clear();
-            if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
+            //if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
+            if(false){
                 answer.setGameWon(true);
                 answer.setWinner(ServerEngine.checkWin(answer.getMap()));
                 System.out.println("Game won by " + answer.getWinner().getNick());
