@@ -26,7 +26,7 @@ public class Server {
     public InputThread playerInput;
     public HashMap<ServerThread, Player> playersClients = new HashMap<>();
     public ArrayList<Player> players = new ArrayList<>();
-    public Answer answer = new Answer(new GameMap(22,1));
+    public Answer answer;
     public ArrayList<Turn> turns = new ArrayList<>();
     public int playerNumber;
     public int initPlayer;
@@ -34,6 +34,7 @@ public class Server {
     ServerSocket server;
     private boolean exit = false;
     private int port;
+    private int mapType; //type of a map
 
     public static void main(String[] args) throws IOException {
         new Server();
@@ -41,6 +42,7 @@ public class Server {
 
     public Server() throws IOException {
         loadConfig();
+        answer = new Answer(new GameMap(22,mapType));
         this.server = new ServerSocket(this.port);
         this.playerInput = new InputThread(this);
         run();
@@ -57,8 +59,11 @@ public class Server {
         this.playerNumber = playerNumber.asInt();
         JsonValue port = configJson.get("ServerPort");
         this.port = port.asInt();
+        JsonValue mapType = configJson.get("mapType");
+        this.mapType = mapType.asInt();
         System.out.println(this.playerNumber);
         System.out.println(this.port);
+        System.out.println(this.mapType);
     }
 
     /**

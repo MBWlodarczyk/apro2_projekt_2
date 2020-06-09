@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Class to represent server answer contains map and flags for communication
  */
 public class Answer implements Serializable {
-    private GameMap map = new GameMap(22,1);
+    private GameMap map;
     private boolean hasSendMove = false; //reconnect variable
     private boolean WrongNickPassword = false; //reconnect flag if true then server refused connection wrong nick
     private boolean gameWon = false;

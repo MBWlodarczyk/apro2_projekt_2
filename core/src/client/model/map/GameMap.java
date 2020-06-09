@@ -1,6 +1,7 @@
 package client.model.map;
 
 
+import client.model.obstacles.Trap;
 import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.model.terrain.Water;
@@ -84,7 +85,10 @@ public class GameMap implements Serializable {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                sb.append(map[i][j].getHero()).append(" ");
+                if(map[i][j].getObstacle() instanceof Trap)
+                    sb.append("TRAP").append(" ");
+                else
+                    sb.append(" null");
             }
             sb.append("\n");
         }

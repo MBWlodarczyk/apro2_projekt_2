@@ -28,4 +28,9 @@ public abstract class Obstacle extends Entity {
     public int getY() {
         return y;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 }
