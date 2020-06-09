@@ -23,6 +23,7 @@ public class GameMap implements Serializable {
     public GameMap(GameMap copy){
         this.map = copy.map;
     }
+
     public GameMap(int size,int mapNumber) {
         this.map = new Field[size][size];
         try {
