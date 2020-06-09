@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+/**
+ * Background under the hud
+ */
+
 public class SkillPanelSprite extends Sprite {
     public SkillPanelSprite(Texture texture) {
         super(texture, 0, 0, texture.getWidth(), texture.getHeight());

@@ -6,8 +6,10 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.awt.*;
+
 /**
- *
+ * Class responsible for loading all textures
  */
 public class Assets implements Disposable {
 
@@ -62,6 +64,7 @@ public class Assets implements Disposable {
         manager.load("special/move.png", Texture.class);
         manager.load("special/skillPanel.png", Texture.class);
         manager.load("special/heroOwnership.png", Texture.class);
+        manager.load("special/name.png", Texture.class);
     }
 
     /**

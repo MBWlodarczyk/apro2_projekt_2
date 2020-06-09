@@ -79,7 +79,7 @@ public class PlayScreen extends AbstractScreen {
                 if (map[i][j].getObstacle() instanceof Wall) {
                     wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.wallTexture));
                 }
-                if (map[i][j].getObstacle() instanceof Trap) {
+                if (map[i][j].getObstacle() instanceof Trap) { //TODO after debuging add there
                     trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.trapTexture));
                 }
                 if (map[i][j].getTerrain() instanceof Water) {
@@ -148,7 +148,7 @@ public class PlayScreen extends AbstractScreen {
 
         if (client.getReceived().getWinner() != null) {
             String winner = client.getReceived().getWinner().getNick();
-            swordGame.setScreen(new MessageScreen(swordGame, "Player " + winner + "won!", new LoadScreen(swordGame)));
+            swordGame.setScreen(new MessageScreen(swordGame, "Player " + winner + " won!", new LoadScreen(swordGame)));
             swordGame.inGameTheme.dispose();
             client.dispose();
             this.dispose();

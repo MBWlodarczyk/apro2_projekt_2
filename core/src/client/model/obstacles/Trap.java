@@ -5,6 +5,8 @@ package client.model.obstacles;
  */
 public class Trap extends Obstacle {
 
+    //TODO add owned to trap in order to recognize whose trap it is
+
     public Trap(int damage) {
         super();
         this.isFixed = true;

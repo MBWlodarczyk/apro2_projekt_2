@@ -2,6 +2,7 @@ package client.view;
 
 import client.model.Player;
 import client.view.screens.LoadScreen;
+import client.view.screens.StartScreen;
 import client.view.utility.Assets;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -14,18 +15,13 @@ public class SwordGame extends Game {
 
     public SpriteBatch batch;
     public Skin skin;
-    public String nick;
-    public String ip;
-    public String port;
-    public byte[] password;
-    public boolean[] chosen = new boolean[6];
     public Player player;
     public Assets assets; //load textures manager
     public Texture grassTexture, wallTexture, waterTexture, forestTexture, bushTexture, rockTexture,
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
             moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture, heroOwnershipTexture,
             paladinTexture_dark, warriorTexture_dark, archerTexture_dark, necromancerTexture_dark, priestTexture_dark, wizardTexture_dark,
-            background;
+            background,nameTexture;
     public Music inGameTheme, theme;
 
     @Override
@@ -33,12 +29,10 @@ public class SwordGame extends Game {
         assets = new Assets();
         assets.load();
         assets.manager.finishLoading();
-
         load();
-
         batch = new SpriteBatch();
         skin = new Skin(Gdx.files.internal("pixthulhuui/pixthulhu-ui.json"));
-        setScreen(new LoadScreen(this));
+        setScreen(new StartScreen(this));
     }
 
     @Override
@@ -48,6 +42,7 @@ public class SwordGame extends Game {
 
     @Override
     public void dispose() {
+        skin.dispose();
         batch.dispose();
     }
 
@@ -74,6 +69,7 @@ public class SwordGame extends Game {
         wizardTexture_dark = assets.manager.get("heroes/wizard_nygga.png", Texture.class);
 
         background = assets.manager.get("special/background.png", Texture.class);
+        nameTexture = assets.manager.get("special/name.png",Texture.class);
         theme = assets.manager.get("sound/Induktancja1.mp3", Music.class);
 
         moveTexture = assets.manager.get("special/move.png", Texture.class);

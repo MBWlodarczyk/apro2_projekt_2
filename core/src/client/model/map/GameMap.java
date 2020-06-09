@@ -86,7 +86,7 @@ public class GameMap implements Serializable {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if(map[i][j].getObstacle() instanceof Trap)
+                if(map[j][i].getObstacle() instanceof Trap)
                     sb.append("TRAP").append(" ");
                 else
                     sb.append(" null");

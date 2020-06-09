@@ -43,15 +43,15 @@ public class MessageScreen extends AbstractScreen {
 
     @Override
     public void update(float delta) {
+        if (Gdx.input.isTouched()) {
+            swordGame.setScreen(nextScreen);
+        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         stage.draw();
-        if (Gdx.input.isTouched()) {
-            swordGame.setScreen(nextScreen);
-        }
     }
 
     @Override

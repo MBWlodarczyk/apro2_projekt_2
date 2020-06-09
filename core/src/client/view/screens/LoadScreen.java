@@ -2,7 +2,6 @@ package client.view.screens;
 
 import client.view.SwordGame;
 import client.view.utility.Constants;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,6 +18,8 @@ import com.badlogic.gdx.utils.Align;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+
+import static client.controller.Inputs.*;
 
 public class LoadScreen extends AbstractScreen {
 
@@ -64,6 +65,16 @@ public class LoadScreen extends AbstractScreen {
         nextScreenButton();
         reconnectButton();
         addMusic();
+        //inscription
+        text();
+    }
+
+    private void text() {
+        TextField textField = new TextField("Chose your heroes!", swordGame.skin);
+        textField.setAlignment(Align.center);
+        textField.setSize(400, 100);
+        textField.setPosition(312, 570);
+        stage.addActor(textField);
     }
 
     private void texturesToArrays() {
@@ -143,7 +154,7 @@ public class LoadScreen extends AbstractScreen {
     }
 
     private void heroes() {
-        int y = 400;        //y param of all heroes
+        int y = 350;        //y param of all heroes
         int x = 10;         //start x of heroes positions (then add 170 to all)
         int size = 150;     //size of a texture
         addHero(swordGame.archerTexture_dark, x, y, size);
@@ -167,11 +178,11 @@ public class LoadScreen extends AbstractScreen {
                     if (texture == textures_dark.get(i))
                         break;
                 }
-                if (!swordGame.chosen[i]) {
-                    swordGame.chosen[i] = true;
+                if (!chosen[i]) {
+                    chosen[i] = true;
                     background.setDrawable(new SpriteDrawable(new Sprite(textures_white.get(i))));
                 } else {
-                    swordGame.chosen[i] = false;
+                    chosen[i] = false;
                     background.setDrawable(new SpriteDrawable(new Sprite(textures_dark.get(i))));
                 }
                 return true;
@@ -183,8 +194,8 @@ public class LoadScreen extends AbstractScreen {
 
     private boolean amountTrue() {
         int count = 0;
-        for (int i = 0; i < swordGame.chosen.length; i++) {
-            if (swordGame.chosen[i])
+        for (int i = 0; i < chosen.length; i++) {
+            if (chosen[i])
                 count++;
         }
         return count == 4;
@@ -198,20 +209,17 @@ public class LoadScreen extends AbstractScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
-                    swordGame.ip = ipField.getText();
-                    swordGame.nick = nickField.getText();
-                    swordGame.port = portField.getText();
+                    ip = ipField.getText();
+                    nick = nickField.getText();
+                    port = portField.getText();
                     MessageDigest md = MessageDigest.getInstance("SHA-512");
-                    swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
-                    if (amountTrue() && !swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
+                    password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
+                    if (amountTrue() && !ip.equals("") & !nick.equals("") & !port.equals("") & !passwordField.getText().equals("")) {
                         WaitScreen ws = new WaitScreen(swordGame, true);
                         if (ws.connected) {
                             swordGame.setScreen(ws);
                             swordGame.theme.dispose();
                         } else {
-                            for (int i = 0; i < swordGame.chosen.length; i++) {
-                                swordGame.chosen[i] = false;
-                            }
                             swordGame.setScreen(new MessageScreen(swordGame, "Can not connect!", new LoadScreen(swordGame)));
                         }
                     }
@@ -230,22 +238,19 @@ public class LoadScreen extends AbstractScreen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                swordGame.ip = ipField.getText();
-                swordGame.nick = nickField.getText();
-                swordGame.port = portField.getText();
+                ip = ipField.getText();
+                nick = nickField.getText();
+                port = portField.getText();
                 MessageDigest md = null;
                 try {
                     md = MessageDigest.getInstance("SHA-512");
-                    swordGame.password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
-                    if (!swordGame.ip.equals("") & !swordGame.nick.equals("") & !swordGame.port.equals("") & !passwordField.getText().equals("")) {
+                    password = md.digest(passwordField.getText().getBytes(StandardCharsets.UTF_8));
+                    if (!ip.equals("") & !nick.equals("") & !port.equals("") & !passwordField.getText().equals("")) {
                         WaitScreen ws = new WaitScreen(swordGame, false);
                         if (ws.connected) {
                             swordGame.setScreen(ws);
                             swordGame.theme.dispose();
                         } else {
-                            for (int i = 0; i < swordGame.chosen.length; i++) {
-                                swordGame.chosen[i] = false;
-                            }
                             swordGame.setScreen(new MessageScreen(swordGame, "Can not connect!", new LoadScreen(swordGame)));
                         }
                     }

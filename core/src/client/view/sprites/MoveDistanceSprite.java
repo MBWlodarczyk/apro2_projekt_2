@@ -18,6 +18,10 @@ public class MoveDistanceSprite {
         moveDistance = new ArrayList<>();
     }
 
+    /**
+     * Add elements to arrayList of sprites with positions connected with boolean marked table
+     * @param marked table of possible moves
+     */
     public void setSprites(boolean[][] marked) {
         Sprite s;
         for (int i = 1; i < Constants.GAME_SIZE - 1; i++) {
@@ -39,5 +43,4 @@ public class MoveDistanceSprite {
     public void draw(Batch batch) {
         for (Sprite value : moveDistance) value.draw(batch);
     }
-
 }

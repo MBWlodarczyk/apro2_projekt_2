@@ -1,6 +1,7 @@
 package client.view.screens;
 
 import client.controller.Client;
+import client.controller.Inputs;
 import client.view.SwordGame;
 import client.view.utility.GifDecoder;
 import com.badlogic.gdx.Gdx;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.net.ConnectException;
+
+import static client.controller.Inputs.*;
 
 public class WaitScreen extends AbstractScreen {
 
@@ -26,10 +29,10 @@ public class WaitScreen extends AbstractScreen {
         } catch (ConnectException e) {
             swordGame.setScreen(new LoadScreen(swordGame));
             System.out.println("can't connect");
-            swordGame.ip = "";
-            swordGame.nick = "";
-            swordGame.password = null;
-            swordGame.port = "";
+            ip = "";
+            nick = "";
+            port = "";
+            password = null;
             connected = false;
         }
 
@@ -54,10 +57,7 @@ public class WaitScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-
-        elapsed += Gdx.graphics.getDeltaTime();
-        Gdx.gl.glClearColor(0, 0, 0, 0);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        elapsed += delta;
         swordGame.batch.begin();
         swordGame.batch.draw(animation.getKeyFrame(elapsed), 272.0f, 112.0f);
         swordGame.batch.end();
