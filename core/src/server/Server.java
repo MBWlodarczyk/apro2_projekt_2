@@ -41,8 +41,8 @@ public class Server {
     }
 
     public Server() throws IOException {
-        loadConfig();
         answer = new Answer(new GameMap(22,mapType));
+        loadConfig();
         this.server = new ServerSocket(this.port);
         this.playerInput = new InputThread(this);
         run();
@@ -52,7 +52,7 @@ public class Server {
     /**
      * Method loading config from config.json
      */
-    private void loadConfig() {
+    private void loadConfig() throws IOException {
         JsonReader file = new JsonReader();
         JsonValue configJson = file.parse(new FileHandle("config.json"));
         JsonValue playerNumber = configJson.get("playerNumber");
@@ -61,6 +61,13 @@ public class Server {
         this.port = port.asInt();
         JsonValue mapType = configJson.get("mapType");
         this.mapType = mapType.asInt();
+        try {
+            this.answer.getMap().readMapFromFile(this.mapType);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            this.answer.getMap().loadMap();
+        }
         System.out.println(this.playerNumber);
         System.out.println(this.port);
         System.out.println(this.mapType);

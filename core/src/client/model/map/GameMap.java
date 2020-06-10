@@ -35,7 +35,7 @@ public class GameMap implements Serializable {
         }
     }
 
-    private String[][] readMapFromFile(int mapNumber) throws IOException {
+    public String[][] readMapFromFile(int mapNumber) throws IOException {
         String mapPath;
         if(mapNumber==1)  { mapPath = "mapTXT.txt";}
             else mapPath = "map_maze.txt";
@@ -51,7 +51,7 @@ public class GameMap implements Serializable {
     }
 
      //Loads map from file if file was correctly found
-    private void loadMap(String[][] mapString){
+    public void loadMap(String[][] mapString){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
@@ -67,7 +67,7 @@ public class GameMap implements Serializable {
     }
 
     // Loads map with grass if there's no file found
-    private void loadMap() {
+    public void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
