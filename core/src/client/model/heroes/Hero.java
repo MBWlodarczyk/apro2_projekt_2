@@ -39,7 +39,6 @@ public abstract class Hero extends Entity {
     private int mana;
     private final int maxMana;
 //    private double manaStatus;
-
     public Hero(Player owner, int weight, int startHealth, int health, int speed, int y, int x) {
         this.owner = owner;
         this.speed = speed;

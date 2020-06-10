@@ -99,7 +99,7 @@ public class ServerEngine {
         if(move.getWhat() instanceof Stay) return;
         if(move.getWhere()==move.getFrom())return;
         if (gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null) {
-            Hero temp = move.getWho();
+            Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
             gameMap.getFieldsArray()[y][x].setHero(null);
@@ -109,22 +109,39 @@ public class ServerEngine {
             gameMap.getFieldsArray()[y][x].setHero(temp);
         } else {
             if (move.getWhere().getHero()== null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight()) return;
-            Move next;
-            int k=1;
-            Queue<Point> possibilities;
-            do{
-                possibilities = fieldsInRadius(gameMap, move.getWhere(), k);
-                k++;
-                Point poss = null;
-                if (!possibilities.isEmpty()) poss = possibilities.poll();
-                next = new Move(move.getWhere().getHero(), gameMap.getFieldsArray()[(int)poss.getY()][(int)poss.getX()]
-                        , move.getWhere(), new Walk(k));
-            }while (possibilities.isEmpty() || !GameEngine.isValid(gameMap,next));
-            Hero temp = move.getWho();
+            //moving
+            Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
             int x = move.getFrom().getX();
             int y = move.getFrom().getY();
             gameMap.getFieldsArray()[y][x].setHero(null);
-            moveHero(gameMap, next);
+
+            Hero tmp = gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero();
+            int xt = move.getWhere().getX();
+            int yt = move.getWhere().getY();
+            gameMap.getFieldsArray()[yt][xt].setHero(null);
+
+            boolean changed=true;
+            int k=1;
+            Queue<Point> possibilities;
+            do{
+                possibilities = fieldsInRadius(gameMap, move.getWhere(), k++);
+                Point poss = possibilities.poll();
+                while (!possibilities.isEmpty()) {
+                    if(gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].getHero()==null){
+
+                        tmp.setX((int)poss.getX());
+                        tmp.setY((int)poss.getY());
+                        gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].setHero(tmp);
+                        changed=false;
+                    break;
+                    }
+                    poss=possibilities.poll();
+                }
+            }while (changed);
+            //moveHero(gameMap, next);
+
+            temp.setY(y);
+            temp.setX(x);
             x = move.getWhere().getX();
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
