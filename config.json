@@ -1,5 +1,5 @@
 {
-  "playerNumber": 1,
-  "serverPort": 1701,
-  "mapType": 1
+  "playerNumber":1,
+  "serverPort":1701,
+  "mapType":"standard"
 }
