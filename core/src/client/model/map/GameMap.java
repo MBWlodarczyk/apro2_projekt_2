@@ -6,7 +6,6 @@ import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.model.terrain.Water;
 
-import javax.swing.plaf.PanelUI;
 import java.io.*;
 import java.util.Scanner;
 
@@ -24,21 +23,18 @@ public class GameMap implements Serializable {
         this.map = copy.map;
     }
 
-    public GameMap(int size,int mapNumber) {
+    public GameMap(int size) {
         this.map = new Field[size][size];
-        try {
-            loadMap(readMapFromFile(mapNumber));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            loadMap();
-        }
     }
 
-    public String[][] readMapFromFile(int mapNumber) throws IOException {
-        String mapPath;
-        if(mapNumber==1)  { mapPath = "mapTXT.txt";}
-            else mapPath = "map_maze.txt";
+    /**
+     * Reads map from .txt file
+     * @param mapName name of map
+     * @return map in arrays of strings
+     * @throws IOException
+     */
+    public String[][] readMapFromFile(String mapName) throws IOException {
+        String mapPath = "map_"+mapName+".txt";
         Scanner scanner = new Scanner(new File(mapPath));
         String[][] mapString = new String[map.length][map.length];
         int rowNumber=0;
@@ -50,7 +46,10 @@ public class GameMap implements Serializable {
         return mapString;
     }
 
-     //Loads map from file if file was correctly found
+    /**
+     * Loads map if txt file was read correctly
+     * @param mapString map in arrays of strings
+     */
     public void loadMap(String[][] mapString){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -66,7 +65,9 @@ public class GameMap implements Serializable {
         }
     }
 
-    // Loads map with grass if there's no file found
+    /**
+     * Loads map with grass, if there was bug with reading txt file
+     */
     public void loadMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {

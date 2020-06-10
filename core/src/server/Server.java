@@ -34,14 +34,14 @@ public class Server {
     ServerSocket server;
     private boolean exit = false;
     private int port;
-    private int mapType; //type of a map
+    private String mapType; //type of a map
 
     public static void main(String[] args) throws IOException {
         new Server();
     }
 
     public Server() throws IOException {
-        answer = new Answer(new GameMap(22,mapType));
+        answer = new Answer(new GameMap(22));
         loadConfig();
         this.server = new ServerSocket(this.port);
         this.playerInput = new InputThread(this);
@@ -52,7 +52,7 @@ public class Server {
     /**
      * Method loading config from config.json
      */
-    private void loadConfig() throws IOException {
+    private void loadConfig() {
         JsonReader file = new JsonReader();
         JsonValue configJson = file.parse(new FileHandle("config.json"));
         JsonValue playerNumber = configJson.get("playerNumber");
@@ -60,12 +60,14 @@ public class Server {
         JsonValue port = configJson.get("ServerPort");
         this.port = port.asInt();
         JsonValue mapType = configJson.get("mapType");
-        this.mapType = mapType.asInt();
+        this.mapType = mapType.asString();
         try {
-            this.answer.getMap().readMapFromFile(this.mapType);
+            //loads map that was read from txt file
+            this.answer.getMap().loadMap(this.answer.getMap().readMapFromFile(this.mapType));
         }
         catch (IOException e) {
             e.printStackTrace();
+            //loads map with grass if there was error while reading map
             this.answer.getMap().loadMap();
         }
         System.out.println(this.playerNumber);
@@ -282,7 +284,7 @@ public class Server {
      * Method to restart the game
      */
     public void newGame() {
-        this.answer.setMap(new GameMap(22,2));
+        this.answer.setMap(new GameMap(22));
         this.answer.setWinner(null);
         this.answer.setGameWon(false);
         this.answer.setWrongNickPassword(false);
