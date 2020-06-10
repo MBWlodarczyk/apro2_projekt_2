@@ -1,24 +1,15 @@
 package client.view.screens;
 
 import client.controller.*;
-import client.model.heroes.*;
 import client.model.map.Field;
-import client.model.obstacles.Trap;
-import client.model.obstacles.Wall;
-import client.model.terrain.Grass;
-import client.model.terrain.Water;
 import client.view.SwordGame;
 import client.view.scenes.HeroStatisticHud;
 import client.view.scenes.QueueStateHud;
 import client.view.scenes.SendRemoveButtonHud;
 import client.view.scenes.SkillOptionsHud;
 import client.view.sprites.*;
-import client.view.utility.Constants;
+import client.view.utility.TextureManager;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 
@@ -28,13 +19,12 @@ import static client.controller.Inputs.tab;
 public class PlayScreen extends AbstractScreen {
     public Client client;
     private Field[][] map;
-    private OrthographicCamera gameCam;
-    private Viewport gamePort;
     private MouseSprite mouseSprite;
-    private SkillPanelSprite skillPanelSprite;
-    private MoveDistanceSprite skillDistanceSprite;
-    private ArrayList<ObstacleSprite> wallSprite, trapSprite;
-    private ArrayList<TerrainSprite> grassSprite, waterSprite;
+    private SkillPanelBackgroundSprite skillPanelBackgroundSprite;
+    private SkillDistanceSprite skillDistanceSprite;
+    private TextureManager textureManager;
+    private ArrayList<ObstacleSprite> obstacleSprites;
+    private ArrayList<TerrainSprite> terrainSprites;
     private ArrayList<HeroSprite> heroesSprites;
     private HandleInput handleInput;
     private HeroStatisticHud heroStatisticHud;
@@ -46,100 +36,45 @@ public class PlayScreen extends AbstractScreen {
     public PlayScreen(SwordGame swordGame, Client client) {
         super(swordGame);
         this.client = client;
-        this.map = client.getReceived().getMap().getFieldsArray();
-        this.gameCam = new OrthographicCamera();
-        this.gamePort = new FitViewport(Constants.WIDTH, Constants.HEIGHT, gameCam);
-        this.handleInput = new HandleInput(this);
-        this.heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
-        this.skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
-        this.queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
-        this.sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch, swordGame.skin, handleInput);
-        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        map = client.getReceived().getMap().getFieldsArray();
+        handleInput = new HandleInput(this);
+        heroStatisticHud = new HeroStatisticHud(swordGame.batch, swordGame.skin);
+        skillOptionsHud = new SkillOptionsHud(swordGame.batch, swordGame.skin);
+        queueStateHud = new QueueStateHud(swordGame.batch, swordGame.skin);
+        sendRemoveButtonHud = new SendRemoveButtonHud(swordGame.batch, swordGame.skin, handleInput);
+        textureManager = new TextureManager(swordGame);
         mouseSprite = new MouseSprite(swordGame.edgeTexture);
-        skillPanelSprite = new SkillPanelSprite(swordGame.skillPanelTexture);
-        skillDistanceSprite = new MoveDistanceSprite(swordGame.moveTexture);
-        wallSprite = new ArrayList<>();
-        trapSprite = new ArrayList<>();
-        grassSprite = new ArrayList<>();
-        waterSprite = new ArrayList<>();
+        skillPanelBackgroundSprite = new SkillPanelBackgroundSprite(swordGame.skillPanelTexture);
+        skillDistanceSprite = new SkillDistanceSprite(swordGame.moveTexture);
+        obstacleSprites = new ArrayList<>();
+        terrainSprites = new ArrayList<>();
         heroesSprites = new ArrayList<>();
-        rewriteMap();
         Gdx.input.setInputProcessor(handleInput);
     }
 
     private void addMusic() {
         swordGame.inGameTheme.setVolume(0.25f);
         swordGame.inGameTheme.setLooping(true);
-        //swordGame.inGameTheme.play();
-    }
-
-    private void rewriteMap() {
-        for (int i = 0; i < Constants.GAME_SIZE; i++) {
-            for (int j = 0; j < Constants.GAME_SIZE; j++) {
-                if (map[i][j].getObstacle() instanceof Wall) {
-                    wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.wallTexture));
-                }
-                if (map[i][j].getObstacle() instanceof Trap) { //TODO after debuging add there
-                    trapSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.trapTexture));
-                }
-                if (map[i][j].getTerrain() instanceof Water) {
-                    wallSprite.add(new ObstacleSprite(map[i][j].getObstacle(), swordGame.waterTexture));
-                }
-                if (map[i][j].getTerrain() instanceof Grass) {
-                    grassSprite.add(new TerrainSprite(map[i][j].getTerrain(), swordGame.grassTexture));
-                }
-                if (map[i][j].getHero() != null) {
-                    heroesSprites.add(new HeroSprite(map[i][j].getHero(), checkHero(i, j), swordGame.heroOwnershipTexture, heroOwnership(i, j)));
-                }
-            }
-        }
-    }
-
-    private boolean heroOwnership(int i, int j) {
-        return map[i][j].getHero().getOwner().equals(client.player);
-    }
-
-    private Texture checkHero(int i, int j) {
-        if (map[i][j].getHero() instanceof Paladin)
-            return swordGame.paladinTexture;
-        if (map[i][j].getHero() instanceof Warrior)
-            return swordGame.warriorTexture;
-        if (map[i][j].getHero() instanceof Archer)
-            return swordGame.archerTexture;
-        if (map[i][j].getHero() instanceof Necromancer)
-            return swordGame.necromancerTexture;
-        if (map[i][j].getHero() instanceof Wizard)
-            return swordGame.wizardTexture;
-        if (map[i][j].getHero() instanceof Priest)
-            return swordGame.priestTexture;
-        return null;
-    }
-
-    private void distanceMove() {
-        int x = Inputs.x;
-        int y = Inputs.y;
-        Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
-        boolean[][] marked = GameEngine.getValid(client.getReceived().getMap(), move.getWhere(), move.getWhat());
-        skillDistanceSprite.setSprites(marked);
+        swordGame.inGameTheme.play();
     }
 
     private void clear() {
         skillDistanceSprite.clear();
-        wallSprite.clear();
-        trapSprite.clear();
-        grassSprite.clear();
+        obstacleSprites.clear();
+        terrainSprites.clear();
         heroesSprites.clear();
         handleInput.getRectangles().clear();
     }
 
     @Override
     public void update(float delta) {
-        this.map = client.getReceived().getMap().getFieldsArray();
         clear();
-        gameCam.update();
-        rewriteMap();
+        this.map = client.getReceived().getMap().getFieldsArray();
+        textureManager.rewriteMap(map, client.player, obstacleSprites, terrainSprites, heroesSprites);
+
         if (handleInput.currentState == HandleInput.ControllerState.PERFORM_SKILL)
-            distanceMove();
+            textureManager.skillDistance(map,client.getReceived().getMap(),skillDistanceSprite);
+
         queueStateHud.updateText(client.getSend().toString());
         skillOptionsHud.update(delta);
 
@@ -161,11 +96,9 @@ public class PlayScreen extends AbstractScreen {
 
         swordGame.batch.begin();
 
-        skillPanelSprite.draw(swordGame.batch); //draw skill panel
-        grassSprite.forEach(n -> n.draw(swordGame.batch, delta)); //draw grass
-        waterSprite.forEach(n -> n.draw(swordGame.batch, delta)); //draw water
-        wallSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw walls
-        trapSprite.forEach(n -> n.draw(swordGame.batch, delta));  //draw traps
+        skillPanelBackgroundSprite.draw(swordGame.batch); //draw skill panel
+        terrainSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw terrain
+        obstacleSprites.forEach(n -> n.draw(swordGame.batch, delta));  //draw walls
         heroesSprites.forEach(n -> n.draw(swordGame.batch, delta)); //draw heroes
         skillDistanceSprite.draw(swordGame.batch); //draw dfs marked fields
         mouseSprite.draw(swordGame.batch);  //draw mouse
@@ -185,31 +118,25 @@ public class PlayScreen extends AbstractScreen {
 
     @Override
     public void resize(int width, int height) {
-        gamePort.update(width, height);
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
     public void dispose() {
-
     }
 }

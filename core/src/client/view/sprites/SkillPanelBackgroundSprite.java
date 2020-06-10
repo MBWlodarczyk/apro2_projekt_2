@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  * Background under the hud
  */
 
-public class SkillPanelSprite extends Sprite {
-    public SkillPanelSprite(Texture texture) {
+public class SkillPanelBackgroundSprite extends Sprite {
+    public SkillPanelBackgroundSprite(Texture texture) {
         super(texture, 0, 0, texture.getWidth(), texture.getHeight());
         setPosition(Constants.HEIGHT, 0);
     }

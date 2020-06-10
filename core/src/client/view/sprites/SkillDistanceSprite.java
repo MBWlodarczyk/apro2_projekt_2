@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
 
 
-public class MoveDistanceSprite {
+public class SkillDistanceSprite {
 
     private ArrayList<Sprite> moveDistance;
     private Texture texture;
 
-    public MoveDistanceSprite(Texture texture) {
+    public SkillDistanceSprite(Texture texture) {
         this.texture = texture;
         moveDistance = new ArrayList<>();
     }
