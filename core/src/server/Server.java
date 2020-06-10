@@ -15,7 +15,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * Main class to implement client server communication on server side
@@ -36,18 +35,17 @@ public class Server {
     private int port;
     private int mapType; //type of a map
 
-    public static void main(String[] args) throws IOException {
-        new Server();
-    }
-
     public Server() throws IOException {
-        answer = new Answer(new GameMap(22,mapType));
+        answer = new Answer(new GameMap(22, mapType));
         loadConfig();
         this.server = new ServerSocket(this.port);
         this.playerInput = new InputThread(this);
         run();
     }
 
+    public static void main(String[] args) throws IOException {
+        new Server();
+    }
 
     /**
      * Method loading config from config.json
@@ -63,8 +61,7 @@ public class Server {
         this.mapType = mapType.asInt();
         try {
             this.answer.getMap().readMapFromFile(this.mapType);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             this.answer.getMap().loadMap();
         }
@@ -88,6 +85,7 @@ public class Server {
 
     /**
      * Method accepting and handling single connection
+     *
      * @param i local client number
      * @param s socket to add
      */
@@ -105,6 +103,7 @@ public class Server {
 
     /**
      * Method to check if all players inited and send turns. When true it calls sendToAll
+     *
      * @return true if all send, false otherwise
      */
     public synchronized boolean check() throws IOException {
@@ -138,6 +137,7 @@ public class Server {
 
     /**
      * Method to compute moves and send map to all
+     *
      * @param moves true if you want to perform moves
      */
     public synchronized void sendToAll(boolean moves) throws IOException {
@@ -146,7 +146,7 @@ public class Server {
             answer = ServerEngine.performTurns(answer.getMap(), turns);
             turns.clear();
             //if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
-            if(false){
+            if (false) {
                 answer.setGameWon(true);
                 answer.setWinner(ServerEngine.checkWin(answer.getMap()));
                 System.out.println("Game won by " + answer.getWinner().getNick());
@@ -225,6 +225,7 @@ public class Server {
 
     /**
      * Method to check if player has already send turn
+     *
      * @param player player to check
      * @return true if sent
      */
@@ -234,9 +235,10 @@ public class Server {
 
     /**
      * Method initing one player
+     *
      * @param playerNumber which player it is starting from 0
-     * @param CornerX x corner of init place
-     * @param CornerY y corner of init place
+     * @param CornerX      x corner of init place
+     * @param CornerY      y corner of init place
      */
     private synchronized void initPlayer(int playerNumber, int CornerX, int CornerY) {
         Turn turn = clients.get(playerNumber).received;
@@ -250,6 +252,7 @@ public class Server {
         answer.getMap().getFieldsArray()[CornerX + 1][CornerY].setHero(hero3);
         answer.getMap().getFieldsArray()[CornerX + 1][CornerY + 1].setHero(hero4);
     }
+
     /**
      * Method to save the game to file
      */
@@ -261,6 +264,7 @@ public class Server {
         objectOut.close();
         System.out.println("Saved game");
     }
+
     /**
      * Method to load the game from file
      */
@@ -282,7 +286,7 @@ public class Server {
      * Method to restart the game
      */
     public void newGame() {
-        this.answer.setMap(new GameMap(22,2));
+        this.answer.setMap(new GameMap(22, 2));
         this.answer.setWinner(null);
         this.answer.setGameWon(false);
         this.answer.setWrongNickPassword(false);

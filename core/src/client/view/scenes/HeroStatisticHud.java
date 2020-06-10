@@ -28,7 +28,7 @@ public class HeroStatisticHud extends Hud {
 
     @Override
     public void draw(SpriteBatch batch, float delta) {
-        if (!s.equals("")) {
+        if (!s.equals("")) { //draw only if the text is not empty
             update(delta);
             stage.draw();
         }
@@ -41,6 +41,7 @@ public class HeroStatisticHud extends Hud {
 
     /**
      * Update text
+     *
      * @param s
      */
     public void updateText(String s) {

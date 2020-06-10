@@ -1,7 +1,8 @@
 package client.view.utility;
 
+import client.controller.Client;
+import client.controller.ControllerState;
 import client.controller.GameEngine;
-import client.controller.Inputs;
 import client.controller.Move;
 import client.model.Player;
 import client.model.heroes.*;
@@ -16,12 +17,15 @@ import client.view.sprites.HeroSprite;
 import client.view.sprites.ObstacleSprite;
 import client.view.sprites.SkillDistanceSprite;
 import client.view.sprites.TerrainSprite;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-import static client.controller.Inputs.tab;
+import static client.controller.Inputs.*;
+
+/**
+ * Update textures in all arrayLists which are
+ */
 
 public class TextureManager {
 
@@ -31,18 +35,34 @@ public class TextureManager {
         this.swordGame = swordGame;
     }
 
-    public void skillDistance(Field[][] map, GameMap gameMap, SkillDistanceSprite skillDistanceSprite) {
-        int x = Inputs.x;
-        int y = Inputs.y;
-        Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(Inputs.skillChosen));
+    /**
+     * Group off all update methods
+     *
+     * @param client              Client
+     * @param obstacleSprites     arrayList of obstacles
+     * @param terrainSprites      arrayList of terrain
+     * @param heroesSprites       arrayList of heroes
+     * @param skillDistanceSprite arrayList of skillDistance
+     */
+    public void update(Client client,
+                       ArrayList<ObstacleSprite> obstacleSprites, ArrayList<TerrainSprite> terrainSprites, ArrayList<HeroSprite> heroesSprites,
+                       SkillDistanceSprite skillDistanceSprite) {
+        Field[][] map = client.getReceived().getMap().getFieldsArray();
+        rewriteMap(map, client.player, obstacleSprites, terrainSprites, heroesSprites);
+        if (currentState == ControllerState.PERFORM_SKILL)
+            skillDistance(map, client.getReceived().getMap(), skillDistanceSprite);
+    }
+
+    private void skillDistance(Field[][] map, GameMap gameMap, SkillDistanceSprite skillDistanceSprite) {
+        Move move = new Move(map[y][x].getHero(), map[tab[0]][tab[1]], map[y][x], map[y][x].getHero().getSkills().get(skillChosen));
         boolean[][] marked = GameEngine.getValid(gameMap, move.getWhere(), move.getWhat());
         skillDistanceSprite.setSprites(marked);
     }
 
-    public void rewriteMap(Field[][] map, Player player,
+    private void rewriteMap(Field[][] map, Player player,
                             ArrayList<ObstacleSprite> obstacleSprites, ArrayList<TerrainSprite> terrainSprites, ArrayList<HeroSprite> heroesSprites) {
-        for (int i = 0; i < Constants.GAME_SIZE; i++) {
-            for (int j = 0; j < Constants.GAME_SIZE; j++) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
                 if (map[i][j].getObstacle() != null) { //TODO after debuging add there
                     obstacleSprites.add(new ObstacleSprite(map[i][j].getObstacle(), checkObstacleTexture(map[i][j])));
                 }

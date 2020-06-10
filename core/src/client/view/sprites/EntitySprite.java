@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- *  Abstract class which is responsible for updating the position and drawing sprite
+ * Abstract class which is responsible for updating the position and drawing sprite
+ *
  * @param <E>
  */
 public abstract class EntitySprite<E extends Entity> implements Updatable, Drawable {

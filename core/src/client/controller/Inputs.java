@@ -15,4 +15,5 @@ public class Inputs {
     public static String port;
     public static byte[] password;
     public static boolean[] chosen = new boolean[6];
+    public static ControllerState currentState;
 }

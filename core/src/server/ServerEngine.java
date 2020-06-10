@@ -11,7 +11,6 @@ import client.model.obstacles.Obstacle;
 import client.model.obstacles.Trap;
 import client.model.obstacles.Wall;
 import client.model.skills.*;
-import com.badlogic.gdx.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -54,14 +53,14 @@ public class ServerEngine {
         //damage dealing section
         if (move.getWhat().getRangeType() == SkillProperty.FloodRange && !(move.getWhat() instanceof Walk)) {
             for (Field f : GameEngine.findPath(gameMap, move.getFrom(), move.getWhere(), move.getWhat())) {
-                if(f.getHero() == null) continue;
-                addDamage(gameMap,f.getY(),f.getX(), move.getWhat().getValue());
+                if (f.getHero() == null) continue;
+                addDamage(gameMap, f.getY(), f.getX(), move.getWhat().getValue());
             }
         }
         if (move.getWhat().getRangeType() == SkillProperty.PointRange) {
-            if(move.getWhere().getHero() !=null) {
-                addDamage(gameMap,move.getWhere().getY(),move.getWhere().getX(),move.getWhat().getValue());
-            }else {
+            if (move.getWhere().getHero() != null) {
+                addDamage(gameMap, move.getWhere().getY(), move.getWhere().getX(), move.getWhat().getValue());
+            } else {
                 if (move.getWhat() instanceof SettingTrap || move.getWhat() instanceof SettingWall) {
                     buildObstacle(gameMap, move);
                 }
@@ -69,12 +68,12 @@ public class ServerEngine {
         }
         if (move.getWhat().getRangeType() == SkillProperty.AreaRange) {
             Queue<Point> inRange = fieldsInRadius(gameMap, move.getWhere(), move.getWhat().getRange());
-            inRange.add(new Point(move.getWhere().getX(),move.getWhere().getY()));
-            while(!inRange.isEmpty()){
+            inRange.add(new Point(move.getWhere().getX(), move.getWhere().getY()));
+            while (!inRange.isEmpty()) {
                 Point temp = inRange.poll();
-                Field target = gameMap.getFieldsArray()[(int)temp.getY()][(int)temp.getX()];
-                if(target.getHero() == null) continue;
-                addDamage(gameMap,target.getY(),target.getX(),move.getWhat().getValue());
+                Field target = gameMap.getFieldsArray()[(int) temp.getY()][(int) temp.getX()];
+                if (target.getHero() == null) continue;
+                addDamage(gameMap, target.getY(), target.getX(), move.getWhat().getValue());
             }
         }
         //movement section
@@ -82,7 +81,8 @@ public class ServerEngine {
             moveHero(gameMap, move);
         }
     }
-    private static void replenishMana(GameMap gameMap){
+
+    private static void replenishMana(GameMap gameMap) {
         Field[][] map = gameMap.getFieldsArray();
         for (Field[] fields : map) {
             for (int j = 0; j < map[0].length; j++) {
@@ -92,12 +92,13 @@ public class ServerEngine {
             }
         }
     }
+
     private static void moveHero(GameMap gameMap, Move move) {
-        if(move.getWhere().getObstacle() != null){
-            addDamage(gameMap,move.getFrom().getY(),move.getFrom().getX(),move.getWhere().getObstacle().getDamage());
+        if (move.getWhere().getObstacle() != null) {
+            addDamage(gameMap, move.getFrom().getY(), move.getFrom().getX(), move.getWhere().getObstacle().getDamage());
         }
-        if(move.getWhat() instanceof Stay) return;
-        if(move.getWhere()==move.getFrom())return;
+        if (move.getWhat() instanceof Stay) return;
+        if (move.getWhere() == move.getFrom()) return;
         if (gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null) {
             Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
             int x = move.getFrom().getX();
@@ -108,7 +109,8 @@ public class ServerEngine {
             y = move.getWhere().getY();
             gameMap.getFieldsArray()[y][x].setHero(temp);
         } else {
-            if (move.getWhere().getHero()== null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight()) return;
+            if (move.getWhere().getHero() == null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight())
+                return;
             //moving
             Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
             int x = move.getFrom().getX();
@@ -120,24 +122,24 @@ public class ServerEngine {
             int yt = move.getWhere().getY();
             gameMap.getFieldsArray()[yt][xt].setHero(null);
 
-            boolean changed=true;
-            int k=1;
+            boolean changed = true;
+            int k = 1;
             Queue<Point> possibilities;
-            do{
+            do {
                 possibilities = fieldsInRadius(gameMap, move.getWhere(), k++);
                 Point poss = possibilities.poll();
                 while (!possibilities.isEmpty()) {
-                    if(gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].getHero()==null){
+                    if (gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].getHero() == null) {
 
-                        tmp.setX((int)poss.getX());
-                        tmp.setY((int)poss.getY());
+                        tmp.setX((int) poss.getX());
+                        tmp.setY((int) poss.getY());
                         gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].setHero(tmp);
-                        changed=false;
-                    break;
+                        changed = false;
+                        break;
                     }
-                    poss=possibilities.poll();
+                    poss = possibilities.poll();
                 }
-            }while (changed);
+            } while (changed);
             //moveHero(gameMap, next);
 
             temp.setY(y);
@@ -147,20 +149,22 @@ public class ServerEngine {
             gameMap.getFieldsArray()[y][x].setHero(temp);
         }
     }
+
     private static void buildObstacle(GameMap gameMap, Move move) {
         int y = move.getWhere().getY();
         int x = move.getWhere().getX();
         Obstacle o = null;
-        if(move.getWhat() instanceof SettingWall)
+        if (move.getWhat() instanceof SettingWall)
             o = new Wall();
-        if(move.getWhat() instanceof SettingWall)
+        if (move.getWhat() instanceof SettingWall)
             o = new Trap(move.getWhat().getValue());
-        if(gameMap.getFieldsArray()[y][x].getHero()==null) {
+        if (gameMap.getFieldsArray()[y][x].getHero() == null) {
             gameMap.getFieldsArray()[y][x].setObstacle(o);
-            System.out.println("Trap set on:" + x +" "+y);
+            System.out.println("Trap set on:" + x + " " + y);
         }
     }
-    private static void addDamage(GameMap map, int y, int x, int damage){
+
+    private static void addDamage(GameMap map, int y, int x, int damage) {
         int health = map.getFieldsArray()[y][x].getHero().getHealth() + damage;
         map.getFieldsArray()[y][x].getHero().setHealth(health);
         System.out.println(map.getFieldsArray()[y][x].getHero().toString() + " is at: " + health + "HP");
@@ -187,13 +191,14 @@ public class ServerEngine {
         }
         return winner;
     }
-    private static Queue<Point> fieldsInRadius(GameMap gameMap, Field target, int radius){
-        boolean[][] possibilities = GameEngine.getValid(gameMap,target,new Walk(radius));
+
+    private static Queue<Point> fieldsInRadius(GameMap gameMap, Field target, int radius) {
+        boolean[][] possibilities = GameEngine.getValid(gameMap, target, new Walk(radius));
         Queue<Point> inRange = new LinkedList<>();
-        for (int i = 0; i< possibilities.length;i++) {
+        for (int i = 0; i < possibilities.length; i++) {
             for (int j = 0; j < possibilities[i].length; j++) {
-                if(i==target.getX() && j==target.getY()) continue;
-                if(possibilities[i][j]) inRange.add(new Point(i,j));
+                if (i == target.getX() && j == target.getY()) continue;
+                if (possibilities[i][j]) inRange.add(new Point(i, j));
             }
         }
         return inRange;

@@ -13,22 +13,23 @@ import java.net.Socket;
  */
 public class ServerThread extends Thread {
     public final Object lock = new Object();
-    Socket sock;
     public ObjectOutputStream os;
     public ObjectInputStream is;
     public String name;
-    private Server server;
     public Turn received;
     public boolean init;
     public Player player;
+    Socket sock;
     boolean exit;
+    private Server server;
 
     /**
      * Public constructor
-     * @param sock of connection
-     * @param is input stream from socket
-     * @param os output stream from socket
-     * @param name of client
+     *
+     * @param sock   of connection
+     * @param is     input stream from socket
+     * @param os     output stream from socket
+     * @param name   of client
      * @param server server reference
      */
     public ServerThread(Socket sock, ObjectInputStream is, ObjectOutputStream os, String name, Server server) {
@@ -97,6 +98,7 @@ public class ServerThread extends Thread {
 
     /**
      * Method to record player (used during init)
+     *
      * @param player player to record
      */
     private synchronized void recordPlayer(Player player) {
@@ -119,6 +121,7 @@ public class ServerThread extends Thread {
             server.unlock();
         }
     }
+
     /**
      * Records the reconnecting player if he is in server players.
      */
@@ -138,6 +141,7 @@ public class ServerThread extends Thread {
             this.dispose();
         }
     }
+
     /**
      * Checks if player didn't send turn already and receives it.
      */
@@ -145,8 +149,8 @@ public class ServerThread extends Thread {
         if (!server.hasSendTurn(player)) {
             System.out.println("Server: Waiting for turn from " + name);
             receive();
-            if(server.gameInit & checkTurn(received)){
-            server.turns.add(received);
+            if (server.gameInit & checkTurn(received)) {
+                server.turns.add(received);
             }
 
         }
@@ -154,10 +158,11 @@ public class ServerThread extends Thread {
 
     /**
      * Check if the turn came for the good player
+     *
      * @param turn turn to check
      * @return true if the turn is valid
      */
-    private synchronized boolean checkTurn(Turn turn){
+    private synchronized boolean checkTurn(Turn turn) {
         return received.getOwner().equals(player) &
                 turn.getMoves().stream()
                         .allMatch(move -> move.getWho().getOwner().equals(player));

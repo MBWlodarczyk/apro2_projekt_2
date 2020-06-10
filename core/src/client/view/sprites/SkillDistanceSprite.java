@@ -20,6 +20,7 @@ public class SkillDistanceSprite {
 
     /**
      * Add elements to arrayList of sprites with positions connected with boolean marked table
+     *
      * @param marked table of possible moves
      */
     public void setSprites(boolean[][] marked) {

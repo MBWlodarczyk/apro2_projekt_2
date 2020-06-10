@@ -1,7 +1,6 @@
 package client.view;
 
 import client.model.Player;
-import client.view.screens.LoadScreen;
 import client.view.screens.StartScreen;
 import client.view.utility.Assets;
 import com.badlogic.gdx.Game;
@@ -21,7 +20,7 @@ public class SwordGame extends Game {
             paladinTexture, warriorTexture, archerTexture, necromancerTexture, priestTexture, wizardTexture,
             moveTexture, edgeTexture, healthTexture, skillPanelTexture, trapTexture, heroOwnershipTexture,
             paladinTexture_dark, warriorTexture_dark, archerTexture_dark, necromancerTexture_dark, priestTexture_dark, wizardTexture_dark,
-            background,nameTexture;
+            background, nameTexture;
     public Music inGameTheme, theme;
 
     @Override
@@ -69,7 +68,7 @@ public class SwordGame extends Game {
         wizardTexture_dark = assets.manager.get("heroes/wizard_nygga.png", Texture.class);
 
         background = assets.manager.get("special/background.png", Texture.class);
-        nameTexture = assets.manager.get("special/name.png",Texture.class);
+        nameTexture = assets.manager.get("special/name.png", Texture.class);
         theme = assets.manager.get("sound/Induktancja1.mp3", Music.class);
 
         moveTexture = assets.manager.get("special/move.png", Texture.class);

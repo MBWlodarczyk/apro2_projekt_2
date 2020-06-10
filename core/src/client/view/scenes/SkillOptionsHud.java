@@ -1,6 +1,8 @@
 package client.view.scenes;
 
+import client.controller.ControllerState;
 import client.controller.HandleInput;
+import client.controller.Inputs;
 import client.model.map.Field;
 import client.view.utility.Constants;
 import client.view.utility.Drawable;
@@ -49,7 +51,7 @@ public class SkillOptionsHud implements Drawable, Updatable {
                 stage.addActor(text);
             }
         } else {
-            handleInput.currentState = HandleInput.ControllerState.IDLE;
+            Inputs.currentState = ControllerState.IDLE;
         }
     }
 

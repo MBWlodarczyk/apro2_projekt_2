@@ -6,8 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.awt.*;
-
 /**
  * Class responsible for loading all textures
  */

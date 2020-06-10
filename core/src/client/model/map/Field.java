@@ -66,7 +66,7 @@ public class Field implements Serializable {
 
     public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
-        if(obstacle != null){
+        if (obstacle != null) {
             obstacle.setX(x);
             obstacle.setY(y);
         }

@@ -21,7 +21,7 @@ public class SettingWall extends Skill { //temporary: unbreakable wall
     }
 
     public void buildWall(GameMap gameMap, int y, int x) {
-        if(gameMap.getFieldsArray()[y][x].getHero()==null)
-        gameMap.getFieldsArray()[y][x].setObstacle(new Wall());
+        if (gameMap.getFieldsArray()[y][x].getHero() == null)
+            gameMap.getFieldsArray()[y][x].setObstacle(new Wall());
     }
 }

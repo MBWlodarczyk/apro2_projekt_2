@@ -15,6 +15,7 @@ public abstract class Hero extends Entity {
      * Start health
      */
     private final int maxHealth;
+    private final int maxMana;
     /**
      * ArrayList of skills
      */
@@ -32,13 +33,12 @@ public abstract class Hero extends Entity {
      * Health of hero
      */
     private int health;
-//    private float healthStatus;
+    //    private float healthStatus;
     private int x;
     private int y;
-
     private int mana;
-    private final int maxMana;
-//    private double manaStatus;
+
+    //    private double manaStatus;
     public Hero(Player owner, int weight, int startHealth, int health, int speed, int y, int x) {
         this.owner = owner;
         this.speed = speed;
@@ -53,14 +53,17 @@ public abstract class Hero extends Entity {
         this.x = x;
         this.y = y;
     }
+
     public static int getIdGen() {
         return idGen;
     }
+
     public void replenishMana() {
-        if(mana+10< maxMana){
-            mana+=10;
+        if (mana + 10 < maxMana) {
+            mana += 10;
         } else mana = maxMana;
     }
+
     @Override
     public String toString() {
         return getClass().getSimpleName();

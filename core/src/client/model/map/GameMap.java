@@ -6,8 +6,9 @@ import client.model.obstacles.Wall;
 import client.model.terrain.Grass;
 import client.model.terrain.Water;
 
-import javax.swing.plaf.PanelUI;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Scanner;
 
 /**
@@ -20,16 +21,15 @@ public class GameMap implements Serializable {
      */
     private Field[][] map;
 
-    public GameMap(GameMap copy){
+    public GameMap(GameMap copy) {
         this.map = copy.map;
     }
 
-    public GameMap(int size,int mapNumber) {
+    public GameMap(int size, int mapNumber) {
         this.map = new Field[size][size];
         try {
             loadMap(readMapFromFile(mapNumber));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             loadMap();
         }
@@ -37,12 +37,13 @@ public class GameMap implements Serializable {
 
     public String[][] readMapFromFile(int mapNumber) throws IOException {
         String mapPath;
-        if(mapNumber==1)  { mapPath = "mapTXT.txt";}
-            else mapPath = "map_maze.txt";
+        if (mapNumber == 1) {
+            mapPath = "mapTXT.txt";
+        } else mapPath = "map_maze.txt";
         Scanner scanner = new Scanner(new File(mapPath));
         String[][] mapString = new String[map.length][map.length];
-        int rowNumber=0;
-        while(scanner.hasNextLine()) {
+        int rowNumber = 0;
+        while (scanner.hasNextLine()) {
             String[] row = scanner.nextLine().split(";");
             System.arraycopy(row, 0, mapString[rowNumber], 0, row.length);
             rowNumber++;
@@ -50,16 +51,16 @@ public class GameMap implements Serializable {
         return mapString;
     }
 
-     //Loads map from file if file was correctly found
-    public void loadMap(String[][] mapString){
+    //Loads map from file if file was correctly found
+    public void loadMap(String[][] mapString) {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Field(i, j);
                 map[i][j].setTerrain(new Grass(i, j));
-                if(mapString[i][j].equals("s")){ //s from sea
-                    map[i][j].setTerrain(new Water(i,j));
+                if (mapString[i][j].equals("s")) { //s from sea
+                    map[i][j].setTerrain(new Water(i, j));
                 }
-                if(mapString[i][j].equals("w")){
+                if (mapString[i][j].equals("w")) {
                     map[i][j].setObstacle(new Wall());
                 }
             }
@@ -86,7 +87,7 @@ public class GameMap implements Serializable {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if(map[j][i].getObstacle() instanceof Trap)
+                if (map[j][i].getObstacle() instanceof Trap)
                     sb.append("TRAP").append(" ");
                 else
                     sb.append(" null");

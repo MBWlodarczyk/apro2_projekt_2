@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
 
-import static client.controller.HandleInput.ControllerState.*;
+import static client.controller.ControllerState.*;
 import static client.controller.Inputs.*;
 
 /**
@@ -19,26 +19,25 @@ import static client.controller.Inputs.*;
  */
 public class HandleInput implements InputProcessor {
 
-    public ControllerState currentState;
     private PlayScreen playScreen;
     private Field field;
     private ArrayList<Rectangle> rectangles;
     private Rectangle sendTurnRec, removeMoveRec;
 
     public HandleInput(PlayScreen playScreen) {
-        this.currentState = IDLE;
+        currentState = IDLE;
         this.playScreen = playScreen;
         this.rectangles = new ArrayList<>();
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) { //TODO fix it XDDDDDDD
         anyHeroChosen = false; //set anyHeroChosen at start always as false
         if (buttonsTouch(screenX, screenY)) //check if the sendTurn or removeMove buttons were clicked (if jes return true)
             return true;
 
         if (screenX < Constants.HEIGHT) {
-            getCord(screenX, screenY); //zwraca cordy gdzie przycisnelismy
+            getCord(screenX, screenY);
             field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
             if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().equals(playScreen.swordGame.player)) { //next state HEROCHOSEN and set anyHero as true
                 currentState = HERO_CHOSEN;
@@ -187,12 +186,4 @@ public class HandleInput implements InputProcessor {
         return false;
     }
 
-    public enum ControllerState {
-        IDLE(0),
-        HERO_CHOSEN(1),
-        PERFORM_SKILL(2);
-
-        ControllerState(int index) {
-        }
-    }
 }
