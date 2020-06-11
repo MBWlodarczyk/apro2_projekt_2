@@ -7,7 +7,7 @@ public class SettingTrap extends Skill {
 
     public SettingTrap() {
         distance = 2;
-        value = -15;
+        value = -40;
         range = 1;
 
         afterAttack = SkillProperty.StayOnSpot;

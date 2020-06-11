@@ -51,15 +51,15 @@ public class ServerEngine {
             if (GameEngine.isWallOnWay(gameMap, move)) return;
         }
         //damage dealing section
-        if (move.getWhat().getRangeType() == SkillProperty.FloodRange && !(move.getWhat() instanceof Walk)) {
+        if (!(move.getWhat() instanceof Walk) && move.getWhat().getRangeType() == SkillProperty.FloodRange) {
             for (Field f : GameEngine.findPath(gameMap, move.getFrom(), move.getWhere(), move.getWhat())) {
                 if (f.getHero() == null) continue;
-                addDamage(gameMap, f.getY(), f.getX(), move.getWhat().getValue());
+                addDamage(gameMap, f.getY(), f.getX(), move.getWhat().getValue(),move);
             }
         }
         if (move.getWhat().getRangeType() == SkillProperty.PointRange) {
             if (move.getWhere().getHero() != null) {
-                addDamage(gameMap, move.getWhere().getY(), move.getWhere().getX(), move.getWhat().getValue());
+                addDamage(gameMap, move.getWhere().getY(), move.getWhere().getX(), move.getWhat().getValue(),move);
             } else {
                 if (move.getWhat() instanceof SettingTrap || move.getWhat() instanceof SettingWall) {
                     buildObstacle(gameMap, move);
@@ -73,7 +73,7 @@ public class ServerEngine {
                 Point temp = inRange.poll();
                 Field target = gameMap.getFieldsArray()[(int) temp.getY()][(int) temp.getX()];
                 if (target.getHero() == null) continue;
-                addDamage(gameMap, target.getY(), target.getX(), move.getWhat().getValue());
+                addDamage(gameMap, target.getY(), target.getX(), move.getWhat().getValue(),move);
             }
         }
         //movement section
@@ -82,6 +82,10 @@ public class ServerEngine {
         }
     }
 
+    /**
+     * method to restore 10 mana points after move.
+     * @param gameMap
+     */
     private static void replenishMana(GameMap gameMap) {
         Field[][] map = gameMap.getFieldsArray();
         for (Field[] fields : map) {
@@ -93,30 +97,27 @@ public class ServerEngine {
         }
     }
 
+    /**
+     * method handling hero movement considering weight, traps, and occupied fields
+     * @param gameMap
+     * @param move
+     */
     private static void moveHero(GameMap gameMap, Move move) {
         if (move.getWhere().getObstacle() != null) {
-            addDamage(gameMap, move.getFrom().getY(), move.getFrom().getX(), move.getWhere().getObstacle().getDamage());
+            addDamage(gameMap, move.getFrom().getY(), move.getFrom().getX(), move.getWhere().getObstacle().getDamage(),null);
+            gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].setObstacle(null);
         }
         if (move.getWhat() instanceof Stay) return;
         if (move.getWhere() == move.getFrom()) return;
-        if (gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() == null) {
-            Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
-            int x = move.getFrom().getX();
-            int y = move.getFrom().getY();
-            gameMap.getFieldsArray()[y][x].setHero(null);
+        if (move.getWhere().getHero() != null && move.getWho().getWeight() <= move.getWhere().getHero().getWeight()) return;
+        //moving hero
+        Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
+        int x = move.getFrom().getX();
+        int y = move.getFrom().getY();
+        gameMap.getFieldsArray()[y][x].setHero(null);
 
-            x = move.getWhere().getX();
-            y = move.getWhere().getY();
-            gameMap.getFieldsArray()[y][x].setHero(temp);
-        } else {
-            if (move.getWhere().getHero() == null || move.getWho().getWeight() <= move.getWhere().getHero().getWeight())
-                return;
-            //moving
-            Hero temp = gameMap.getFieldsArray()[move.getFrom().getY()][move.getFrom().getX()].getHero();
-            int x = move.getFrom().getX();
-            int y = move.getFrom().getY();
-            gameMap.getFieldsArray()[y][x].setHero(null);
-
+        if(gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero() != null){
+            //second hero movement
             Hero tmp = gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero();
             int xt = move.getWhere().getX();
             int yt = move.getWhere().getY();
@@ -129,34 +130,42 @@ public class ServerEngine {
                 possibilities = fieldsInRadius(gameMap, move.getWhere(), k++);
                 Point poss = possibilities.poll();
                 while (!possibilities.isEmpty()) {
-                    if (gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].getHero() == null) {
-
+                    if (gameMap.getFieldsArray()[poss.y][poss.x].getHero() == null) {
                         tmp.setX((int) poss.getX());
                         tmp.setY((int) poss.getY());
-                        gameMap.getFieldsArray()[(int) poss.getY()][(int) poss.getX()].setHero(tmp);
+                        gameMap.getFieldsArray()[poss.y][poss.x].setHero(tmp);
+                        //spychanie na trap
+                        if (gameMap.getFieldsArray()[poss.y][poss.x].getObstacle() != null) {
+                            addDamage(gameMap, poss.y, poss.x,
+                                    gameMap.getFieldsArray()[poss.y][poss.x].getObstacle().getDamage(),null);
+                            gameMap.getFieldsArray()[poss.y][poss.x].setObstacle(null);
+                        }
                         changed = false;
                         break;
                     }
                     poss = possibilities.poll();
                 }
             } while (changed);
-            //moveHero(gameMap, next);
-
-            temp.setY(y);
-            temp.setX(x);
-            x = move.getWhere().getX();
-            y = move.getWhere().getY();
-            gameMap.getFieldsArray()[y][x].setHero(temp);
         }
+        temp.setY(y);
+        temp.setX(x);
+        x = move.getWhere().getX();
+        y = move.getWhere().getY();
+        gameMap.getFieldsArray()[y][x].setHero(temp);
     }
 
+    /**
+     * method for handling what obstacle should be built on field
+     * @param gameMap
+     * @param move
+     */
     private static void buildObstacle(GameMap gameMap, Move move) {
         int y = move.getWhere().getY();
         int x = move.getWhere().getX();
         Obstacle o = null;
         if (move.getWhat() instanceof SettingWall)
             o = new Wall();
-        if (move.getWhat() instanceof SettingWall)
+        if (move.getWhat() instanceof SettingTrap)
             o = new Trap(move.getWhat().getValue());
         if (gameMap.getFieldsArray()[y][x].getHero() == null) {
             gameMap.getFieldsArray()[y][x].setObstacle(o);
@@ -164,12 +173,36 @@ public class ServerEngine {
         }
     }
 
-    private static void addDamage(GameMap map, int y, int x, int damage) {
-        int health = map.getFieldsArray()[y][x].getHero().getHealth() + damage;
+    /**
+     * method to deal damage to a hero.
+     * damage is multiplied by how many friendly heroes are in 4-neighbourhood
+     * @param map
+     * @param y
+     * @param x
+     * @param damage
+     * @param m
+     */
+    private static void addDamage(GameMap map, int y, int x, int damage,Move m) {
+        int multiplier = 1;
+        if(m!=null) {
+            Queue<Point> check = fieldsInRadius(map, map.getFieldsArray()[m.getFrom().getY()][m.getFrom().getX()], 1);
+            Player owner = m.getWhose();
+            for (Point p : check) {
+                if (map.getFieldsArray()[(int) p.getY()][(int) p.getX()].getHero() == null) continue;
+                if (map.getFieldsArray()[(int) p.getY()][(int) p.getX()].getHero().getOwner().equals(owner))
+                    multiplier++;
+            }
+        }
+        int health = map.getFieldsArray()[y][x].getHero().getHealth() + (damage*multiplier);
         map.getFieldsArray()[y][x].getHero().setHealth(health);
         System.out.println(map.getFieldsArray()[y][x].getHero().toString() + " is at: " + health + "HP");
     }
 
+    /**
+     * player wins if there are no other player's heroes
+     * @param gameMap
+     * @return
+     */
     static Player checkWin(GameMap gameMap) {
         Field[][] map = gameMap.getFieldsArray();
         Player winner = null;
@@ -192,13 +225,20 @@ public class ServerEngine {
         return winner;
     }
 
+    /**
+     * Method returning queue of near fields in radius
+     * @param gameMap
+     * @param target
+     * @param radius
+     * @return
+     */
     private static Queue<Point> fieldsInRadius(GameMap gameMap, Field target, int radius) {
         boolean[][] possibilities = GameEngine.getValid(gameMap, target, new Walk(radius));
         Queue<Point> inRange = new LinkedList<>();
         for (int i = 0; i < possibilities.length; i++) {
             for (int j = 0; j < possibilities[i].length; j++) {
                 if (i == target.getX() && j == target.getY()) continue;
-                if (possibilities[i][j]) inRange.add(new Point(i, j));
+                if (possibilities[j][i]) inRange.add(new Point(i, j));
             }
         }
         return inRange;
