@@ -1,17 +1,25 @@
 package client.view.sprites;
 
 import client.view.utility.Constants;
+import client.view.utility.Drawable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Sprite of Mouse
+ */
 public class MouseSprite extends Sprite {
     public MouseSprite(Texture texture) {
-        super(texture, 0, 0, texture.getWidth(), texture.getHeight());
-        setPosition(-50, -50);
+        super(texture, texture.getWidth(), texture.getHeight());
+        setPosition(-50, -50); //set default position as - 50, -50, thanks to that mouse is invisible when we start game
     }
 
+    /**
+     * set Position by computing the x, y position of mouse
+     */
     private void setPosition() {
         int x = Gdx.input.getX();
         int y = Gdx.input.getY();

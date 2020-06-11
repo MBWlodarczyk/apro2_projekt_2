@@ -18,10 +18,10 @@ abstract class Hud implements Updatable, Drawable {
     Stage stage;
     Viewport viewport;
     Label label;
+    String text;
 
     Hud(SpriteBatch spriteBatch, Skin skin) {
         viewport = new FillViewport(Constants.WIDTH, Constants.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, spriteBatch);
     }
-
 }

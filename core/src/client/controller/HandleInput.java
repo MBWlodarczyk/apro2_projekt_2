@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.model.heroes.Hero;
 import client.model.map.Field;
 import client.model.skills.Stay;
 import client.view.screens.PlayScreen;
@@ -25,7 +26,7 @@ public class HandleInput implements InputProcessor {
     private Rectangle sendTurnRec, removeMoveRec;
 
     public HandleInput(PlayScreen playScreen) {
-        currentState = IDLE;
+        currentState = IDLE; //start state as IDLE
         this.playScreen = playScreen;
         this.rectangles = new ArrayList<>();
     }
@@ -111,11 +112,11 @@ public class HandleInput implements InputProcessor {
                 playScreen.client.getSend().addMove(move);
                 System.out.println("Adding move...");
                 if (!move.getWhat().getSoundPath().equals("")) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(move.getWhat().getSoundPath()));
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(move.getWhat().getSoundPath())); //TODO change it to load in assets
                     sound.play(0.6f);
                 }
             } else {
-                Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/bruh.wav"));
+                Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/bruh.wav")); //TODO there also move to assets
                 sound.play(0.6f);
             }
             System.out.println(playScreen.client.getSend().getMoves().size());
@@ -185,5 +186,4 @@ public class HandleInput implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
-
 }
