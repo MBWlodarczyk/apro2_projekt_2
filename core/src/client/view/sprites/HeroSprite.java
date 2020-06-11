@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Class which take Hero as a E
+ */
 public class HeroSprite extends EntitySprite<Hero> {
     private Sprite sprite;
-    private boolean ownership;
+    private boolean ownership; //if that hero belong to the client
 
     public HeroSprite(Hero hero, Texture texture, Texture ownershipTexture, boolean ownership) {
         super(hero, texture);

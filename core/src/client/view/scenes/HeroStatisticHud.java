@@ -10,16 +10,14 @@ import com.badlogic.gdx.utils.Align;
 public class HeroStatisticHud extends Hud {
 
 
-    private String s;
-
     public HeroStatisticHud(SpriteBatch spriteBatch, Skin skin) {
         super(spriteBatch, skin);
         Dialog dialog = new Dialog("", skin);
         dialog.setSize(288, 224);
         dialog.setPosition(Constants.HEIGHT, Constants.TEXTURE_SIZE);
         dialog.setFillParent(false);
-        s = "";
-        label = new Label(s, skin);
+        text = "";
+        label = new Label(text, skin);
         label.setFontScale(0.8f); //scale font
         label.setAlignment(Align.center); //set at center
         dialog.getContentTable().add(label).left().size(288, 224);
@@ -28,7 +26,7 @@ public class HeroStatisticHud extends Hud {
 
     @Override
     public void draw(SpriteBatch batch, float delta) {
-        if (!s.equals("")) { //draw only if the text is not empty
+        if (!text.equals("")) { //draw only if the text is not empty
             update(delta);
             stage.draw();
         }
@@ -36,7 +34,7 @@ public class HeroStatisticHud extends Hud {
 
     @Override
     public void update(float delta) {
-        label.setText(s);
+        label.setText(text);
     }
 
     /**
@@ -45,7 +43,7 @@ public class HeroStatisticHud extends Hud {
      * @param s
      */
     public void updateText(String s) {
-        this.s = s;
+        this.text = s;
     }
 
 }

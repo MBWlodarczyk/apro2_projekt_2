@@ -10,8 +10,6 @@ import com.badlogic.gdx.utils.Align;
 public class QueueStateHud extends Hud {
 
 
-    private String s;
-
     public QueueStateHud(SpriteBatch spriteBatch, Skin skin) {
         super(spriteBatch, skin);
         label = new Label("", skin);
@@ -28,7 +26,7 @@ public class QueueStateHud extends Hud {
 
     @Override
     public void draw(SpriteBatch batch, float delta) {
-        if (!s.equals("")) {
+        if (!text.equals("")) {
             update(delta);
             stage.draw();
         }
@@ -36,10 +34,10 @@ public class QueueStateHud extends Hud {
 
     @Override
     public void update(float delta) {
-        label.setText(s);
+        label.setText(text);
     }
 
     public void updateText(String s) {
-        this.s = s;
+        this.text = s;
     }
 }
