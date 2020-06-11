@@ -4,9 +4,9 @@ package client.model.skills;
  * Abstract class to represent skill of short range attack.
  */
 public class Melee extends Skill {
-    public Melee() {
+    public Melee(int value) {
         distance = 2;
-        value = -20;
+        this.value = value;
         range = 1;
 
         afterAttack = SkillProperty.GoToTarget;

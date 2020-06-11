@@ -6,7 +6,7 @@ package client.model.skills;
 public class Heal extends Skill {
     public Heal(boolean Strong) {
         if (Strong) {
-            distance = 5;
+            distance = 4;
             value = +20;
             range = 1;
 

@@ -17,15 +17,4 @@ public class SettingTrap extends Skill {
         soundPath = "sound/trap_wire.mp3";
     }
 
-    public SettingTrap(int damage) {
-        distance = 2;
-        value = damage;
-        range = 1;
-
-        afterAttack = SkillProperty.StayOnSpot;
-        useDistance = SkillProperty.Flood;
-        rangeType = SkillProperty.PointRange;
-    }
-
-
 }

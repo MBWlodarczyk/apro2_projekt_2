@@ -87,8 +87,22 @@ public abstract class Hero extends Entity {
         return health;
     }
 
+    public boolean isDead(){
+        return this.health == 0;
+    }
+
+    public void ressurect(){
+        this.health=100;
+    }
+
     public void setHealth(int health) {
-        this.health = health;
+        if(this.health==0) return;
+        if(health>this.maxHealth){
+            this.health=maxHealth;
+            return;
+        }
+        if(health>0)this.health = health;
+        else this.health=0;
     }
 
     public String description() {

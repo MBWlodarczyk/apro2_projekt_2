@@ -9,7 +9,7 @@ import client.model.obstacles.Wall;
 public class SettingWall extends Skill { //temporary: unbreakable wall
 
     public SettingWall() {
-        distance = 7;
+        distance = 3;
         value = 0;
         range = 1;
 
@@ -18,10 +18,5 @@ public class SettingWall extends Skill { //temporary: unbreakable wall
         rangeType = SkillProperty.PointRange;
 
         soundPath = "sound/block.mp3";
-    }
-
-    public void buildWall(GameMap gameMap, int y, int x) {
-        if (gameMap.getFieldsArray()[y][x].getHero() == null)
-            gameMap.getFieldsArray()[y][x].setObstacle(new Wall());
     }
 }

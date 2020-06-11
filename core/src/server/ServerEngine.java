@@ -5,6 +5,7 @@ import client.controller.Move;
 import client.controller.Turn;
 import client.model.Player;
 import client.model.heroes.Hero;
+import client.model.heroes.Necromancer;
 import client.model.map.Field;
 import client.model.map.GameMap;
 import client.model.obstacles.Obstacle;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.Callable;
 
 public class ServerEngine {
     /**
@@ -59,6 +61,9 @@ public class ServerEngine {
         }
         if (move.getWhat().getRangeType() == SkillProperty.PointRange) {
             if (move.getWhere().getHero() != null) {
+                if(move.getWhat() instanceof Necromancy){
+                    gameMap.getFieldsArray()[move.getWhere().getY()][move.getWhere().getX()].getHero().ressurect();
+                }
                 addDamage(gameMap, move.getWhere().getY(), move.getWhere().getX(), move.getWhat().getValue(),move);
             } else {
                 if (move.getWhat() instanceof SettingTrap || move.getWhat() instanceof SettingWall) {
@@ -130,6 +135,7 @@ public class ServerEngine {
                 possibilities = fieldsInRadius(gameMap, move.getWhere(), k++);
                 Point poss = possibilities.poll();
                 while (!possibilities.isEmpty()) {
+                    assert poss != null;
                     if (gameMap.getFieldsArray()[poss.y][poss.x].getHero() == null) {
                         tmp.setX((int) poss.getX());
                         tmp.setY((int) poss.getY());
@@ -169,7 +175,7 @@ public class ServerEngine {
             o = new Trap(move.getWhat().getValue());
         if (gameMap.getFieldsArray()[y][x].getHero() == null) {
             gameMap.getFieldsArray()[y][x].setObstacle(o);
-            System.out.println("Trap set on:" + x + " " + y);
+            //System.out.println("Trap set on:" + x + " " + y);
         }
     }
 
@@ -195,7 +201,7 @@ public class ServerEngine {
         }
         int health = map.getFieldsArray()[y][x].getHero().getHealth() + (damage*multiplier);
         map.getFieldsArray()[y][x].getHero().setHealth(health);
-        System.out.println(map.getFieldsArray()[y][x].getHero().toString() + " is at: " + health + "HP");
+        //System.out.println(map.getFieldsArray()[y][x].getHero().toString() + " is at: " + health + "HP");
     }
 
     /**

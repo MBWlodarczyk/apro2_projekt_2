@@ -7,8 +7,8 @@ package client.model.skills;
 public class ArrowLongDist extends Skill {
 
     public ArrowLongDist() {
-        distance = 7;
-        value = -20;
+        distance = 6;
+        value = -10;
         range = 1;
 
         afterAttack = SkillProperty.StayOnSpot;

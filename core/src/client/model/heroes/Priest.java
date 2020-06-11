@@ -1,10 +1,7 @@
 package client.model.heroes;
 
 import client.model.Player;
-import client.model.skills.Heal;
-import client.model.skills.SettingWall;
-import client.model.skills.Stay;
-import client.model.skills.Walk;
+import client.model.skills.*;
 
 public class Priest extends Hero {
     final int id;
@@ -16,5 +13,6 @@ public class Priest extends Hero {
         this.skills.add(new Stay());
         this.skills.add(new Heal(true));
         this.skills.add(new SettingWall());
+        this.skills.add(new Melee(-10));
     }
 }

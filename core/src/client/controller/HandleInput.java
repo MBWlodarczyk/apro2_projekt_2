@@ -108,7 +108,7 @@ public class HandleInput implements InputProcessor {
         Field field = fieldsArray[y][x];
         Move move = new Move(field.getHero(), this.field, field, field.getHero().getSkills().get(index));
         if (GameEngine.isValid(playScreen.client.getReceived().getMap(), move)) {
-            if (!GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
+            if (GameEngine.checkMove(move, playScreen.client.getSend().getMoves())) {
                 playScreen.client.getSend().addMove(move);
                 System.out.println("Adding move...");
                 if (!move.getWhat().getSoundPath().equals("")) {

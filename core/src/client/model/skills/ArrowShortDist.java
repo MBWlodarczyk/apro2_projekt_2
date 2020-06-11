@@ -7,7 +7,7 @@ package client.model.skills;
 public class ArrowShortDist extends Skill {
 
     public ArrowShortDist() {
-        distance = 5;
+        distance = 4;
         value = -20;
         range = 1;
 

@@ -9,7 +9,7 @@ import client.model.map.GameMap;
 public class Teleport extends Skill {
 
     public Teleport() {
-        distance = 15;
+        distance = 10;
         range = 1;
 
         afterAttack = SkillProperty.GoToTarget;
@@ -19,8 +19,4 @@ public class Teleport extends Skill {
         soundPath = "sound/teleport.mp3";
     }
 
-    public void teleportation(GameMap gameMap, int x, int y, Hero hero) {
-        gameMap.getFieldsArray()[hero.getX()][hero.getY()].setHero(null);
-        gameMap.getFieldsArray()[x][y].setHero(hero);
-    }
 }

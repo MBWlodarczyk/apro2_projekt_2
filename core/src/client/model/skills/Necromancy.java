@@ -5,7 +5,7 @@ package client.model.skills;
  */
 public class Necromancy extends Skill {
     public Necromancy() {
-        this.distance = 10;
+        this.distance = 5;
         this.range = 1;
 
         afterAttack = SkillProperty.GoToTarget;

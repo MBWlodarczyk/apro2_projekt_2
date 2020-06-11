@@ -70,19 +70,21 @@ public class GameEngine {
      * @return
      */
     public static boolean checkMove(Move move, Queue<Move> moves) {
+        //check if hero is dead
+        if(move.getWho().isDead())return false;
         //check if tile is crossable
         if (move.getWhere().getObstacle() != null && !move.getWhere().getObstacle().isCrossable()) {
             System.out.println("This tile is not crossable");
-            return true;
+            return false;
         }
         // check if hero has moved yet.
         for (Move m : moves) {
             if (!m.equals(move) && m.getWho().equals(move.getWho())) {
                 System.out.println("This hero has made a move already");
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     /**
