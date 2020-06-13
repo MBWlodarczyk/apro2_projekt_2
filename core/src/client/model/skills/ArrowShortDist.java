@@ -10,6 +10,7 @@ public class ArrowShortDist extends Skill {
         distance = 4;
         value = -20;
         range = 1;
+        cost=10;
 
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.Lob;

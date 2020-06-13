@@ -9,6 +9,7 @@ public class Heal extends Skill {
             distance = 4;
             value = +20;
             range = 1;
+            cost=20;
 
             afterAttack = SkillProperty.GoToTarget;
             useDistance = SkillProperty.Flood;

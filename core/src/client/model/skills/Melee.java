@@ -8,6 +8,7 @@ public class Melee extends Skill {
         distance = 2;
         this.value = value;
         range = 1;
+        cost=5;
 
         afterAttack = SkillProperty.GoToTarget;
         useDistance = SkillProperty.Flood;

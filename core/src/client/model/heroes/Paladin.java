@@ -7,7 +7,7 @@ public class Paladin extends Hero {
     final int id;
 
     public Paladin(Player owner, int y, int x) {
-        super(owner, 120, 120, 120, 5, y, x);
+        super(owner, 120, 120, 120, 5, y, x,100);
         id = idGen++;
         this.skills.add(new Walk(3));
         this.skills.add(new Stay());

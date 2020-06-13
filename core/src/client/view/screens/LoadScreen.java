@@ -114,7 +114,7 @@ public class LoadScreen extends AbstractScreen {
     private void addMusic() {
         swordGame.theme.setVolume(0.7f);
         swordGame.theme.setLooping(true);
-        //swordGame.theme.play();
+        swordGame.theme.play();
     }
 
     private void ipInput(int x, int y) {

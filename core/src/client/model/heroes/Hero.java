@@ -23,14 +23,14 @@ public abstract class Hero extends Entity {
     private int y;
     private int mana;
 
-    public Hero(Player owner, int weight, int startHealth, int health, int speed, int y, int x) {
+    public Hero(Player owner, int weight, int startHealth, int health, int speed, int y, int x, int maxMana) {
         this.owner = owner;
         this.speed = speed;
         this.weight = weight;
         this.health = health;
         this.maxHealth = startHealth;
-        this.mana = health;
-        this.maxMana = startHealth;
+        this.mana = maxMana;
+        this.maxMana = maxMana;
         this.skills = new ArrayList<>();
         this.x = x;
         this.y = y;
@@ -65,6 +65,10 @@ public abstract class Hero extends Entity {
     @Override
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getMana(){
+        return this.mana;
     }
 
     public Player getOwner() {
@@ -105,6 +109,11 @@ public abstract class Hero extends Entity {
         else this.health=0;
     }
 
+    public void setMana(int mana){
+        if(this.mana==0) return;
+        if(mana<0) return;
+        this.mana=mana;
+    }
     public String description() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName() + '\n');

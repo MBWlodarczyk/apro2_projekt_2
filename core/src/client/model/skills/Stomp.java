@@ -9,6 +9,7 @@ public class Stomp extends Skill {
         distance = 5;
         value = -10;
         range = 3;
+        cost=25;
 
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.Flood;

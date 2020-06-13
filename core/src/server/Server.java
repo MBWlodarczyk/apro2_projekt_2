@@ -15,7 +15,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Scanner;
 
 /**
  * Main class to implement client server communication on server side
@@ -41,7 +40,7 @@ public class Server {
     }
 
     public Server() throws IOException {
-        answer = new Answer(new GameMap(22));
+        answer = new Answer(new GameMap(22),null);
         loadConfig();
         this.server = new ServerSocket(this.port);
         this.playerInput = new InputThread(this);
@@ -147,8 +146,8 @@ public class Server {
         if (moves) {
             answer = ServerEngine.performTurns(answer.getMap(), turns);
             turns.clear();
-            //if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
-            if(false){
+            if (ServerEngine.checkWin(answer.getMap()) != null) { //checking if game is already won
+            //if(false){
                 answer.setGameWon(true);
                 answer.setWinner(ServerEngine.checkWin(answer.getMap()));
                 System.out.println("Game won by " + answer.getWinner().getNick());

@@ -7,7 +7,7 @@ public class Stay extends Skill {
 
     public Stay() {
         distance = 0;
-
+        cost=0;
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.Flood;
         rangeType = SkillProperty.PointRange;

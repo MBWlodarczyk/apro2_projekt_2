@@ -7,6 +7,7 @@ public class Necromancy extends Skill {
     public Necromancy() {
         this.distance = 5;
         this.range = 1;
+        cost=50;
 
         afterAttack = SkillProperty.GoToTarget;
         useDistance = SkillProperty.Flood;

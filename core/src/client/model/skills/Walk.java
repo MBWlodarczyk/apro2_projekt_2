@@ -10,6 +10,7 @@ public class Walk extends Skill {
      */
     public Walk(int distance) {
         this.distance = distance;
+        cost=0;
 
         afterAttack = SkillProperty.GoToTarget;
         useDistance = SkillProperty.Flood;

@@ -9,6 +9,7 @@ public class Fireball extends Skill {
         distance = 5;
         value = -15;
         range = 3;
+        cost=20;
 
         afterAttack = SkillProperty.StayOnSpot;
         useDistance = SkillProperty.NoLob;

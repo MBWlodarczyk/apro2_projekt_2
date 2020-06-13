@@ -4,6 +4,7 @@ import client.model.Player;
 import client.model.map.GameMap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Class to represent server answer contains map and flags for communication
@@ -14,8 +15,10 @@ public class Answer implements Serializable {
     private boolean WrongNickPassword = false; //reconnect flag if true then server refused connection wrong nick
     private boolean gameWon = false;
     private Player Winner = null;
+    private ArrayList<String> serverComunicates=new ArrayList<>();
 
-    public Answer(GameMap map) {
+    public Answer(GameMap map, ArrayList<String> coms) {
+        this.serverComunicates =coms;
         this.map = map;
     }
 
@@ -25,6 +28,10 @@ public class Answer implements Serializable {
 
     public void setGameWon(boolean gameWon) {
         this.gameWon = gameWon;
+    }
+
+    public void setServerComunicates(ArrayList<String> s){
+        this.serverComunicates=s;
     }
 
     public Player getWinner() {

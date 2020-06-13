@@ -7,7 +7,7 @@ public class Warrior extends Hero {
     final int id;
 
     public Warrior(Player owner, int y, int x) {
-        super(owner, 120, 120, 120, 5, y, x);
+        super(owner, 120, 120, 120, 5, y, x,70);
         id = idGen++;
         this.skills.add(new Walk(3));
         this.skills.add(new Stay());
