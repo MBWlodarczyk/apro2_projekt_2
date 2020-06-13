@@ -230,7 +230,7 @@ public class ServerEngine {
         Player winner = null;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j].getHero() != null) {
+                if (map[i][j].getHero() != null & !map[i][j].getHero().isDead()) {
                     winner = map[i][j].getHero().getOwner();
                     break;
                 }
@@ -238,7 +238,7 @@ public class ServerEngine {
         }
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j].getHero() != null) {
+                if (map[i][j].getHero() != null & !map[i][j].getHero().isDead()) {
                     if (map[i][j].getHero().getOwner() != winner)
                         return null;
                 }
