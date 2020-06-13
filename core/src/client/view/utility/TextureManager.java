@@ -81,7 +81,13 @@ public class TextureManager {
         return field.getHero().getOwner().equals(player);
     }
 
-    private Texture checkHeroTexture(Field field) {
+    private Texture checkHeroTexture(Field field){
+        if(!field.getHero().isDead())
+            return aliveHero(field);
+        else return deadHero(field);
+    }
+
+    private Texture aliveHero(Field field) {
         if (field.getHero() instanceof Paladin)
             return swordGame.paladinTexture;
         if (field.getHero() instanceof Warrior)
@@ -94,6 +100,22 @@ public class TextureManager {
             return swordGame.wizardTexture;
         if (field.getHero() instanceof Priest)
             return swordGame.priestTexture;
+        return null;
+    }
+
+    private Texture deadHero(Field field) {
+        if (field.getHero() instanceof Paladin)
+            return swordGame.paladinTexture_dark;
+        if (field.getHero() instanceof Warrior)
+            return swordGame.warriorTexture_dark;
+        if (field.getHero() instanceof Archer)
+            return swordGame.archerTexture_dark;
+        if (field.getHero() instanceof Necromancer)
+            return swordGame.necromancerTexture_dark;
+        if (field.getHero() instanceof Wizard)
+            return swordGame.wizardTexture_dark;
+        if (field.getHero() instanceof Priest)
+            return swordGame.priestTexture_dark;
         return null;
     }
 

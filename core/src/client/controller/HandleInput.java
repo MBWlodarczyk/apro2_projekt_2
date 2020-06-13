@@ -40,7 +40,7 @@ public class HandleInput implements InputProcessor {
         if (screenX < Constants.HEIGHT) {
             getCord(screenX, screenY);
             field = playScreen.client.getReceived().getMap().getFieldsArray()[tab[0]][tab[1]];
-            if (currentState == IDLE && field.getHero() != null && field.getHero().getOwner().equals(playScreen.swordGame.player)) { //next state HEROCHOSEN and set anyHero as true
+            if (currentState == IDLE && field.getHero() != null && !field.getHero().isDead() && field.getHero().getOwner().equals(playScreen.swordGame.player)) { //next state HEROCHOSEN and set anyHero as true
                 currentState = HERO_CHOSEN;
                 anyHeroChosen = true;
                 y = tab[0];
@@ -53,7 +53,7 @@ public class HandleInput implements InputProcessor {
             }
         }
         if (currentState == HERO_CHOSEN) {
-            if (field.getHero() != null && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
+            if (field.getHero() != null && !field.getHero().isDead() && !field.getHero().getOwner().equals(playScreen.swordGame.player)) {
                 anyHeroChosen = true;
                 currentState = IDLE;
             }
