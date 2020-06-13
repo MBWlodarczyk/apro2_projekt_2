@@ -236,7 +236,7 @@ public class ServerEngine {
                 }
             }
         }
-        for (int i = 0; i < map.length; i++) {
+        for (int i = 0; i < map.length; i++) { //FIXME maciek ogarnij ten win condition
             for (int j = 0; j < map[0].length; j++) {
                 if (map[i][j].getHero() != null) {
                     if (map[i][j].getHero().getOwner() != winner)
