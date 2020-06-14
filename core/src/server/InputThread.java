@@ -30,7 +30,7 @@ public class InputThread extends Thread {
                     System.exit(0);
                     this.dispose();
                 }
-                if (line.startsWith("save")) {
+                else if (line.startsWith("save")) {
                     String path = line.split(" ")[1];
                     try {
                         server.save(path);
@@ -38,7 +38,7 @@ public class InputThread extends Thread {
                         e.printStackTrace();
                     }
                 }
-                if (line.startsWith("load")) {
+                else if (line.startsWith("load")) {
                     String path = line.split(" ")[1];
                     try {
                         server.load(path);
@@ -46,12 +46,19 @@ public class InputThread extends Thread {
                         System.out.println("Can't locate the file");
                     }
                 }
-                if (line.startsWith("list"))
+                else if (line.startsWith("list")) {
                     System.out.println("Server: Printing clients:");
-                for (ServerThread client : server.clients) {
-                    System.out.println(client.player.getNick());
-                    System.out.println(client.sock.getRemoteSocketAddress().toString());
-                    System.out.println();
+                    for (ServerThread client : server.clients) {
+                        System.out.println(client.player.getNick());
+                        System.out.println(client.sock.getRemoteSocketAddress().toString());
+                        System.out.println();
+                    }
+                }
+                else if (line.startsWith("kill")){
+                    int x = Integer.parseInt(line.split(" ")[1]);
+                    int y = Integer.parseInt(line.split(" ")[2]);
+                    ServerEngine.kill(x,y,server.getMap());
+                    System.out.println("Server: killing hero on spot " + x +" " + y);
                 }
             }
         }

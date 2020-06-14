@@ -101,14 +101,23 @@ public class ServerThread extends Thread {
      *
      * @param player player to record
      */
-    private synchronized void recordPlayer(Player player) {
-        if (player != null) {
+    private synchronized void recordPlayer(Player player) throws IOException {
+        if (player != null & !server.checkIfPlayerExists(player)) {
             this.player = player;
             server.playersClients.put(this, player);
             server.players.add(player);
             server.initPlayer++;
             this.name += " (" + player.getNick() + ")";
+        } else{
+            server.answer.setWrongNickPassword(true);
+            send();
+            server.answer.setWrongNickPassword(false);
+            server.removeClient(this);
+            server.playersClients.remove(this);
+            System.out.println("Server: disconnect " + name);
+            this.dispose();
         }
+
     }
 
     /**

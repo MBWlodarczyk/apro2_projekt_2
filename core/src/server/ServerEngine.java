@@ -230,16 +230,18 @@ public class ServerEngine {
         Player winner = null;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j].getHero() != null & !map[i][j].getHero().isDead()) {
-                    winner = map[i][j].getHero().getOwner();
-                    break;
+                if (map[i][j].getHero() != null) {
+                    if(!map[i][j].getHero().isDead()) {
+                        winner = map[i][j].getHero().getOwner();
+                        break;
+                    }
                 }
             }
         }
-        for (int i = 0; i < map.length; i++) { //FIXME maciek ogarnij ten win condition
+        for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j].getHero() != null & !map[i][j].getHero().isDead()) {
-                    if (map[i][j].getHero().getOwner() != winner)
+                if (map[i][j].getHero() != null) {
+                    if (!map[i][j].getHero().isDead() & map[i][j].getHero().getOwner() != winner)
                         return null;
                 }
             }
@@ -264,5 +266,8 @@ public class ServerEngine {
             }
         }
         return inRange;
+    }
+    public static void kill(int x, int y,GameMap gameMap){
+        if(gameMap.getFieldsArray()[x][y].getHero()!=null) gameMap.getFieldsArray()[x][y].getHero().setHealth(0);
     }
 }
