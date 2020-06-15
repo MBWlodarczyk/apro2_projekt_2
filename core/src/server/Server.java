@@ -256,7 +256,7 @@ public class Server {
      */
     public void save(String filepath) throws IOException {
         Save save = new Save(this.answer, this.turns, this.playerNumber, this.players, this.initPlayer, this.gameInit);
-        FileOutputStream fileOut = new FileOutputStream(filepath); //TODO zapisywanie w folderze maps
+        FileOutputStream fileOut = new FileOutputStream(filepath);
         ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
         objectOut.writeObject(save);
         objectOut.close();

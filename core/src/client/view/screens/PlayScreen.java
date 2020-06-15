@@ -37,6 +37,7 @@ public class PlayScreen extends AbstractScreen {
         heroesSprites = new ArrayList<>();
         hudManager = new HudManager(swordGame, handleInput);
         Gdx.input.setInputProcessor(handleInput);
+        addMusic();
     }
 
     /**

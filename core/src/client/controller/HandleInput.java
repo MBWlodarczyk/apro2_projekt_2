@@ -32,7 +32,7 @@ public class HandleInput implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) { //TODO fix it XDDDDDDD
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         anyHeroChosen = false; //set anyHeroChosen at start always as false
         if (buttonsTouch(screenX, screenY)) //check if the sendTurn or removeMove buttons were clicked (if jes return true)
             return true;
@@ -112,11 +112,11 @@ public class HandleInput implements InputProcessor {
                 playScreen.client.getSend().addMove(move);
                 System.out.println("Adding move...");
                 if (!move.getWhat().getSoundPath().equals("")) {
-                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(move.getWhat().getSoundPath())); //TODO change it to load in assets
+                    Sound sound = Gdx.audio.newSound(Gdx.files.internal(move.getWhat().getSoundPath()));
                     sound.play(0.6f);
                 }
             } else {
-                Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/bruh.wav")); //TODO there also move to assets
+                Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/bruh.wav"));
                 sound.play(0.6f);
             }
             System.out.println(playScreen.client.getSend().getMoves().size());
