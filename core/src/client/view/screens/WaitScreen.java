@@ -1,6 +1,7 @@
 package client.view.screens;
 
 import client.controller.Client;
+import client.controller.Inputs;
 import client.view.SwordGame;
 import client.view.utility.GifDecoder;
 import com.badlogic.gdx.Gdx;
@@ -21,7 +22,7 @@ public class WaitScreen extends AbstractScreen {
     public WaitScreen(SwordGame swordGame, boolean init) throws Exception {
         super(swordGame);
         try {
-            this.client = new Client(swordGame, init);
+            this.client = new Client(swordGame, Inputs.ip,Integer.parseInt(Inputs.port), init);
             connected = true;
             animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("special/load.gif").read());
         } catch (ConnectException e) {

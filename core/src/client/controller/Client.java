@@ -30,9 +30,9 @@ public class Client {
     private Answer received;
     private boolean isSend = false;
 
-    public Client(SwordGame swordGame, final boolean init) throws Exception {
+    public Client(SwordGame swordGame,String host,int port, final boolean init) throws Exception {
 
-        Socket s = new Socket("127.0.0.1", 1701);
+        Socket s = new Socket(host, port);
         sock = s;
         is = new ObjectInputStream(s.getInputStream());
         os = new ObjectOutputStream(s.getOutputStream());
