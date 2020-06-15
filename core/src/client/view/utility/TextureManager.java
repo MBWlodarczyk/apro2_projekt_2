@@ -63,7 +63,7 @@ public class TextureManager {
                             ArrayList<ObstacleSprite> obstacleSprites, ArrayList<TerrainSprite> terrainSprites, ArrayList<HeroSprite> heroesSprites) {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j].getObstacle() != null) { //TODO after debuging add there
+                if (map[i][j].getObstacle() != null) {
                     obstacleSprites.add(new ObstacleSprite(map[i][j].getObstacle(), checkObstacleTexture(map[i][j])));
                 }
                 if (map[i][j].getTerrain() != null) {
